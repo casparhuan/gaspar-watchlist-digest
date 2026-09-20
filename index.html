@@ -78,6 +78,7 @@
   }
   table.focus th { color: var(--muted); font-weight: 600; font-size: 0.72rem; }
   table.focus td.t { color: var(--blue); font-weight: 700; white-space: nowrap; }
+  table.focus td.nm { color: var(--text); font-weight: 600; white-space: nowrap; }
   .sent {
     display: inline-block; padding: 2px 7px; border-radius: 6px; font-size: 0.72rem; font-weight: 600;
   }
@@ -295,21 +296,21 @@
       <h2><span class="n">1</span>美股焦点表</h2>
       <table class="focus">
         <thead>
-          <tr><th>代码</th><th>情绪</th><th>一句话</th><th>操作参考</th></tr>
+          <tr><th>代码</th><th>名称</th><th>情绪</th><th>一句话</th><th>操作参考</th></tr>
         </thead>
         <tbody>
-          <tr><td class="t">NVDA</td><td><span class="sent s4">乐观 68</span></td><td>需求叙事仍强，毛利指引被反复计价</td><td>持有 / 回踩再加</td></tr>
-          <tr><td class="t">ORCL</td><td><span class="sent s2">悲观 38</span></td><td>积压亮眼但 FCF 承压、客户集中受质疑</td><td>观察 / 减仓博弈</td></tr>
-          <tr><td class="t">RKLB</td><td><span class="sent s4">乐观 62</span></td><td>FCC 过关 + 约 9/24 股东投票窗口</td><td>事件交易 / 轻仓试错</td></tr>
-          <tr><td class="t">WRD</td><td><span class="sent s3">中性 48</span></td><td>政策主题相关，个股硬催化偏薄</td><td>观察</td></tr>
-          <tr><td class="t">AMD</td><td><span class="sent s4">乐观 66</span></td><td>半导体重估日跟涨；映射 AMDL</td><td>持有</td></tr>
-          <tr><td class="t">TSLA</td><td><span class="sent s2">悲观 42</span></td><td>Cybercab 监管书面答复临近（约 9/30）</td><td>观察 / 轻仓</td></tr>
-          <tr><td class="t">BABA</td><td><span class="sent s4">乐观 64</span></td><td>周五放量反弹；云增速预期上修</td><td>持有 / 轻仓试错</td></tr>
-          <tr><td class="t">COIN</td><td><span class="sent s5">极度乐观 78</span></td><td>加密 beta；映射 CONL</td><td>持有 / 勿追高</td></tr>
-          <tr><td class="t">CRCL</td><td><span class="sent s4">乐观 70</span></td><td>稳定币/加密基建；映射 CRCA</td><td>观察 / 轻仓</td></tr>
-          <tr><td class="t">CRWV</td><td><span class="sent s3">中性</span></td><td>AI 算力租赁；映射 CWVX · 价待补</td><td>观察</td></tr>
-          <tr><td class="t">HOOD</td><td><span class="sent s5">极度乐观 76</span></td><td>加密+零售情绪；映射 ROBN</td><td>持有 / 勿追高</td></tr>
-          <tr><td class="t">OKLO</td><td><span class="sent s3">中性 52</span></td><td>能源政策叙事；映射 OKLL</td><td>观察</td></tr>
+          <tr><td class="t">NVDA</td><td class="nm">英伟达</td><td><span class="sent s4">乐观 68</span></td><td>需求叙事仍强，毛利指引被反复计价</td><td>持有 / 回踩再加</td></tr>
+          <tr><td class="t">ORCL</td><td class="nm">甲骨文</td><td><span class="sent s2">悲观 38</span></td><td>积压亮眼但 FCF 承压、客户集中受质疑</td><td>观察 / 减仓博弈</td></tr>
+          <tr><td class="t">RKLB</td><td class="nm">Rocket Lab</td><td><span class="sent s4">乐观 62</span></td><td>FCC 过关 + 约 9/24 股东投票窗口</td><td>事件交易 / 轻仓试错</td></tr>
+          <tr><td class="t">WRD</td><td class="nm">文远知行</td><td><span class="sent s3">中性 48</span></td><td>政策主题相关，个股硬催化偏薄</td><td>观察</td></tr>
+          <tr><td class="t">AMD</td><td class="nm">超微半导体</td><td><span class="sent s4">乐观 66</span></td><td>半导体重估日跟涨；映射 AMDL</td><td>持有</td></tr>
+          <tr><td class="t">TSLA</td><td class="nm">特斯拉</td><td><span class="sent s2">悲观 42</span></td><td>Cybercab 监管书面答复临近（约 9/30）</td><td>观察 / 轻仓</td></tr>
+          <tr><td class="t">BABA</td><td class="nm">阿里巴巴</td><td><span class="sent s4">乐观 64</span></td><td>周五放量反弹；云增速预期上修</td><td>持有 / 轻仓试错</td></tr>
+          <tr><td class="t">COIN</td><td class="nm">Coinbase</td><td><span class="sent s5">极度乐观 78</span></td><td>加密 beta；映射 CONL</td><td>持有 / 勿追高</td></tr>
+          <tr><td class="t">CRCL</td><td class="nm">Circle</td><td><span class="sent s4">乐观 70</span></td><td>稳定币/加密基建；映射 CRCA</td><td>观察 / 轻仓</td></tr>
+          <tr><td class="t">CRWV</td><td class="nm">CoreWeave</td><td><span class="sent s3">中性</span></td><td>AI 算力租赁；映射 CWVX · 价待补</td><td>观察</td></tr>
+          <tr><td class="t">HOOD</td><td class="nm">Robinhood</td><td><span class="sent s5">极度乐观 76</span></td><td>加密+零售情绪；映射 ROBN</td><td>持有 / 勿追高</td></tr>
+          <tr><td class="t">OKLO</td><td class="nm">Oklo</td><td><span class="sent s3">中性 52</span></td><td>能源政策叙事；映射 OKLL</td><td>观察</td></tr>
         </tbody>
       </table>
       <p class="note">正股：NVDA ORCL RKLB WRD AMD TSLA BABA；杠杆映射 COIN→CONL、AMD→AMDL、CRCL→CRCA、CRWV→CWVX、HOOD→ROBN、OKLO→OKLL。</p>
@@ -674,26 +675,26 @@
       <h2><span class="n">1</span>A股焦点表</h2>
       <table class="focus">
         <thead>
-          <tr><th>代码</th><th>情绪</th><th>一句话</th><th>操作参考</th></tr>
+          <tr><th>代码</th><th>名称</th><th>情绪</th><th>一句话</th><th>操作参考</th></tr>
         </thead>
         <tbody>
-          <tr><td class="t">000158</td><td><span class="sent s3">中性 54</span></td><td>信创/算力主题映射；个股硬催化偏薄</td><td>观察</td></tr>
-          <tr><td class="t">002739</td><td><span class="sent s3">中性 50</span></td><td>影视内容复苏叙事；缺短线强催化</td><td>观察</td></tr>
-          <tr><td class="t">002920</td><td><span class="sent s3">中性 55</span></td><td>智驾/舱驾电子龙头；近季盈利承压</td><td>持有 / 逢弱观察</td></tr>
-          <tr><td class="t">600118</td><td><span class="sent s4">乐观 66</span></td><td>商业航天+卫星应用；周五强于大盘</td><td>持有 / 回踩再加</td></tr>
-          <tr><td class="t">601127</td><td><span class="sent s3">中性 48</span></td><td>问界合作模式调整扰动；股价偏弱整理</td><td>观察 / 轻仓</td></tr>
-          <tr><td class="t">601818</td><td><span class="sent s2">偏弱 42</span></td><td>银行股逆势承压；防御风格被抛弃</td><td>观察</td></tr>
-          <tr><td class="t">601899</td><td><span class="sent s4">乐观 64</span></td><td>贵金属/资源 beta + 10 亿创投 AI 布局</td><td>持有 / 逢弱吸</td></tr>
-          <tr><td class="t">603099</td><td><span class="sent s3">中性 52</span></td><td>文旅景区；交投平稳缺强催化</td><td>观察</td></tr>
-          <tr><td class="t">688047</td><td><span class="sent s4">乐观 65</span></td><td>国产 CPU/信创；定增受理 + 算力情绪</td><td>持有 / 勿追高</td></tr>
-          <tr><td class="t">002230</td><td><span class="sent s4">乐观 62</span></td><td>AI 应用/大模型；回购进行中 · 价待补</td><td>持有 / 回踩</td></tr>
-          <tr><td class="t">603019</td><td><span class="sent s4">乐观 63</span></td><td>算力服务器/先进计算；主线映射 · 价待补</td><td>观察 / 回踩</td></tr>
-          <tr><td class="t">600536</td><td><span class="sent s3">中性 56</span></td><td>信创软件；跟涨弹性弱于硬件链 · 价待补</td><td>观察</td></tr>
-          <tr><td class="t">601138</td><td><span class="sent s4">乐观 64</span></td><td>AI 服务器代工/出海；算力链映射 · 价待补</td><td>持有 / 回踩</td></tr>
-          <tr><td class="t">600585</td><td><span class="sent s3">中性 50</span></td><td>水泥周期；地产脉冲外溢有限 · 价待补</td><td>观察</td></tr>
-          <tr><td class="t">600048</td><td><span class="sent s3">中性 53</span></td><td>龙头房企；政策脉冲受益但持续性存疑 · 价待补</td><td>观察 / 轻仓</td></tr>
-          <tr><td class="t">600036</td><td><span class="sent s3">中性 48</span></td><td>银行权重；风格上攻日相对落后 · 价待补</td><td>观察</td></tr>
-          <tr><td class="t">300750</td><td><span class="sent s2">偏弱 40</span></td><td>车企「去宁化」叙事压制；回购托底进行中</td><td>观察 / 逢弱</td></tr>
+          <tr><td class="t">000158</td><td class="nm">常山北明</td><td><span class="sent s3">中性 54</span></td><td>信创/算力主题映射；个股硬催化偏薄</td><td>观察</td></tr>
+          <tr><td class="t">002739</td><td class="nm">万达电影</td><td><span class="sent s3">中性 50</span></td><td>影视内容复苏叙事；缺短线强催化</td><td>观察</td></tr>
+          <tr><td class="t">002920</td><td class="nm">德赛西威</td><td><span class="sent s3">中性 55</span></td><td>智驾/舱驾电子龙头；近季盈利承压</td><td>持有 / 逢弱观察</td></tr>
+          <tr><td class="t">600118</td><td class="nm">中国卫星</td><td><span class="sent s4">乐观 66</span></td><td>商业航天+卫星应用；周五强于大盘</td><td>持有 / 回踩再加</td></tr>
+          <tr><td class="t">601127</td><td class="nm">赛力斯</td><td><span class="sent s3">中性 48</span></td><td>问界合作模式调整扰动；股价偏弱整理</td><td>观察 / 轻仓</td></tr>
+          <tr><td class="t">601818</td><td class="nm">光大银行</td><td><span class="sent s2">偏弱 42</span></td><td>银行股逆势承压；防御风格被抛弃</td><td>观察</td></tr>
+          <tr><td class="t">601899</td><td class="nm">紫金矿业</td><td><span class="sent s4">乐观 64</span></td><td>贵金属/资源 beta + 10 亿创投 AI 布局</td><td>持有 / 逢弱吸</td></tr>
+          <tr><td class="t">603099</td><td class="nm">长白山</td><td><span class="sent s3">中性 52</span></td><td>文旅景区；交投平稳缺强催化</td><td>观察</td></tr>
+          <tr><td class="t">688047</td><td class="nm">龙芯中科</td><td><span class="sent s4">乐观 65</span></td><td>国产 CPU/信创；定增受理 + 算力情绪</td><td>持有 / 勿追高</td></tr>
+          <tr><td class="t">002230</td><td class="nm">科大讯飞</td><td><span class="sent s4">乐观 62</span></td><td>AI 应用/大模型；回购进行中 · 价待补</td><td>持有 / 回踩</td></tr>
+          <tr><td class="t">603019</td><td class="nm">中科曙光</td><td><span class="sent s4">乐观 63</span></td><td>算力服务器/先进计算；主线映射 · 价待补</td><td>观察 / 回踩</td></tr>
+          <tr><td class="t">600536</td><td class="nm">中国软件</td><td><span class="sent s3">中性 56</span></td><td>信创软件；跟涨弹性弱于硬件链 · 价待补</td><td>观察</td></tr>
+          <tr><td class="t">601138</td><td class="nm">工业富联</td><td><span class="sent s4">乐观 64</span></td><td>AI 服务器代工/出海；算力链映射 · 价待补</td><td>持有 / 回踩</td></tr>
+          <tr><td class="t">600585</td><td class="nm">海螺水泥</td><td><span class="sent s3">中性 50</span></td><td>水泥周期；地产脉冲外溢有限 · 价待补</td><td>观察</td></tr>
+          <tr><td class="t">600048</td><td class="nm">保利发展</td><td><span class="sent s3">中性 53</span></td><td>龙头房企；政策脉冲受益但持续性存疑 · 价待补</td><td>观察 / 轻仓</td></tr>
+          <tr><td class="t">600036</td><td class="nm">招商银行</td><td><span class="sent s3">中性 48</span></td><td>银行权重；风格上攻日相对落后 · 价待补</td><td>观察</td></tr>
+          <tr><td class="t">300750</td><td class="nm">宁德时代</td><td><span class="sent s2">偏弱 40</span></td><td>车企「去宁化」叙事压制；回购托底进行中</td><td>观察 / 逢弱</td></tr>
         </tbody>
       </table>
       <p class="note">名单 17 只（不含 01810 小米，已在港股关注）。截图价优先；未出现在截图者价位记「待补」。小米亦出现在用户 App 自选列表中，仅作脚注交叉，不重复出 A 股卡。</p>
@@ -1186,14 +1187,14 @@
       <h2><span class="n">1</span>港股焦点表</h2>
       <table class="focus">
         <thead>
-          <tr><th>代码</th><th>情绪</th><th>一句话</th><th>操作参考</th></tr>
+          <tr><th>代码</th><th>名称</th><th>情绪</th><th>一句话</th><th>操作参考</th></tr>
         </thead>
         <tbody>
-          <tr><td class="t">01788</td><td><span class="sent s3">中性 58</span></td><td>私有化作价 3.00 锚定价；贴近折价博弈</td><td>观察 / 事件跟踪</td></tr>
-          <tr><td class="t">01810</td><td><span class="sent s3">中性 56</span></td><td>回购托底 + 深度回撤；盈利仍承压</td><td>持有 / 逢弱吸</td></tr>
-          <tr><td class="t">06178</td><td><span class="sent s3">中性 52</span></td><td>低估值底部区，成交偏淡缺强催化</td><td>观察 / 轻仓</td></tr>
-          <tr><td class="t">09660</td><td><span class="sent s2">悲观 44</span></td><td>收入增、经调整亏扩大；目标价下修</td><td>观察 / 轻仓主题</td></tr>
-          <tr><td class="t">02050</td><td><span class="sent s3">中性 57</span></td><td>热管理/机器人映射；增持+临近除净</td><td>持有 / 逢弱观察</td></tr>
+          <tr><td class="t">01788</td><td class="nm">国泰君安国际</td><td><span class="sent s3">中性 58</span></td><td>私有化作价 3.00 锚定价；贴近折价博弈</td><td>观察 / 事件跟踪</td></tr>
+          <tr><td class="t">01810</td><td class="nm">小米集团</td><td><span class="sent s3">中性 56</span></td><td>回购托底 + 深度回撤；盈利仍承压</td><td>持有 / 逢弱吸</td></tr>
+          <tr><td class="t">06178</td><td class="nm">光大证券</td><td><span class="sent s3">中性 52</span></td><td>低估值底部区，成交偏淡缺强催化</td><td>观察 / 轻仓</td></tr>
+          <tr><td class="t">09660</td><td class="nm">地平线机器人</td><td><span class="sent s2">悲观 44</span></td><td>收入增、经调整亏扩大；目标价下修</td><td>观察 / 轻仓主题</td></tr>
+          <tr><td class="t">02050</td><td class="nm">三花智控</td><td><span class="sent s3">中性 57</span></td><td>热管理/机器人映射；增持+临近除净</td><td>持有 / 逢弱观察</td></tr>
         </tbody>
       </table>
       <p class="note">仅覆盖当前港股关注五只；不编造其他持仓。</p>
