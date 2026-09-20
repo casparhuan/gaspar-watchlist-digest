@@ -227,6 +227,61 @@
     letter-spacing: 0.06em; padding: 2px 4px 0; text-transform: none;
   }
 
+  /* 推特舆情 */
+  .tw-strip {
+    margin: 10px 0 4px; padding: 10px 12px;
+    background: #1a2030; border: 1px dashed #3a4a66; border-radius: 10px;
+  }
+  .tw-strip h3 {
+    margin: 0 0 6px; font-size: 0.82rem; color: var(--purple); letter-spacing: 0.04em;
+  }
+  .tw-strip p { margin: 0; font-size: 0.84rem; color: #cfd5e4; }
+  .tw-strip .src { margin-top: 6px; font-size: 0.72rem; color: var(--muted); }
+  .tw-sec {
+    margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border);
+  }
+  .tw-sec > h3 {
+    margin: 0 0 8px; font-size: 0.9rem; color: var(--purple);
+  }
+  .tw-grid { display: flex; flex-direction: column; gap: 8px; }
+  .tw-card {
+    background: var(--card2); border: 1px solid #343c50; border-radius: 10px;
+    padding: 10px 12px;
+  }
+  .tw-card .tw-head {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-bottom: 6px;
+  }
+  .tw-card .tw-code { color: var(--blue); font-weight: 700; font-size: 0.88rem; }
+  .tw-card .tw-name { font-weight: 600; }
+  .tw-pill {
+    display: inline-block; padding: 1px 7px; border-radius: 999px;
+    font-size: 0.7rem; font-weight: 600; border: 1px solid var(--border);
+  }
+  .tw-pill.bull { color: var(--green); background: #1e3d2f; border-color: #2f5a45; }
+  .tw-pill.neut { color: var(--neutral); background: #2a3140; }
+  .tw-pill.bear { color: var(--orange); background: #3a2a22; border-color: #5a4030; }
+  .tw-pill.heat-h { color: var(--accent); background: #3a3020; border-color: #5a4a30; }
+  .tw-pill.heat-m { color: var(--blue); background: #1e2a40; border-color: #3a4f73; }
+  .tw-pill.heat-l { color: var(--muted); background: #222833; }
+  .tw-card ul { margin: 4px 0 0; padding-left: 1.1rem; }
+  .tw-card li { font-size: 0.8rem; color: #d0d5e2; margin: 0 0 3px; }
+  .tw-card .tw-debate { margin-top: 6px; font-size: 0.78rem; color: #b8c0d4; }
+  .tw-card .tw-debate strong { color: var(--orange); }
+  .tw-inline {
+    margin-top: 8px; padding: 8px 10px; background: #1a2030;
+    border-left: 3px solid var(--purple); border-radius: 0 8px 8px 0;
+  }
+  .tw-inline h4 {
+    margin: 0 0 4px; font-size: 0.78rem; color: var(--purple); font-weight: 700;
+  }
+  .tw-inline p { margin: 0 0 4px; font-size: 0.8rem; color: #d0d5e2; }
+  .tw-inline .meta-line { font-size: 0.72rem; color: var(--muted); }
+  .badge-ver {
+    display: inline-block; margin-top: 8px; margin-left: 6px; padding: 3px 10px;
+    border-radius: 999px; background: #2a2438; color: var(--purple); font-size: 0.75rem;
+    border: 1px solid #4a3f66;
+  }
+
 </style>
 </head>
 <body>
@@ -236,6 +291,8 @@
     <div class="meta">2026-09-20（周日）· 周末复盘 / 周一前瞻 · Asia/Shanghai (CST)</div>
     <div class="meta" style="margin-top:4px;">六标签：美股大盘 / 美股关注 / A股大盘 / A股关注 / 港股大盘 / 港股关注</div>
     <span class="badge">休市日 · 报价为上一交易日收盘 · 参考口径</span>
+    <span class="badge-ver" id="ver-tw1">含推特舆情 · v=tw1</span>
+    <div class="meta" style="margin-top:6px;font-size:0.75rem;">推特舆情来自公开网页检索 X/Twitter 讨论主题（非官方 API）；定性不代表资金流向，不构成投资建议。缓存参数 <code>?v=tw1</code></div>
   </header>
 
   <div class="tab-bar-wrap">
@@ -288,6 +345,16 @@
       </ul>
       <div class="disclaimer">以上为信息整理与参考，不构成投资建议。</div>
     </section>
+
+    <section class="block">
+      <h2><span class="n">※</span>推特舆情（大盘横切）</h2>
+      <div class="tw-strip">
+        <h3>跨资产公开讨论主题（X/Twitter · 网页检索）</h3>
+        <p>周末公开讨论主轴仍是 <strong>AI 算力/云基建</strong>（NVDA 需求与估值辩论、AMD 跟涨叙事）、<strong>加密高 beta</strong>（COIN/HOOD 随 BTC 风险偏好）、以及 <strong>自动驾驶监管</strong>（TSLA Cybercab 书面答复窗口）。ORCL 讨论偏「积压 vs 自由现金流/融资压力」对立；航天链 RKLB 以事件轴（Iridium/Neutron）为主。</p>
+        <p class="src">来源说明：公开网页对 X/Twitter 提及与情绪追踪页的归纳（AltIndex / TickerTalks / LunarCrush 等二手汇总），非认证 API；不编造推文原文或账号。</p>
+      </div>
+      <p class="note">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
+    </section>
   </div>
 
   <!-- ========== 2 美股关注 ========== -->
@@ -314,6 +381,106 @@
         </tbody>
       </table>
       <p class="note">正股：NVDA ORCL RKLB WRD AMD TSLA BABA；杠杆映射 COIN→CONL、AMD→AMDL、CRCL→CRCA、CRWV→CWVX、HOOD→ROBN、OKLO→OKLL。</p>
+    </section>
+
+    <section class="block">
+      <h2><span class="n">1b</span>推特舆情</h2>
+      <p class="note">公开网页检索 X/Twitter 讨论主题（非认证 API）；只归纳主题，不编造推文/账号。舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
+      <div class="tw-grid">
+        <div class="tw-card">
+          <div class="tw-head">
+            <span class="tw-code">NVDA</span><span class="tw-name">英伟达</span>
+            <span class="tw-pill bull">情绪 · 偏多</span>
+            <span class="tw-pill heat-h">热度 · 高</span>
+          </div>
+          <ul>
+            <li>主题：AI 基础设施需求 / Hugging Face 收购叙事</li>
+            <li>主题：黄仁勋供给与销量指引被反复引用</li>
+            <li>主题：估值与「AI 泡沫」对冲声音并存</li>
+            <li>主题：日均 cashtag 提及处正常偏活跃区间</li>
+          </ul>
+          <div class="tw-debate"><strong>争议点：</strong>多头强调算力刚需与 backlog；空头盯估值、内部人卖出与竞争。</div>
+        </div>
+        <div class="tw-card">
+          <div class="tw-head">
+            <span class="tw-code">TSLA</span><span class="tw-name">特斯拉</span>
+            <span class="tw-pill neut">情绪 · 中性</span>
+            <span class="tw-pill heat-h">热度 · 高</span>
+          </div>
+          <ul>
+            <li>主题：Robotaxi / 佛罗里达等地监管推进乐观声</li>
+            <li>主题：Cybercab / Autopilot 安全与监管审查</li>
+            <li>主题：事件驱动波动，多空分裂明显</li>
+          </ul>
+          <div class="tw-debate"><strong>争议点：</strong>自动驾驶落地时间表 vs 安全/监管阻力；X 情绪分数多落在中性区间。</div>
+        </div>
+        <div class="tw-card">
+          <div class="tw-head">
+            <span class="tw-code">ORCL</span><span class="tw-name">甲骨文</span>
+            <span class="tw-pill neut">情绪 · 中性偏空</span>
+            <span class="tw-pill heat-m">热度 · 中</span>
+          </div>
+          <ul>
+            <li>主题：OpenAI / Stargate 积压与云增速故事</li>
+            <li>主题：负 FCF、资本开支与项目融资压力</li>
+            <li>主题：知名空头仓位与许可/项目进度争论</li>
+          </ul>
+          <div class="tw-debate"><strong>争议点：</strong>巨额 backlog 能否兑现成现金流；数据中心贷款定价压力是否外溢到估值。</div>
+        </div>
+        <div class="tw-card">
+          <div class="tw-head">
+            <span class="tw-code">RKLB</span><span class="tw-name">Rocket Lab</span>
+            <span class="tw-pill bull">情绪 · 偏多</span>
+            <span class="tw-pill heat-m">热度 · 中</span>
+          </div>
+          <ul>
+            <li>主题：积压增长 / Iridium 交易与卫星项目</li>
+            <li>主题：Neutron 进度与太阳能电池产品叙事</li>
+            <li>主题：稀释、现金消耗与内部人卖出担忧</li>
+          </ul>
+          <div class="tw-debate"><strong>争议点：</strong>事件多头 vs Neutron 时间表/ATM 稀释空头；热度较峰值回落。</div>
+        </div>
+        <div class="tw-card">
+          <div class="tw-head">
+            <span class="tw-code">AMD</span><span class="tw-name">超微半导体</span>
+            <span class="tw-pill bull">情绪 · 偏多</span>
+            <span class="tw-pill heat-m">热度 · 中</span>
+          </div>
+          <ul>
+            <li>主题：AI GPU / 数据中心份额「第二曲线」</li>
+            <li>主题：财报 beat-and-raise 后的跟涨讨论</li>
+            <li>主题：相对 NVDA 的估值与竞争差距</li>
+          </ul>
+          <div class="tw-debate"><strong>争议点：</strong>X 侧偏多、可信评论者分歧仍在（供应/中国/竞争）。</div>
+        </div>
+        <div class="tw-card">
+          <div class="tw-head">
+            <span class="tw-code">COIN</span><span class="tw-name">Coinbase</span>
+            <span class="tw-pill bull">情绪 · 偏多</span>
+            <span class="tw-pill heat-h">热度 · 高</span>
+          </div>
+          <ul>
+            <li>主题：BTC 反弹下的高 beta 加密交易所交易</li>
+            <li>主题：稳定币 / Base / 代币化与衍生品叙事</li>
+            <li>主题：现货成交与监管不确定性对冲声</li>
+          </ul>
+          <div class="tw-debate"><strong>争议点：</strong>加密回暖 beta vs 交易量波动与监管；勿把热度等同资金流入。</div>
+        </div>
+        <div class="tw-card">
+          <div class="tw-head">
+            <span class="tw-code">HOOD</span><span class="tw-name">Robinhood</span>
+            <span class="tw-pill bull">情绪 · 偏多</span>
+            <span class="tw-pill heat-m">热度 · 中</span>
+          </div>
+          <ul>
+            <li>主题：加密 + 期权/事件合约的零售情绪</li>
+            <li>主题：相对 COIN 更「多元化」平台叙事</li>
+            <li>主题：估值溢价与增长放缓风险</li>
+          </ul>
+          <div class="tw-debate"><strong>争议点：</strong>零售风险偏好回升可持续性；热度较近期均值偏冷。</div>
+        </div>
+      </div>
+      <p class="note" style="margin-top:8px;">其余自选（WRD/BABA/CRCL 等）本轮未做专项 X 检索块。</p>
     </section>
 
     <section class="block" style="background:transparent;border:none;padding:0;">
@@ -352,6 +519,14 @@
       <p><span class="lbl">风险警报</span>　Q3 毛利率指引约 74% 及后续或下探至约 71%–72% 的讨论仍在定价中；反垄断/出口管制与大额收购交割不确定性。</p>
       <p><span class="lbl">积极催化</span>　数据中心需求叙事强化；存储周期上行对 AI 硬件链情绪外溢。</p>
       <p><span class="lbl">Financial</span>　8/26 已披露：Q2 FY27 营收约 $962 亿（+106% YoY）；数据中心约 $890 亿（+117%）；Q3 营收指引约 $1080 亿 ±2%。</p>
+    
+      <div class="tw-inline">
+        <h4>推特舆情 · NVDA 英伟达</h4>
+        <p class="meta-line"><span class="tw-pill bull">情绪 · 偏多</span> <span class="tw-pill heat-h">热度 · 高</span> · 公开网页检索 X/Twitter 主题（非 API）</p>
+        <ul><li>AI 需求与收购/供给指引被高频讨论</li><li>估值与泡沫担忧作为主要空头对冲</li></ul>
+        <p><strong>争议点：</strong>多头讲算力刚需，空头讲估值与内部人卖出。</p>
+        <p class="meta-line">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
+      </div>
     </div>
     <div class="sec">
       <h3>作战计划 / 策略</h3>
@@ -404,6 +579,14 @@
       <p><span class="lbl">风险警报</span>　自由现金流仍为负；OpenAI 等相关大客户集中度与融资条件变化；毛利率一度承压至约 61% 的讨论。</p>
       <p><span class="lbl">积极催化</span>　若后续披露资本开支高峰见顶或大客户合同现金回收加速，估值逻辑可重定价。</p>
       <p><span class="lbl">Financial</span>　见上；周末无新增正式披露。</p>
+    
+      <div class="tw-inline">
+        <h4>推特舆情 · ORCL 甲骨文</h4>
+        <p class="meta-line"><span class="tw-pill neut">情绪 · 中性偏空</span> <span class="tw-pill heat-m">热度 · 中</span> · 公开网页检索 X/Twitter 主题（非 API）</p>
+        <ul><li>云积压/OpenAI 叙事 vs 负 FCF 与融资压力</li><li>知名空头与项目许可争议抬升对立</li></ul>
+        <p><strong>争议点：</strong>积压兑现速度与数据中心贷款定价是否冲击估值。</p>
+        <p class="meta-line">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
+      </div>
     </div>
     <div class="sec">
       <h3>作战计划 / 策略</h3>
@@ -455,6 +638,14 @@
       <p><span class="lbl">风险警报</span>　投票或后续监管不及预期；发射延期；并购整合与稀释风险。</p>
       <p><span class="lbl">积极催化</span>　交易推进节点、积压订单兑现、发射节奏超预期。</p>
       <p><span class="lbl">Financial</span>　8/10：Q2 营收约 $2.34 亿创纪录（约 +62%）；积压约 $23.6 亿。</p>
+    
+      <div class="tw-inline">
+        <h4>推特舆情 · RKLB Rocket Lab</h4>
+        <p class="meta-line"><span class="tw-pill bull">情绪 · 偏多</span> <span class="tw-pill heat-m">热度 · 中</span> · 公开网页检索 X/Twitter 主题（非 API）</p>
+        <ul><li>积压/Iridium/太阳能产品等事件叙事</li><li>Neutron 进度、稀释与内部人卖出担忧</li></ul>
+        <p><strong>争议点：</strong>事件多头与执行/稀释空头并存；热度较峰值回落。</p>
+        <p class="meta-line">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
+      </div>
     </div>
     <div class="sec">
       <h3>作战计划 / 策略</h3>
@@ -507,6 +698,14 @@
       <p><span class="lbl">风险警报</span>　书面答复若暗示认证路径受阻或延期，机器人出租车叙事可能重定价；交付与价格战旧风险仍在。</p>
       <p><span class="lbl">积极催化</span>　若答复给出清晰合规路径，事件溢价可能快速修复。</p>
       <p><span class="lbl">Financial</span>　本周末无新增正式财报；沿用既有季度披露即可。</p>
+    
+      <div class="tw-inline">
+        <h4>推特舆情 · TSLA 特斯拉</h4>
+        <p class="meta-line"><span class="tw-pill neut">情绪 · 中性</span> <span class="tw-pill heat-h">热度 · 高</span> · 公开网页检索 X/Twitter 主题（非 API）</p>
+        <ul><li>Robotaxi 监管推进乐观与安全审查悲观并存</li><li>Cybercab 书面答复窗口抬升事件讨论</li></ul>
+        <p><strong>争议点：</strong>自动驾驶时间表 vs 监管/安全阻力，多空分裂。</p>
+        <p class="meta-line">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
+      </div>
     </div>
     <div class="sec">
       <h3>作战计划 / 策略</h3>
@@ -586,6 +785,13 @@
         <p><strong>结论</strong>：半导体/存储情绪日跟涨，数据中心份额叙事仍在，但整体增速对比 NVDA 仍被市场讨论。</p>
         <p><strong>新闻</strong>：周五费城半导体大涨背景下普涨（综合行情）。</p>
         <p><strong>策略</strong>：持有为主；回踩再加，数值待补 · 待开盘验证。映射杠杆 <strong>AMDL</strong>。</p>
+        
+        <div class="tw-inline">
+          <h4>推特舆情 · AMD</h4>
+          <p class="meta-line"><span class="tw-pill bull">情绪 · 偏多</span> <span class="tw-pill heat-m">热度 · 中</span> · 公开网页检索</p>
+          <p>主题：AI GPU 份额叙事、财报后跟涨；争议：相对 NVDA 差距与竞争/供应风险。热度较均值偏冷。</p>
+          <p class="meta-line">舆情定性≠资金流向；不构成投资建议。</p>
+        </div>
         <p class="note">以上为信息整理与参考，不构成投资建议。</p>
       </div>
     </details>
@@ -604,6 +810,13 @@
         <p><strong>结论</strong>：加密风险偏好回暖主导定价，周五大涨；情绪过热，操作「持有但勿追高」。</p>
         <p><strong>新闻</strong>：周末 BTC 重上约 $8 万关口、加密总市值报道升温（综合加密媒体）。</p>
         <p><strong>策略</strong>：已有仓持有；新仓等回撤。映射杠杆 <strong>CONL</strong>（波动显著更大）。</p>
+        
+        <div class="tw-inline">
+          <h4>推特舆情 · COIN</h4>
+          <p class="meta-line"><span class="tw-pill bull">情绪 · 偏多</span> <span class="tw-pill heat-h">热度 · 高</span> · 公开网页检索</p>
+          <p>主题：BTC/加密 beta、稳定币与平台扩张叙事；争议：现货量波动与监管。勿追热度峰值。</p>
+          <p class="meta-line">舆情定性≠资金流向；不构成投资建议。</p>
+        </div>
         <p class="note">以上为信息整理与参考，不构成投资建议。</p>
       </div>
     </details>
@@ -613,6 +826,13 @@
         <p><strong>结论</strong>：加密 + 零售交易情绪共振，周五强势；与 COIN 同属高 beta。</p>
         <p><strong>新闻</strong>：加密市场回暖叙事（综合）。</p>
         <p><strong>策略</strong>：持有 / 勿追高；回撤再评估。映射 <strong>ROBN</strong>。</p>
+        
+        <div class="tw-inline">
+          <h4>推特舆情 · HOOD</h4>
+          <p class="meta-line"><span class="tw-pill bull">情绪 · 偏多</span> <span class="tw-pill heat-m">热度 · 中</span> · 公开网页检索</p>
+          <p>主题：零售+加密共振、相对 COIN 更分散；争议：估值溢价与增长放缓。讨论量低于近期均值。</p>
+          <p class="meta-line">舆情定性≠资金流向；不构成投资建议。</p>
+        </div>
         <p class="note">以上为信息整理与参考，不构成投资建议。</p>
       </div>
     </details>
@@ -667,6 +887,15 @@
       </ul>
       <div class="disclaimer">以上为信息整理与参考，不构成投资建议。</div>
     </section>
+
+    <section class="block">
+      <h2><span class="n">※</span>推特舆情（大盘横切）</h2>
+      <div class="tw-strip">
+        <h3>跨资产公开讨论主题（X/Twitter · 网页检索）</h3>
+        <p>英文 X 上对 A 股个股原生讨论整体偏少；可检索到的跨市场叙事多为 <strong>国产算力/信创</strong>（龙芯等映射）、<strong>商业航天/卫星互联网</strong>（中国卫星等主题外溢）、以及 <strong>新能源龙头「去宁化」</strong> 与资源股 beta。更多实质讨论仍集中在中文社区，X 侧记「公开检索偏少」。</p>
+        <p class="src">来源说明：公开网页检索 X/Twitter 及舆情汇总页主题归纳；非认证 API。舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
+      </div>
+    </section>
   </div>
 
   <!-- ========== 4 A股关注 ========== -->
@@ -698,6 +927,76 @@
         </tbody>
       </table>
       <p class="note">名单 17 只（不含 01810 小米，已在港股关注）。截图价优先；未出现在截图者价位记「待补」。小米亦出现在用户 App 自选列表中，仅作脚注交叉，不重复出 A 股卡。</p>
+    </section>
+
+    <section class="block">
+      <h2><span class="n">1b</span>推特舆情</h2>
+      <p class="note">公开网页检索 X/Twitter（及可检索舆情汇总）主题归纳；英文 X 对 A 股单票讨论普遍偏少。舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
+      <div class="tw-grid">
+        <div class="tw-card">
+          <div class="tw-head">
+            <span class="tw-code">600118</span><span class="tw-name">中国卫星</span>
+            <span class="tw-pill bull">情绪 · 偏多</span>
+            <span class="tw-pill heat-m">热度 · 中</span>
+          </div>
+          <ul>
+            <li>主题：商业航天 / 卫星互联网组网情绪外溢</li>
+            <li>主题：通感智算 / 发射窗口催化讨论</li>
+            <li>主题：公开 X 英文讨论偏少，多映射板块热度</li>
+          </ul>
+          <div class="tw-debate"><strong>争议点：</strong>主题一日游 vs 订单兑现；股东减持等风险被提及。英文 cashtag 检索：公开检索偏少 / 待补。</div>
+        </div>
+        <div class="tw-card">
+          <div class="tw-head">
+            <span class="tw-code">688047</span><span class="tw-name">龙芯中科</span>
+            <span class="tw-pill bull">情绪 · 偏多</span>
+            <span class="tw-pill heat-l">热度 · 低</span>
+          </div>
+          <ul>
+            <li>主题：国产 CPU / 信创自主可控映射</li>
+            <li>主题：定增与算力情绪外溢</li>
+          </ul>
+          <div class="tw-debate"><strong>争议点：</strong>主题估值扩张 vs 盈利兑现。X 侧：公开检索偏少 / 待补。</div>
+        </div>
+        <div class="tw-card">
+          <div class="tw-head">
+            <span class="tw-code">002230</span><span class="tw-name">科大讯飞</span>
+            <span class="tw-pill neut">情绪 · 中性偏空</span>
+            <span class="tw-pill heat-m">热度 · 中</span>
+          </div>
+          <ul>
+            <li>主题：大模型商业化与盈利兑现质疑</li>
+            <li>主题：AI 应用长期叙事仍在</li>
+            <li>主题：品牌/公关层负面讨论抬升噪音（非基本面主线）</li>
+          </ul>
+          <div class="tw-debate"><strong>争议点：</strong>「再等等」式失望情绪 vs 国产 AI 刚需信仰。英文 X：公开检索偏少 / 待补。</div>
+        </div>
+        <div class="tw-card">
+          <div class="tw-head">
+            <span class="tw-code">300750</span><span class="tw-name">宁德时代</span>
+            <span class="tw-pill bear">情绪 · 偏空</span>
+            <span class="tw-pill heat-m">热度 · 中</span>
+          </div>
+          <ul>
+            <li>主题：车企「去宁化」与份额担忧</li>
+            <li>主题：全球动力电池龙头地位仍被引用</li>
+            <li>主题：回购托底叙事对冲情绪</li>
+          </ul>
+          <div class="tw-debate"><strong>争议点：</strong>竞争加剧压估值 vs 龙头壁垒。英文 X 讨论：公开检索偏少 / 待补。</div>
+        </div>
+        <div class="tw-card">
+          <div class="tw-head">
+            <span class="tw-code">601899</span><span class="tw-name">紫金矿业</span>
+            <span class="tw-pill bull">情绪 · 偏多</span>
+            <span class="tw-pill heat-l">热度 · 低</span>
+          </div>
+          <ul>
+            <li>主题：贵金属/铜金资源 beta</li>
+            <li>主题：公司层创投/AI 布局被当作边缘叙事</li>
+          </ul>
+          <div class="tw-debate"><strong>争议点：</strong>商品价格周期 vs 成长溢价。X 侧：公开检索偏少 / 待补。</div>
+        </div>
+      </div>
     </section>
 
     <section class="block" style="background:transparent;border:none;padding:0;">
@@ -736,6 +1035,14 @@
       <p><span class="lbl">风险警报</span>　主题一日游；盈利弹性弱于估值扩张；订单兑现节奏不及预期。</p>
       <p><span class="lbl">积极催化</span>　星座组网加速、星载单机/地面终端中标、发射窗口密集。</p>
       <p><span class="lbl">Financial</span>　以公司年报/半年报为准；周末无新正式业绩指引。</p>
+    
+      <div class="tw-inline">
+        <h4>推特舆情 · 600118 中国卫星</h4>
+        <p class="meta-line"><span class="tw-pill bull">情绪 · 偏多</span> <span class="tw-pill heat-m">热度 · 中</span> · 公开网页检索 X/Twitter 主题（非 API）</p>
+        <ul><li>商业航天/星网主题外溢</li><li>英文 X 原生讨论：公开检索偏少 / 待补</li></ul>
+        <p><strong>争议点：</strong>主题脉冲 vs 订单兑现与减持风险。</p>
+        <p class="meta-line">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
+      </div>
     </div>
     <div class="sec">
       <h3>作战计划 / 策略</h3>
@@ -787,6 +1094,14 @@
       <p><span class="lbl">风险警报</span>　定增稀释与审核不确定性；生态与性能竞争；主题退潮回撤。</p>
       <p><span class="lbl">积极催化</span>　信创招标放量、新品导入、定增落地用于研发/扩产。</p>
       <p><span class="lbl">Financial</span>　以公司定期报告为准。</p>
+    
+      <div class="tw-inline">
+        <h4>推特舆情 · 688047 龙芯中科</h4>
+        <p class="meta-line"><span class="tw-pill bull">情绪 · 偏多</span> <span class="tw-pill heat-l">热度 · 低</span> · 公开网页检索 X/Twitter 主题（非 API）</p>
+        <ul><li>国产 CPU/信创映射</li><li>X：公开检索偏少 / 待补</li></ul>
+        <p><strong>争议点：</strong>主题估值 vs 盈利兑现。</p>
+        <p class="meta-line">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
+      </div>
     </div>
     <div class="sec">
       <h3>作战计划 / 策略</h3>
@@ -838,6 +1153,14 @@
       <p><span class="lbl">风险警报</span>　AI 应用商业化节奏；估值波动；教育/toG 订单季节性。</p>
       <p><span class="lbl">积极催化</span>　回购持续、大模型产品落地、算力链情绪外溢。</p>
       <p><span class="lbl">Financial</span>　见半年报；精确数字以公告为准。</p>
+    
+      <div class="tw-inline">
+        <h4>推特舆情 · 002230 科大讯飞</h4>
+        <p class="meta-line"><span class="tw-pill neut">情绪 · 中性偏空</span> <span class="tw-pill heat-m">热度 · 中</span> · 公开网页检索 X/Twitter 主题（非 API）</p>
+        <ul><li>大模型商业化兑现质疑</li><li>品牌层噪音抬升讨论离散度；英文 X 偏少</li></ul>
+        <p><strong>争议点：</strong>长期国产 AI 信仰 vs 短期盈利失望。</p>
+        <p class="meta-line">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
+      </div>
     </div>
     <div class="sec">
       <h3>作战计划 / 策略</h3>
@@ -889,6 +1212,14 @@
       <p><span class="lbl">风险警报</span>　客户结构变化；毛利率承压；叙事发酵期波动加大。</p>
       <p><span class="lbl">积极催化</span>　回购加码、高端车型份额稳住、海外产能兑现。</p>
       <p><span class="lbl">Financial</span>　见半年报与回购进展公告。</p>
+    
+      <div class="tw-inline">
+        <h4>推特舆情 · 300750 宁德时代</h4>
+        <p class="meta-line"><span class="tw-pill bear">情绪 · 偏空</span> <span class="tw-pill heat-m">热度 · 中</span> · 公开网页检索 X/Twitter 主题（非 API）</p>
+        <ul><li>「去宁化」份额担忧</li><li>回购托底对冲；英文 X：公开检索偏少 / 待补</li></ul>
+        <p><strong>争议点：</strong>竞争加剧 vs 龙头壁垒。</p>
+        <p class="meta-line">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
+      </div>
     </div>
     <div class="sec">
       <h3>作战计划 / 策略</h3>
@@ -940,6 +1271,14 @@
       <p><span class="lbl">风险警报</span>　大宗商品回撤；海外矿山运营与地缘；创投布局与主业协同不确定。</p>
       <p><span class="lbl">积极催化</span>　铜金价格回升、产量超预期、分红/回购。</p>
       <p><span class="lbl">Financial</span>　以定期报告为准。</p>
+    
+      <div class="tw-inline">
+        <h4>推特舆情 · 601899 紫金矿业</h4>
+        <p class="meta-line"><span class="tw-pill bull">情绪 · 偏多</span> <span class="tw-pill heat-l">热度 · 低</span> · 公开网页检索 X/Twitter 主题（非 API）</p>
+        <ul><li>资源/贵金属 beta</li><li>X：公开检索偏少 / 待补</li></ul>
+        <p><strong>争议点：</strong>商品周期定价主导，社交讨论稀薄。</p>
+        <p class="meta-line">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
+      </div>
     </div>
     <div class="sec">
       <h3>作战计划 / 策略</h3>
@@ -1179,6 +1518,15 @@
       </ul>
       <div class="disclaimer">以上为信息整理与参考，不构成投资建议。</div>
     </section>
+
+    <section class="block">
+      <h2><span class="n">※</span>推特舆情（大盘横切）</h2>
+      <div class="tw-strip">
+        <h3>跨资产公开讨论主题（X/Twitter · 网页检索）</h3>
+        <p>港股相关公开讨论主题：<strong>消费电子+汽车+AI 生态</strong>（小米业绩承压 vs 长期叙事）、<strong>智驾芯片</strong>（地平线订单/毛利权衡）、以及 <strong>私有化套利</strong>（01788 贴近作价）。英文 X 对港股单票讨论热度整体低于美股 AI/加密链。</p>
+        <p class="src">来源说明：公开网页检索 X/Twitter 讨论主题；非认证 API。舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
+      </div>
+    </section>
   </div>
 
   <!-- ========== 6 港股关注 ========== -->
@@ -1198,6 +1546,50 @@
         </tbody>
       </table>
       <p class="note">仅覆盖当前港股关注五只；不编造其他持仓。</p>
+    </section>
+
+    <section class="block">
+      <h2><span class="n">1b</span>推特舆情</h2>
+      <p class="note">公开网页检索 X/Twitter 讨论主题；港股单票英文讨论整体偏少。舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
+      <div class="tw-grid">
+        <div class="tw-card">
+          <div class="tw-head">
+            <span class="tw-code">01810</span><span class="tw-name">小米集团</span>
+            <span class="tw-pill neut">情绪 · 中性</span>
+            <span class="tw-pill heat-m">热度 · 中</span>
+          </div>
+          <ul>
+            <li>主题：手机毛利/存储成本与销量压力</li>
+            <li>主题：汽车交付增长 vs 盈利承压</li>
+            <li>主题：AI / 芯片 / 增程 SUV 长期反转叙事</li>
+          </ul>
+          <div class="tw-debate"><strong>争议点：</strong>发布会热度难换股价；南向净卖与回购托底并存。</div>
+        </div>
+        <div class="tw-card">
+          <div class="tw-head">
+            <span class="tw-code">09660</span><span class="tw-name">地平线机器人</span>
+            <span class="tw-pill bear">情绪 · 偏空</span>
+            <span class="tw-pill heat-l">热度 · 低</span>
+          </div>
+          <ul>
+            <li>主题：HSD 铺量节奏与低毛利换订单</li>
+            <li>主题：车企合作（比亚迪/长安/大众等）进展</li>
+          </ul>
+          <div class="tw-debate"><strong>争议点：</strong>收入增长质量 vs 经调整亏损扩大。X：公开检索偏少 / 待补。</div>
+        </div>
+        <div class="tw-card">
+          <div class="tw-head">
+            <span class="tw-code">01788</span><span class="tw-name">国泰君安国际</span>
+            <span class="tw-pill neut">情绪 · 中性</span>
+            <span class="tw-pill heat-l">热度 · 低</span>
+          </div>
+          <ul>
+            <li>主题：私有化现金作价 3.00 港元套利讨论</li>
+            <li>主题：股东批准门槛与时间表博弈</li>
+          </ul>
+          <div class="tw-debate"><strong>争议点：</strong>折价收窄后收益率吸引力；方案失败回吐风险。X：公开检索偏少 / 待补。</div>
+        </div>
+      </div>
     </section>
 
     <section class="block" style="background:transparent;border:none;padding:0;">
@@ -1236,6 +1628,14 @@
       <p><span class="lbl">风险警报</span>　私有化先决条件/股东批准不及预期；作价不再上调；方案失败则溢价回吐。</p>
       <p><span class="lbl">积极催化</span>　计划进度节点、复牌后成交确认、最终交割确定性上升。</p>
       <p><span class="lbl">Financial</span>　见上；周末无新增正式交割完成公告。</p>
+    
+      <div class="tw-inline">
+        <h4>推特舆情 · 01788 国泰君安国际</h4>
+        <p class="meta-line"><span class="tw-pill neut">情绪 · 中性</span> <span class="tw-pill heat-l">热度 · 低</span> · 公开网页检索 X/Twitter 主题（非 API）</p>
+        <ul><li>私有化 3.00 作价套利</li><li>X：公开检索偏少 / 待补</li></ul>
+        <p><strong>争议点：</strong>批准进度与方案失败回吐。</p>
+        <p class="meta-line">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
+      </div>
     </div>
     <div class="sec">
       <h3>作战计划 / 策略</h3>
@@ -1287,6 +1687,14 @@
       <p><span class="lbl">风险警报</span>　盈利同比下滑与汽车交付波动；消费电子竞争；高估值回撤后的二次探底。</p>
       <p><span class="lbl">积极催化</span>　回购持续、新品周期、汽车交付改善。</p>
       <p><span class="lbl">Financial</span>　近期财报口径：营收同比大致持平、利润端承压（综合行情解读）；精确财报数字以公司公告为准。</p>
+    
+      <div class="tw-inline">
+        <h4>推特舆情 · 01810 小米集团</h4>
+        <p class="meta-line"><span class="tw-pill neut">情绪 · 中性</span> <span class="tw-pill heat-m">热度 · 中</span> · 公开网页检索 X/Twitter 主题（非 API）</p>
+        <ul><li>手机毛利压力 vs 汽车/AI 长期叙事</li><li>发布会热度与股价背离被反复讨论</li></ul>
+        <p><strong>争议点：</strong>短期盈利承压 vs 生态反转预期。</p>
+        <p class="meta-line">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
+      </div>
     </div>
     <div class="sec">
       <h3>作战计划 / 策略</h3>
@@ -1389,6 +1797,14 @@
       <p><span class="lbl">风险警报</span>　经营亏损与现金消耗；可转债/融资条款；目标价下修潮；量产份额竞争。</p>
       <p><span class="lbl">积极催化</span>　征程系列定点放量、舱驾一体量产节奏、订单超预期。</p>
       <p><span class="lbl">Financial</span>　见中期业绩公告；周末无新正式财报。</p>
+    
+      <div class="tw-inline">
+        <h4>推特舆情 · 09660 地平线机器人</h4>
+        <p class="meta-line"><span class="tw-pill bear">情绪 · 偏空</span> <span class="tw-pill heat-l">热度 · 低</span> · 公开网页检索 X/Twitter 主题（非 API）</p>
+        <ul><li>HSD 铺量与低毛利换订单</li><li>X：公开检索偏少 / 待补</li></ul>
+        <p><strong>争议点：</strong>收入增 vs 亏损扩大与目标价下修。</p>
+        <p class="meta-line">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
+      </div>
     </div>
     <div class="sec">
       <h3>作战计划 / 策略</h3>
@@ -1470,6 +1886,7 @@
       <li>港股 9/18：恒指 24750.78、恒科 4405.50；南向净买入约 11.93 亿港元。</li>
       <li>港股五只 9/18 收盘（长桥）：01788 2.895、01810 26.40、06178 7.135、09660 4.195、02050 24.90。</li>
       <li>未取得可靠数值处已写「待补」；策略多为条件式 +「待开盘验证」。</li>
+      <li>推特舆情：公开网页检索 X/Twitter 讨论主题与二手情绪汇总（非认证 API）；只归纳主题，不编造推文或账号。舆情为公开讨论定性，不代表资金流向；不构成投资建议。版本标记 <strong>v=tw1</strong>。</li>
     </ul>
     <div class="disclaimer">以上为信息整理与参考，不构成投资建议。</div>
   </section>
