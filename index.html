@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>自选速递 · Gaspar</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --card: #1a1e27;
+    --card2: #222833;
+    --border: #2e3544;
+    --text: #e8eaef;
+    --muted: #8b93a7;
+    --accent: #ffb84d;
+    --blue: #6aa8ff;
+    --green: #3dcf8e;
+    --red: #ff6b6b;
+    --neutral: #9aa3b5;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    padding: 20px 16px 48px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  header {
+    background: linear-gradient(145deg, #1c2230, #151922);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 22px 20px;
+    margin-bottom: 16px;
+  }
+  h1 { margin: 0 0 8px; font-size: 1.55rem; letter-spacing: 0.02em; }
+  .meta { color: var(--muted); font-size: 0.92rem; }
+  .badge {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: #2a3140;
+    color: var(--accent);
+    font-size: 0.8rem;
+  }
+  section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px 16px 8px;
+    margin-bottom: 12px;
+  }
+  h2 {
+    margin: 0 0 12px;
+    font-size: 1.05rem;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  h2 .n {
+    width: 22px; height: 22px; border-radius: 7px;
+    background: #2a3140; color: var(--text);
+    font-size: 0.75rem; display: inline-flex;
+    align-items: center; justify-content: center;
+  }
+  ul { margin: 0 0 12px; padding-left: 1.15rem; }
+  li { margin: 0 0 8px; color: #d5dae6; }
+  li strong { color: var(--blue); font-weight: 600; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .chip {
+    border-radius: 999px; padding: 6px 12px; font-size: 0.85rem;
+    border: 1px solid var(--border); background: var(--card2);
+  }
+  .chip.up { color: var(--green); border-color: #2f5a45; }
+  .chip.down { color: var(--red); border-color: #5a3030; }
+  .chip.mid { color: var(--neutral); }
+  table {
+    width: 100%; border-collapse: collapse; font-size: 0.9rem;
+    margin-bottom: 12px;
+  }
+  th, td {
+    text-align: left; padding: 10px 8px;
+    border-bottom: 1px solid var(--border); vertical-align: top;
+  }
+  th { color: var(--muted); font-weight: 600; font-size: 0.8rem; }
+  td.t { color: var(--blue); font-weight: 600; white-space: nowrap; }
+  .note {
+    color: var(--muted); font-size: 0.85rem;
+    padding: 4px 0 10px;
+  }
+  footer {
+    margin-top: 18px; color: var(--muted); font-size: 0.82rem;
+    text-align: center; line-height: 1.6;
+  }
+  .disclaimer {
+    background: #1b1f28; border: 1px dashed #3a4152;
+    border-radius: 12px; padding: 12px 14px; color: var(--muted);
+    font-size: 0.88rem; margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>自选速递</h1>
+      <div class="meta">2026-09-20（周日）· 周末复盘 / 周一前瞻 · 上海时间</div>
+      <span class="badge">SAMPLE · 休市日样例</span>
+    </header>
+
+    <section>
+      <h2><span class="n">1</span>财报</h2>
+      <table>
+        <thead><tr><th>标的</th><th>日期</th><th>要点</th></tr></thead>
+        <tbody>
+          <tr><td class="t">NVDA</td><td>8/26</td><td>营收约 $962 亿超预期；Q3 指引约 $1080 亿 ±2%；毛利指引有下探讨论</td></tr>
+          <tr><td class="t">ORCL</td><td>~9/10</td><td>云基建约 +121%；积压约 $6640 亿；自由现金流仍为负</td></tr>
+          <tr><td class="t">RKLB</td><td>8/10</td><td>营收约 $2.34 亿创纪录；积压约 $23.6 亿</td></tr>
+          <tr><td class="t">其余</td><td>—</td><td>本周末未见新增正式披露；多数港股近两周无新财报日</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2><span class="n">2</span>新闻汇聚</h2>
+      <ul>
+        <li><strong>NVDA</strong>：收购 Hugging Face 约 $119 亿（待批，预计 2027 上半年交割）</li>
+        <li><strong>RKLB</strong>：FCC 过 Iridium 约 $81 亿交易首道关；股东投票约 9/24</li>
+        <li><strong>TSLA</strong>：NHTSA 要求约 9/30 前就 Cybercab 认证书面答复</li>
+        <li><strong>加密</strong>：周末偏强，COIN / HOOD（CONL、ROBN）叙事回暖；OKLO 有能源政策催化讨论</li>
+        <li><strong>港股</strong>：高盛下调腾讯 / 阿里目标价仍列买入；腾讯持续回购；快手可灵获国家 AI 基金入股</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="n">3</span>舆情</h2>
+      <div class="chips">
+        <span class="chip up">偏多 · RKLB / COIN / HOOD / OKLO / 快手</span>
+        <span class="chip mid">中性 · NVDA / AMD / BABA / 腾讯 / 美团 / WRD</span>
+        <span class="chip down">谨慎 · ORCL / TSLA</span>
+      </div>
+      <p class="note">周日无连续成交；以上为公开讨论定性，不代表资金流向。</p>
+    </section>
+
+    <section>
+      <h2><span class="n">4</span>分析</h2>
+      <ul>
+        <li>主线仍是「AI 基建兑现 vs 融资 / 毛利 / 监管摩擦」。</li>
+        <li>本周事件轴：RKLB 投票、TSLA 监管口径、腾讯回购与港股互联网估值、加密 beta 对 COIN/HOOD 及杠杆的传导。</li>
+        <li>杠杆 ETF 只映射正股，波动显著更大。</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="n">5</span>操作参考</h2>
+      <ul>
+        <li>休市日不做价位判断；周一若高开，先核对事件是否已被定价。</li>
+        <li>事件留意：RKLB 投票结果、TSLA 文件口径、加密波动传导。</li>
+        <li>信息偏薄处（如 WRD 个股层）可先观望。</li>
+      </ul>
+      <div class="disclaimer">以上为信息整理与参考，不构成投资建议。</div>
+    </section>
+
+    <footer>
+      Gaspar · 工作日 08:50 自动更新（样例页）<br />
+      自选：美股 + 港股关注列表
+    </footer>
+  </div>
+</body>
+</html>
