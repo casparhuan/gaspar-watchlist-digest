@@ -87,7 +87,6 @@
   .sent.s1 { background: #3a2222; color: var(--red); }
   .note { color: var(--muted); font-size: 0.8rem; padding: 2px 0 8px; }
 
-  /* Stock card */
   .stock {
     background: var(--card); border: 1px solid var(--border);
     border-radius: 14px; padding: 0; margin-bottom: 12px; overflow: hidden;
@@ -169,6 +168,51 @@
     border-radius: 12px; padding: 12px 14px; color: var(--muted);
     font-size: 0.85rem; margin-top: 8px;
   }
+
+  /* Sticky tabs */
+  .tab-bar-wrap {
+    position: sticky; top: 0; z-index: 40;
+    background: rgba(15,17,21,0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    margin: 0 -4px 12px; padding: 8px 4px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .tab-bar {
+    display: flex; gap: 6px; overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 2px;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex: 0 0 auto; border: 1px solid var(--border);
+    background: var(--card2); color: var(--muted);
+    border-radius: 999px; padding: 8px 14px;
+    font-size: 0.88rem; font-weight: 600;
+    cursor: pointer; font-family: inherit;
+    white-space: nowrap; transition: background .15s, color .15s, border-color .15s;
+  }
+  .tab-btn.active {
+    background: var(--accent); color: #1a1208;
+    border-color: var(--accent);
+  }
+  .tab-btn:not(.active):hover { color: var(--text); border-color: #4a5568; }
+  .tab-chip-muted {
+    flex: 0 0 auto; border: 1px dashed #3a4152;
+    background: transparent; color: #5c6578;
+    border-radius: 999px; padding: 8px 12px;
+    font-size: 0.78rem; white-space: nowrap;
+    user-select: none;
+  }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .empty-state {
+    text-align: center; color: var(--muted);
+    padding: 28px 16px; font-size: 0.9rem;
+  }
+  .seg-hint { color: var(--muted); font-size: 0.75rem; margin: 0 0 8px; padding: 0 2px; }
+
 </style>
 </head>
 <body>
@@ -179,54 +223,63 @@
     <span class="badge">休市日 · 报价为上一交易日收盘 · 参考口径</span>
   </header>
 
-  <!-- 1. 大盘/主题 -->
+  <!-- Shared market overview -->
   <section class="block">
     <h2><span class="n">1</span>大盘 / 主题一览</h2>
     <div class="chips">
       <span class="chip up">美股隔夜(9/18)：纳指 +0.39% · 标普 +0.17% · 道指 -0.18%</span>
       <span class="chip up">费城半导体 +2.78%（存储领涨）</span>
       <span class="chip mid">港股上周：恒指累跌约 0.22%；9/18 恒指 +0.60% 报 24750.78；恒科 +2.20%</span>
-      <span class="chip theme">主线：AI 基建兑现 vs 毛利/融资摩擦 · 加密风险偏好回暖 · 港股互联网回购+卖方目标价调整</span>
+      <span class="chip theme">主线：AI 基建兑现 vs 毛利/融资 · 加密风险偏好 · 港股券商私有化/智驾回撤/热管理主题</span>
     </div>
     <ul class="dense">
-      <li><strong>美股隔夜</strong>：四巫日交投；存储/半导体重估，美光、闪存链强；Magnificent 7 分化——NVDA 收涨、META/MSFT/TSLA 偏弱（来源：BigGo/综合财经稿）。</li>
+      <li><strong>美股隔夜</strong>：四巫日交投；存储/半导体重估；Magnificent 7 分化——NVDA 收涨、META/MSFT/TSLA 偏弱（来源：BigGo/综合财经稿）。</li>
       <li><strong>港股上周</strong>：周五恒指收 24750.78（+0.60%），恒科 4405.50（+2.20%）；全周恒指略跌、恒科累涨约 1.97%（来源：智通财经）。</li>
-      <li><strong>主题</strong>：① AI 算力交付与毛利指引博弈 ② RKLB–Iridium 监管/投票窗口 ③ BTC 站上约 8 万美元关口带动 COIN/HOOD ④ 腾讯连续回购 vs 高盛下调目标价仍买入。</li>
+      <li><strong>主题</strong>：① AI 算力交付与毛利指引博弈 ② RKLB–Iridium 投票窗口 ③ BTC 站上约 8 万美元关口带动 COIN/HOOD ④ 港股侧：01788 私有化锚价、09660 智驾亏损定价、02050 热管理/机器人映射。</li>
     </ul>
-    <p class="note">今日美股、港股休市；以下个股报价均为 2026-09-18（周五）收盘，已标明。</p>
+    <p class="note">今日美股、港股休市；以下个股报价均为 2026-09-18（周五）收盘，已标明。下方分「在买美股 / 在买港股」标签页。</p>
   </section>
 
-  <!-- 2. 今日焦点表 -->
-  <section class="block">
-    <h2><span class="n">2</span>今日焦点表</h2>
-    <table class="focus">
-      <thead>
-        <tr><th>代码</th><th>情绪</th><th>一句话</th><th>操作参考</th></tr>
-      </thead>
-      <tbody>
-        <tr><td class="t">NVDA</td><td><span class="sent s4">乐观 68</span></td><td>需求叙事仍强，毛利指引被反复计价</td><td>持有 / 回踩再加</td></tr>
-        <tr><td class="t">ORCL</td><td><span class="sent s2">悲观 38</span></td><td>积压亮眼但 FCF 承压、客户集中受质疑</td><td>观察 / 减仓博弈</td></tr>
-        <tr><td class="t">TSLA</td><td><span class="sent s2">悲观 42</span></td><td>Cybercab 监管书面答复临近（约 9/30）</td><td>观察 / 轻仓</td></tr>
-        <tr><td class="t">RKLB</td><td><span class="sent s4">乐观 62</span></td><td>FCC 过关 + 约 9/24 股东投票窗口</td><td>事件交易 / 轻仓试错</td></tr>
-        <tr><td class="t">00700</td><td><span class="sent s3">中性 55</span></td><td>连续回购托底，卖方下调目标价仍买入</td><td>持有 / 逢弱吸</td></tr>
-        <tr><td class="t">BABA/09988</td><td><span class="sent s4">乐观 64</span></td><td>周五放量反弹；云增速预期上修</td><td>持有 / 轻仓试错</td></tr>
-        <tr><td class="t">AMD</td><td><span class="sent s4">乐观 66</span></td><td>半导体重估日跟涨，份额叙事仍在</td><td>持有</td></tr>
-        <tr><td class="t">COIN</td><td><span class="sent s5">极度乐观 78</span></td><td>加密 beta 爆发，周五大涨约 12%</td><td>持有 / 勿追高</td></tr>
-        <tr><td class="t">HOOD</td><td><span class="sent s5">极度乐观 76</span></td><td>加密与零售交易情绪共振</td><td>持有 / 勿追高</td></tr>
-        <tr><td class="t">OKLO</td><td><span class="sent s3">中性 52</span></td><td>能源政策叙事仍在，周五回调</td><td>观察</td></tr>
-        <tr><td class="t">WRD</td><td><span class="sent s3">中性 48</span></td><td>政策主题相关，个股硬催化偏薄</td><td>观察</td></tr>
-        <tr><td class="t">其余港股</td><td><span class="sent s3">中性</span></td><td>周末真空，主题映射为主</td><td>观察</td></tr>
-      </tbody>
-    </table>
-  </section>
+  <div class="tab-bar-wrap">
+    <p class="seg-hint">左右滑动切换 · 支持 #us / #hk</p>
+    <div class="tab-bar" role="tablist" aria-label="市场标签">
+      <button type="button" class="tab-btn active" role="tab" aria-selected="true" data-tab="us" id="tab-us">在买美股</button>
+      <button type="button" class="tab-btn" role="tab" aria-selected="false" data-tab="hk" id="tab-hk">在买港股</button>
+      <span class="tab-chip-muted" title="暂无持仓">已出货 · 暂无</span>
+      <span class="tab-chip-muted" title="暂无持仓">新加坡 · 暂无</span>
+    </div>
+  </div>
 
-  <!-- 3. 详细个股卡 -->
-  <section class="block" style="background:transparent;border:none;padding:0;">
-    <h2 style="padding:0 2px 8px;"><span class="n">3</span>详细个股卡（优先有料）</h2>
-  </section>
+  <!-- ========== US TAB ========== -->
+  <div class="tab-panel active" id="panel-us" role="tabpanel" aria-labelledby="tab-us">
+    <section class="block">
+      <h2><span class="n">2</span>美股焦点表</h2>
+      <table class="focus">
+        <thead>
+          <tr><th>代码</th><th>情绪</th><th>一句话</th><th>操作参考</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="t">NVDA</td><td><span class="sent s4">乐观 68</span></td><td>需求叙事仍强，毛利指引被反复计价</td><td>持有 / 回踩再加</td></tr>
+          <tr><td class="t">ORCL</td><td><span class="sent s2">悲观 38</span></td><td>积压亮眼但 FCF 承压、客户集中受质疑</td><td>观察 / 减仓博弈</td></tr>
+          <tr><td class="t">RKLB</td><td><span class="sent s4">乐观 62</span></td><td>FCC 过关 + 约 9/24 股东投票窗口</td><td>事件交易 / 轻仓试错</td></tr>
+          <tr><td class="t">WRD</td><td><span class="sent s3">中性 48</span></td><td>政策主题相关，个股硬催化偏薄</td><td>观察</td></tr>
+          <tr><td class="t">AMD</td><td><span class="sent s4">乐观 66</span></td><td>半导体重估日跟涨；映射 AMDL</td><td>持有</td></tr>
+          <tr><td class="t">TSLA</td><td><span class="sent s2">悲观 42</span></td><td>Cybercab 监管书面答复临近（约 9/30）</td><td>观察 / 轻仓</td></tr>
+          <tr><td class="t">BABA</td><td><span class="sent s4">乐观 64</span></td><td>周五放量反弹；云增速预期上修</td><td>持有 / 轻仓试错</td></tr>
+          <tr><td class="t">COIN</td><td><span class="sent s5">极度乐观 78</span></td><td>加密 beta；映射 CONL</td><td>持有 / 勿追高</td></tr>
+          <tr><td class="t">CRCL</td><td><span class="sent s4">乐观 70</span></td><td>稳定币/加密基建；映射 CRCA</td><td>观察 / 轻仓</td></tr>
+          <tr><td class="t">CRWV</td><td><span class="sent s3">中性</span></td><td>AI 算力租赁；映射 CWVX · 价待补</td><td>观察</td></tr>
+          <tr><td class="t">HOOD</td><td><span class="sent s5">极度乐观 76</span></td><td>加密+零售情绪；映射 ROBN</td><td>持有 / 勿追高</td></tr>
+          <tr><td class="t">OKLO</td><td><span class="sent s3">中性 52</span></td><td>能源政策叙事；映射 OKLL</td><td>观察</td></tr>
+        </tbody>
+      </table>
+    </section>
 
-  <!-- NVDA -->
-  <article class="stock" id="NVDA">
+    <section class="block" style="background:transparent;border:none;padding:0;">
+      <h2 style="padding:0 2px 8px;"><span class="n">3</span>详细个股卡（优先有料）</h2>
+    </section>
+
+<article class="stock" id="NVDA">
     <div class="stock-head">
       <div class="row1">
         <span class="name">英伟达</span>
@@ -278,8 +331,7 @@
     <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
   </article>
 
-  <!-- ORCL -->
-  <article class="stock" id="ORCL">
+<article class="stock" id="ORCL">
     <div class="stock-head">
       <div class="row1">
         <span class="name">甲骨文</span>
@@ -330,60 +382,7 @@
     <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
   </article>
 
-  <!-- TSLA -->
-  <article class="stock" id="TSLA">
-    <div class="stock-head">
-      <div class="row1">
-        <span class="name">特斯拉</span>
-        <span class="code">TSLA</span>
-        <span class="px down">$364.27　-0.53%</span>
-        <span class="session-tag">上一个交易日收盘 · 2026-09-18</span>
-      </div>
-    </div>
-    <div class="concl">
-      <h3>核心结论</h3>
-      <p class="summary">NHTSA 就 Cybercab FMVSS 认证要求约 9/30 前宣誓式书面答复，监管不确定性上升压制风险偏好；在答复口径明朗前，情绪偏谨慎，操作以观察为主。</p>
-      <div class="metrics">
-        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s2">悲观</span></span></div>
-        <div class="metric"><span class="k">情绪分</span><span class="v">42 / 100</span></div>
-        <div class="metric"><span class="k">操作建议</span><span class="v">观察 · 轻仓（参考）</span></div>
-        <div class="metric"><span class="k">趋势研判</span><span class="v">事件驱动震荡 · 方向待监管文件</span></div>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>数据视角</h3>
-      <p><span class="lbl">趋势状态</span>　周五小跌，弱于纳指；属 Mag7 中偏弱一侧。</p>
-      <p><span class="lbl">价格位置</span>　均线与近期高低精确值待补；定性为监管事件前的高波动整理。</p>
-      <p><span class="lbl">量能</span>　成交约 5190 万股量级（行情库）。</p>
-      <p><span class="lbl">相关板块</span>　电动车 / 自动驾驶 / 机器人叙事映射。</p>
-    </div>
-    <div class="sec">
-      <h3>情报</h3>
-      <p><span class="lbl">新闻要点</span>　NHTSA 特别令：就 Cybercab 无方向盘/踏板等合规路径，要求约 9/30 前书面答复（综合监管新闻）。</p>
-      <p><span class="lbl">风险警报</span>　书面答复若暗示认证路径受阻或延期，机器人出租车叙事可能重定价；交付与价格战旧风险仍在。</p>
-      <p><span class="lbl">积极催化</span>　若答复给出清晰合规路径，事件溢价可能快速修复。</p>
-      <p><span class="lbl">Financial</span>　本周末无新增正式财报；沿用既有季度披露即可。</p>
-    </div>
-    <div class="sec">
-      <h3>作战计划 / 策略</h3>
-      <p class="note" style="padding-top:0;">休市日 · 参考区间 · 待开盘验证</p>
-      <div class="strat">
-        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">监管文件落地后视口径再定 · 此前不设主动买点</span></div>
-        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">仅极端错杀且量能配合时轻仓试错</span></div>
-        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">事件交易仓：隔夜跳空不利即减 / 破近期低点（待补）</span></div>
-        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">利好落地后的脉冲高点分批兑现</span></div>
-      </div>
-      <ul class="risks">
-        <li>9/30 答复窗口前波动加大。</li>
-        <li>自动驾驶监管口径超预期严格。</li>
-        <li>大盘风险偏好切换时高 beta 先跌。</li>
-      </ul>
-    </div>
-    <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
-  </article>
-
-  <!-- RKLB -->
-  <article class="stock" id="RKLB">
+<article class="stock" id="RKLB">
     <div class="stock-head">
       <div class="row1">
         <span class="name">Rocket Lab</span>
@@ -435,60 +434,58 @@
     <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
   </article>
 
-  <!-- 00700 -->
-  <article class="stock" id="Tencent">
+<article class="stock" id="TSLA">
     <div class="stock-head">
       <div class="row1">
-        <span class="name">腾讯控股</span>
-        <span class="code">00700.HK</span>
-        <span class="px down">HK$419.00　-1.64%</span>
+        <span class="name">特斯拉</span>
+        <span class="code">TSLA</span>
+        <span class="px down">$364.27　-0.53%</span>
         <span class="session-tag">上一个交易日收盘 · 2026-09-18</span>
       </div>
     </div>
     <div class="concl">
       <h3>核心结论</h3>
-      <p class="summary">连续约 25 日回购（累计约 1017.60 万股 / 约 45.09 亿港元）提供下行缓冲，但高盛下调 12 个月目标价至 650 港元（仍列买入）显示卖方上修空间收敛；中性偏多持有，逢弱关注回购区。</p>
+      <p class="summary">NHTSA 就 Cybercab FMVSS 认证要求约 9/30 前宣誓式书面答复，监管不确定性上升压制风险偏好；在答复口径明朗前，情绪偏谨慎，操作以观察为主。</p>
       <div class="metrics">
-        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s3">中性</span></span></div>
-        <div class="metric"><span class="k">情绪分</span><span class="v">55 / 100</span></div>
-        <div class="metric"><span class="k">操作建议</span><span class="v">持有 · 逢弱吸（参考）</span></div>
-        <div class="metric"><span class="k">趋势研判</span><span class="v">回购托底下的震荡寻底 / 修复</span></div>
+        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s2">悲观</span></span></div>
+        <div class="metric"><span class="k">情绪分</span><span class="v">42 / 100</span></div>
+        <div class="metric"><span class="k">操作建议</span><span class="v">观察 · 轻仓（参考）</span></div>
+        <div class="metric"><span class="k">趋势研判</span><span class="v">事件驱动震荡 · 方向待监管文件</span></div>
       </div>
     </div>
     <div class="sec">
       <h3>数据视角</h3>
-      <p><span class="lbl">趋势状态</span>　周五收 419，跌 1.64%；回购价区间约 425.2–430.2，收盘低于当日回购带，显示抛压仍在。</p>
-      <p><span class="lbl">价格位置</span>　自 8/17 回购启动以来股价累计约 -4.77%（证券时报数据宝）；相对中长期均线精确值待补。</p>
-      <p><span class="lbl">量能</span>　成交额约 121.81 亿港元。</p>
-      <p><span class="lbl">相关板块</span>　港股互联网 / 游戏 / 广告 / 金融科技。</p>
+      <p><span class="lbl">趋势状态</span>　周五小跌，弱于纳指；属 Mag7 中偏弱一侧。</p>
+      <p><span class="lbl">价格位置</span>　均线与近期高低精确值待补；定性为监管事件前的高波动整理。</p>
+      <p><span class="lbl">量能</span>　成交约 5190 万股量级（行情库）。</p>
+      <p><span class="lbl">相关板块</span>　电动车 / 自动驾驶 / 机器人叙事映射。</p>
     </div>
     <div class="sec">
       <h3>情报</h3>
-      <p><span class="lbl">新闻要点</span>　① 港交所公告连续回购（证券时报）。② 高盛约 9/17 下调目标价至 650 港元仍「买入」，游戏/娱乐列年底前偏好前列（卖方研报转述）。</p>
-      <p><span class="lbl">风险警报</span>　目标价下修潮若蔓延；游戏版号/监管；大盘流动性收紧。</p>
-      <p><span class="lbl">积极催化</span>　回购持续、游戏流水超预期、广告复苏。</p>
-      <p><span class="lbl">Financial</span>　周末无新财报；沿用既有季度。</p>
+      <p><span class="lbl">新闻要点</span>　NHTSA 特别令：就 Cybercab 无方向盘/踏板等合规路径，要求约 9/30 前书面答复（综合监管新闻）。</p>
+      <p><span class="lbl">风险警报</span>　书面答复若暗示认证路径受阻或延期，机器人出租车叙事可能重定价；交付与价格战旧风险仍在。</p>
+      <p><span class="lbl">积极催化</span>　若答复给出清晰合规路径，事件溢价可能快速修复。</p>
+      <p><span class="lbl">Financial</span>　本周末无新增正式财报；沿用既有季度披露即可。</p>
     </div>
     <div class="sec">
       <h3>作战计划 / 策略</h3>
       <p class="note" style="padding-top:0;">休市日 · 参考区间 · 待开盘验证</p>
       <div class="strat">
-        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">回踩回购均价带下沿附近企稳（约 420–425 区作观察，待开盘验证）</span></div>
-        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">放量收复回购带上沿后再加</span></div>
-        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">有效跌破近期波段低点并缩回购力度（条件式）</span></div>
-        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">反弹至卖方目标价路径中的前阻力区分批</span></div>
+        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">监管文件落地后视口径再定 · 此前不设主动买点</span></div>
+        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">仅极端错杀且量能配合时轻仓试错</span></div>
+        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">事件交易仓：隔夜跳空不利即减 / 破近期低点（待补）</span></div>
+        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">利好落地后的脉冲高点分批兑现</span></div>
       </div>
       <ul class="risks">
-        <li>回购未能阻止阴跌。</li>
-        <li>卖方目标价继续下修。</li>
-        <li>港股互联网估值修复失败。</li>
+        <li>9/30 答复窗口前波动加大。</li>
+        <li>自动驾驶监管口径超预期严格。</li>
+        <li>大盘风险偏好切换时高 beta 先跌。</li>
       </ul>
     </div>
     <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
   </article>
 
-  <!-- BABA / 09988 -->
-  <article class="stock" id="BABA">
+<article class="stock" id="BABA">
     <div class="stock-head">
       <div class="row1">
         <span class="name">阿里巴巴</span>
@@ -539,12 +536,221 @@
     <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
   </article>
 
-  <!-- 4. 次级/折叠 -->
-  <section class="block">
-    <h2><span class="n">4</span>其余自选 · 简版</h2>
-    <p class="note">结论 + 新闻一句 + 策略一句；杠杆仅映射标注。</p>
+    <section class="block">
+      <h2><span class="n">4</span>其余美股自选 · 简版</h2>
+      <p class="note">结论 + 新闻一句 + 策略一句；杠杆仅映射标注。</p>
 
-    <details class="mini" open>
+<details class="mini" open>
+      <summary><span class="nm">AMD</span> <span class="px up">$559.82　+2.70%*</span> <span class="sent s4">乐观 66</span> <span class="session-tag">9/18 收盘</span></summary>
+      <div class="body">
+        <p><strong>结论</strong>：半导体/存储情绪日跟涨，数据中心份额叙事仍在，但整体增速对比 NVDA 仍被市场讨论。</p>
+        <p><strong>新闻</strong>：周五费城半导体大涨背景下普涨（综合行情）。</p>
+        <p><strong>策略</strong>：持有为主；回踩再加，数值待补 · 待开盘验证。映射杠杆 <strong>AMDL</strong>。</p>
+        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
+      </div>
+    </details>
+
+<details class="mini" open>
+      <summary><span class="nm">AMD</span> <span class="px up">$559.82　+2.70%*</span> <span class="sent s4">乐观 66</span> <span class="session-tag">9/18 收盘</span></summary>
+      <div class="body">
+        <p><strong>结论</strong>：半导体/存储情绪日跟涨，数据中心份额叙事仍在，但整体增速对比 NVDA 仍被市场讨论。</p>
+        <p><strong>新闻</strong>：周五费城半导体大涨背景下普涨（综合行情）。</p>
+        <p><strong>策略</strong>：持有为主；回踩再加，数值待补 · 待开盘验证。映射杠杆 <strong>AMDL</strong>。</p>
+        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
+      </div>
+    </details>
+
+    <details class="mini">
+      <summary><span class="nm">WRD 文远知行</span> <span class="px down">$5.50　-1.79%*</span> <span class="sent s3">中性 48</span></summary>
+      <div class="body">
+        <p><strong>结论</strong>：与「词元经济」等政策主题相关，但周末缺公司层硬催化，信息偏薄。</p>
+        <p><strong>新闻</strong>：北京约 9/18「词元经济十条」主题映射（政策稿转述）。</p>
+        <p><strong>策略</strong>：观察；不设主动买点直至公司层催化出现。</p>
+        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
+      </div>
+    </details>
+
+<details class="mini" open>
+      <summary><span class="nm">AMD</span> <span class="px up">$559.82　+2.70%*</span> <span class="sent s4">乐观 66</span> <span class="session-tag">9/18 收盘</span></summary>
+      <div class="body">
+        <p><strong>结论</strong>：半导体/存储情绪日跟涨，数据中心份额叙事仍在，但整体增速对比 NVDA 仍被市场讨论。</p>
+        <p><strong>新闻</strong>：周五费城半导体大涨背景下普涨（综合行情）。</p>
+        <p><strong>策略</strong>：持有为主；回踩再加，数值待补 · 待开盘验证。映射杠杆 <strong>AMDL</strong>。</p>
+        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
+      </div>
+    </details>
+
+    <details class="mini">
+      <summary><span class="nm">WRD 文远知行</span> <span class="px down">$5.50　-1.79%*</span> <span class="sent s3">中性 48</span></summary>
+      <div class="body">
+        <p><strong>结论</strong>：与「词元经济」等政策主题相关，但周末缺公司层硬催化，信息偏薄。</p>
+        <p><strong>新闻</strong>：北京约 9/18「词元经济十条」主题映射（政策稿转述）。</p>
+        <p><strong>策略</strong>：观察；不设主动买点直至公司层催化出现。</p>
+        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
+      </div>
+    </details>
+
+    <details class="mini">
+      <summary><span class="nm">COIN</span> <span class="px up">$194.25　+11.66%</span> <span class="sent s5">极度乐观 78</span></summary>
+      <div class="body">
+        <p><strong>结论</strong>：加密风险偏好回暖主导定价，周五大涨；情绪过热，操作「持有但勿追高」。</p>
+        <p><strong>新闻</strong>：周末 BTC 重上约 $8 万关口、加密总市值报道升温（综合加密媒体）。</p>
+        <p><strong>策略</strong>：已有仓持有；新仓等回撤。映射杠杆 <strong>CONL</strong>（波动显著更大）。</p>
+        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
+      </div>
+    </details>
+
+<details class="mini" open>
+      <summary><span class="nm">AMD</span> <span class="px up">$559.82　+2.70%*</span> <span class="sent s4">乐观 66</span> <span class="session-tag">9/18 收盘</span></summary>
+      <div class="body">
+        <p><strong>结论</strong>：半导体/存储情绪日跟涨，数据中心份额叙事仍在，但整体增速对比 NVDA 仍被市场讨论。</p>
+        <p><strong>新闻</strong>：周五费城半导体大涨背景下普涨（综合行情）。</p>
+        <p><strong>策略</strong>：持有为主；回踩再加，数值待补 · 待开盘验证。映射杠杆 <strong>AMDL</strong>。</p>
+        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
+      </div>
+    </details>
+
+    <details class="mini">
+      <summary><span class="nm">WRD 文远知行</span> <span class="px down">$5.50　-1.79%*</span> <span class="sent s3">中性 48</span></summary>
+      <div class="body">
+        <p><strong>结论</strong>：与「词元经济」等政策主题相关，但周末缺公司层硬催化，信息偏薄。</p>
+        <p><strong>新闻</strong>：北京约 9/18「词元经济十条」主题映射（政策稿转述）。</p>
+        <p><strong>策略</strong>：观察；不设主动买点直至公司层催化出现。</p>
+        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
+      </div>
+    </details>
+
+    <details class="mini">
+      <summary><span class="nm">COIN</span> <span class="px up">$194.25　+11.66%</span> <span class="sent s5">极度乐观 78</span></summary>
+      <div class="body">
+        <p><strong>结论</strong>：加密风险偏好回暖主导定价，周五大涨；情绪过热，操作「持有但勿追高」。</p>
+        <p><strong>新闻</strong>：周末 BTC 重上约 $8 万关口、加密总市值报道升温（综合加密媒体）。</p>
+        <p><strong>策略</strong>：已有仓持有；新仓等回撤。映射杠杆 <strong>CONL</strong>（波动显著更大）。</p>
+        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
+      </div>
+    </details>
+
+    <details class="mini">
+      <summary><span class="nm">HOOD</span> <span class="px up">$119.82　+9.12%*</span> <span class="sent s5">极度乐观 76</span></summary>
+      <div class="body">
+        <p><strong>结论</strong>：加密 + 零售交易情绪共振，周五强势；与 COIN 同属高 beta。</p>
+        <p><strong>新闻</strong>：加密市场回暖叙事（综合）。</p>
+        <p><strong>策略</strong>：持有 / 勿追高；回撤再评估。映射 <strong>ROBN</strong>。</p>
+        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
+      </div>
+    </details>
+
+<details class="mini" open>
+      <summary><span class="nm">AMD</span> <span class="px up">$559.82　+2.70%*</span> <span class="sent s4">乐观 66</span> <span class="session-tag">9/18 收盘</span></summary>
+      <div class="body">
+        <p><strong>结论</strong>：半导体/存储情绪日跟涨，数据中心份额叙事仍在，但整体增速对比 NVDA 仍被市场讨论。</p>
+        <p><strong>新闻</strong>：周五费城半导体大涨背景下普涨（综合行情）。</p>
+        <p><strong>策略</strong>：持有为主；回踩再加，数值待补 · 待开盘验证。映射杠杆 <strong>AMDL</strong>。</p>
+        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
+      </div>
+    </details>
+
+    <details class="mini">
+      <summary><span class="nm">WRD 文远知行</span> <span class="px down">$5.50　-1.79%*</span> <span class="sent s3">中性 48</span></summary>
+      <div class="body">
+        <p><strong>结论</strong>：与「词元经济」等政策主题相关，但周末缺公司层硬催化，信息偏薄。</p>
+        <p><strong>新闻</strong>：北京约 9/18「词元经济十条」主题映射（政策稿转述）。</p>
+        <p><strong>策略</strong>：观察；不设主动买点直至公司层催化出现。</p>
+        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
+      </div>
+    </details>
+
+    <details class="mini">
+      <summary><span class="nm">COIN</span> <span class="px up">$194.25　+11.66%</span> <span class="sent s5">极度乐观 78</span></summary>
+      <div class="body">
+        <p><strong>结论</strong>：加密风险偏好回暖主导定价，周五大涨；情绪过热，操作「持有但勿追高」。</p>
+        <p><strong>新闻</strong>：周末 BTC 重上约 $8 万关口、加密总市值报道升温（综合加密媒体）。</p>
+        <p><strong>策略</strong>：已有仓持有；新仓等回撤。映射杠杆 <strong>CONL</strong>（波动显著更大）。</p>
+        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
+      </div>
+    </details>
+
+    <details class="mini">
+      <summary><span class="nm">HOOD</span> <span class="px up">$119.82　+9.12%*</span> <span class="sent s5">极度乐观 76</span></summary>
+      <div class="body">
+        <p><strong>结论</strong>：加密 + 零售交易情绪共振，周五强势；与 COIN 同属高 beta。</p>
+        <p><strong>新闻</strong>：加密市场回暖叙事（综合）。</p>
+        <p><strong>策略</strong>：持有 / 勿追高；回撤再评估。映射 <strong>ROBN</strong>。</p>
+        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
+      </div>
+    </details>
+
+    <details class="mini">
+      <summary><span class="nm">CRCL</span> <span class="px up">$91.78　+7.86%*</span> <span class="sent s4">乐观 70</span></summary>
+      <div class="body">
+        <p><strong>结论</strong>：稳定币/加密基础设施 beta，随风险偏好上行。</p>
+        <p><strong>新闻</strong>：加密板块普涨日跟涨（行情）。</p>
+        <p><strong>策略</strong>：观察仓或轻仓；映射 <strong>CRCA</strong>。</p>
+        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
+      </div>
+    </details>
+
+<details class="mini" open>
+      <summary><span class="nm">AMD</span> <span class="px up">$559.82　+2.70%*</span> <span class="sent s4">乐观 66</span> <span class="session-tag">9/18 收盘</span></summary>
+      <div class="body">
+        <p><strong>结论</strong>：半导体/存储情绪日跟涨，数据中心份额叙事仍在，但整体增速对比 NVDA 仍被市场讨论。</p>
+        <p><strong>新闻</strong>：周五费城半导体大涨背景下普涨（综合行情）。</p>
+        <p><strong>策略</strong>：持有为主；回踩再加，数值待补 · 待开盘验证。映射杠杆 <strong>AMDL</strong>。</p>
+        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
+      </div>
+    </details>
+
+    <details class="mini">
+      <summary><span class="nm">WRD 文远知行</span> <span class="px down">$5.50　-1.79%*</span> <span class="sent s3">中性 48</span></summary>
+      <div class="body">
+        <p><strong>结论</strong>：与「词元经济」等政策主题相关，但周末缺公司层硬催化，信息偏薄。</p>
+        <p><strong>新闻</strong>：北京约 9/18「词元经济十条」主题映射（政策稿转述）。</p>
+        <p><strong>策略</strong>：观察；不设主动买点直至公司层催化出现。</p>
+        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
+      </div>
+    </details>
+
+    <details class="mini">
+      <summary><span class="nm">COIN</span> <span class="px up">$194.25　+11.66%</span> <span class="sent s5">极度乐观 78</span></summary>
+      <div class="body">
+        <p><strong>结论</strong>：加密风险偏好回暖主导定价，周五大涨；情绪过热，操作「持有但勿追高」。</p>
+        <p><strong>新闻</strong>：周末 BTC 重上约 $8 万关口、加密总市值报道升温（综合加密媒体）。</p>
+        <p><strong>策略</strong>：已有仓持有；新仓等回撤。映射杠杆 <strong>CONL</strong>（波动显著更大）。</p>
+        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
+      </div>
+    </details>
+
+    <details class="mini">
+      <summary><span class="nm">HOOD</span> <span class="px up">$119.82　+9.12%*</span> <span class="sent s5">极度乐观 76</span></summary>
+      <div class="body">
+        <p><strong>结论</strong>：加密 + 零售交易情绪共振，周五强势；与 COIN 同属高 beta。</p>
+        <p><strong>新闻</strong>：加密市场回暖叙事（综合）。</p>
+        <p><strong>策略</strong>：持有 / 勿追高；回撤再评估。映射 <strong>ROBN</strong>。</p>
+        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
+      </div>
+    </details>
+
+    <details class="mini">
+      <summary><span class="nm">CRCL</span> <span class="px up">$91.78　+7.86%*</span> <span class="sent s4">乐观 70</span></summary>
+      <div class="body">
+        <p><strong>结论</strong>：稳定币/加密基础设施 beta，随风险偏好上行。</p>
+        <p><strong>新闻</strong>：加密板块普涨日跟涨（行情）。</p>
+        <p><strong>策略</strong>：观察仓或轻仓；映射 <strong>CRCA</strong>。</p>
+        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
+      </div>
+    </details>
+
+    <details class="mini">
+      <summary><span class="nm">OKLO</span> <span class="px down">$38.00　-4.16%*</span> <span class="sent s3">中性 52</span></summary>
+      <div class="body">
+        <p><strong>结论</strong>：数据中心能源/核能政策叙事仍在，但周五回调，情绪从高潮回落至中性。</p>
+        <p><strong>新闻</strong>：此前有众议院数据中心能源相关议案催化讨论（综合报道）。</p>
+        <p><strong>策略</strong>：观察；事件冷静后再定。映射 <strong>OKLL</strong>。</p>
+        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
+      </div>
+    </details>
+
+<details class="mini" open>
       <summary><span class="nm">AMD</span> <span class="px up">$559.82　+2.70%*</span> <span class="sent s4">乐观 66</span> <span class="session-tag">9/18 收盘</span></summary>
       <div class="body">
         <p><strong>结论</strong>：半导体/存储情绪日跟涨，数据中心份额叙事仍在，但整体增速对比 NVDA 仍被市场讨论。</p>
@@ -613,24 +819,300 @@
         <p class="note">以上为信息整理与参考，不构成投资建议。</p>
       </div>
     </details>
+    </section>
+  </div>
 
-    <details class="mini">
-      <summary><span class="nm">港股其余自选</span> <span class="sent s3">中性</span></summary>
-      <div class="body">
-        <p><strong>覆盖</strong>：03690 美团、01810 小米、00388 港交所、01024 快手、09626 哔哩哔哩、00981 中芯国际、02269 药明生物、01060 阿里健康、09618 京东、09992 泡泡玛特、01211 比亚迪。</p>
-        <p><strong>结论</strong>：周末无统一硬催化；周五恒科走强下，快手等 AI 应用（可灵获国家 AI 基金入股叙事）、半导体国产替代（中芯等）主题映射占优；具体收盘价多数待补。</p>
-        <p><strong>新闻一句</strong>：高盛偏好游戏/娱乐；快手可灵国家队入股；京东谈国产算力集群与物流机器人（综合）。</p>
-        <p><strong>策略一句</strong>：周一观察恒科高开是否延续；个股层以主题 ETF/龙头优先，单票轻仓或观察。</p>
-        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
+  <!-- ========== HK TAB ========== -->
+  <div class="tab-panel" id="panel-hk" role="tabpanel" aria-labelledby="tab-hk">
+    <section class="block">
+      <h2><span class="n">2</span>港股焦点表</h2>
+      <table class="focus">
+        <thead>
+          <tr><th>代码</th><th>情绪</th><th>一句话</th><th>操作参考</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="t">01788</td><td><span class="sent s3">中性 58</span></td><td>私有化作价 3.00 锚定价；贴近折价博弈</td><td>观察 / 事件跟踪</td></tr>
+          <tr><td class="t">01810</td><td><span class="sent s3">中性 56</span></td><td>回购托底 + 深度回撤；盈利仍承压</td><td>持有 / 逢弱吸</td></tr>
+          <tr><td class="t">06178</td><td><span class="sent s3">中性 52</span></td><td>低估值底部区，成交偏淡缺强催化</td><td>观察 / 轻仓</td></tr>
+          <tr><td class="t">09660</td><td><span class="sent s2">悲观 44</span></td><td>收入增、经调整亏扩大；目标价下修</td><td>观察 / 轻仓主题</td></tr>
+          <tr><td class="t">02050</td><td><span class="sent s3">中性 57</span></td><td>热管理/机器人映射；增持+临近除净</td><td>持有 / 逢弱观察</td></tr>
+        </tbody>
+      </table>
+      <p class="note">仅覆盖当前「在买港股」五只；已出货/新加坡标签为暂无，不编造持仓。</p>
+    </section>
+
+    <section class="block" style="background:transparent;border:none;padding:0;">
+      <h2 style="padding:0 2px 8px;"><span class="n">3</span>港股详细个股卡</h2>
+    </section>
+
+  <article class="stock" id="HK01788">
+    <div class="stock-head">
+      <div class="row1">
+        <span class="name">国泰君安国际</span>
+        <span class="code">01788.HK</span>
+        <span class="px down">HK$2.895　-0.17%</span>
+        <span class="session-tag">上一个交易日收盘 · 2026-09-18</span>
       </div>
-    </details>
-  </section>
+    </div>
+    <div class="concl">
+      <h3>核心结论</h3>
+      <p class="summary">母公司国泰海通以每股 3.00 港元协议安排私有化（相对停牌前约 +44%）仍是定价锚；现价贴近作价下方，上半年收入/净利改善，但方案须过监管与计划批准，情绪偏事件中性偏多。</p>
+      <div class="metrics">
+        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s3">中性</span></span></div>
+        <div class="metric"><span class="k">情绪分</span><span class="v">58 / 100</span></div>
+        <div class="metric"><span class="k">操作建议</span><span class="v">观察 · 事件跟踪（参考）</span></div>
+        <div class="metric"><span class="k">趋势研判</span><span class="v">贴近私有化作价震荡 · 进度驱动</span></div>
+      </div>
+    </div>
+    <div class="sec">
+      <h3>数据视角</h3>
+      <p><span class="lbl">趋势状态</span>　周五收 2.895（-0.17%），窄幅贴近私有化现金作价 3.00 下方。</p>
+      <p><span class="lbl">价格位置</span>　52 周约 1.90–5.27（长桥）；现价显著高于停牌前低位，但距作价仍有约 3–4% 折价空间（开盘验证）。</p>
+      <p><span class="lbl">量能</span>　成交约 1323 万股 / 约 3834 万港元（长桥 9/18）。</p>
+      <p><span class="lbl">相关板块</span>　港股券商 / 私有化套利 / 财富管理与投行</p>
+    </div>
+    <div class="sec">
+      <h3>情报</h3>
+      <p><span class="lbl">新闻要点</span>　① 国泰海通拟以每股 3 港元现金私有化并退市（最终出价口径，港交所联合公告）。② H1 收入约 38.7 亿港元（+37%），普通股股东应占溢利约 6.75 亿（+23%）；董事会因私有化先决条件未宣派中期息（公司公告/长桥）。</p>
+      <p><span class="lbl">风险警报</span>　私有化先决条件/股东批准不及预期；作价不再上调；方案失败则溢价回吐。</p>
+      <p><span class="lbl">积极催化</span>　计划进度节点、复牌后成交确认、最终交割确定性上升。</p>
+      <p><span class="lbl">Financial</span>　见上；周末无新增正式交割完成公告。</p>
+    </div>
+    <div class="sec">
+      <h3>作战计划 / 策略</h3>
+      <p class="note" style="padding-top:0;">休市日 · 参考区间 · 待开盘验证（不构成点位承诺）</p>
+      <div class="strat">
+        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">贴近作价下方缩量企稳再轻仓事件仓 · 数值待开盘验证</span></div>
+        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">仅在方案重大进展落地后回踩确认</span></div>
+        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">有效跌破近期摆动低点并放量，或方案重大不利（条件式 · 价待补）</span></div>
+        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">接近 3.00 作价区减仓，不赌超额上修</span></div>
+      </div>
+      <ul class="risks">
+      <li>私有化失败或延期导致折价扩大</li>
+      <li>监管/少数股东否决风险</li>
+      <li>成交萎缩时进出滑点</li>
+      </ul>
+    </div>
+    <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
+  </article>
+
+  <article class="stock" id="HK01810">
+    <div class="stock-head">
+      <div class="row1">
+        <span class="name">小米集团</span>
+        <span class="code">01810.HK</span>
+        <span class="px up">HK$26.40　+0.99%</span>
+        <span class="session-tag">上一个交易日收盘 · 2026-09-18</span>
+      </div>
+    </div>
+    <div class="concl">
+      <h3>核心结论</h3>
+      <p class="summary">周五小幅收涨，连续回购托底；手机/IoT 与汽车交付叙事并存，但盈利同比承压、股价处深度回撤区。情绪中性偏多，操作以持有/逢弱吸为主，勿追短线反弹。</p>
+      <div class="metrics">
+        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s3">中性</span></span></div>
+        <div class="metric"><span class="k">情绪分</span><span class="v">56 / 100</span></div>
+        <div class="metric"><span class="k">操作建议</span><span class="v">持有 · 逢弱吸（参考）</span></div>
+        <div class="metric"><span class="k">趋势研判</span><span class="v">深度回撤后的震荡修复</span></div>
+      </div>
+    </div>
+    <div class="sec">
+      <h3>数据视角</h3>
+      <p><span class="lbl">趋势状态</span>　周五收 26.40（+0.99%）；周内多日在约 26 关口附近争夺。</p>
+      <p><span class="lbl">价格位置</span>　52 周约 21.30–59.90（长桥）；现价距高点回撤显著，均线精确对比待补。</p>
+      <p><span class="lbl">量能</span>　成交约 1.10 亿股 / 约 28.9 亿港元（长桥 9/18）。</p>
+      <p><span class="lbl">相关板块</span>　智能手机 / IoT / 智能汽车 / 人形机器人主题映射</p>
+    </div>
+    <div class="sec">
+      <h3>情报</h3>
+      <p><span class="lbl">新闻要点</span>　① 9/16 回购约 190 万股、耗资约 4986 万港元（证券时报数据宝）；年内累计回购规模较大。② 汽车与机器人主题持续被市场讨论，但公司层硬催化需逐条核对。</p>
+      <p><span class="lbl">风险警报</span>　盈利同比下滑与汽车交付波动；消费电子竞争；高估值回撤后的二次探底。</p>
+      <p><span class="lbl">积极催化</span>　回购持续、新品周期、汽车交付改善。</p>
+      <p><span class="lbl">Financial</span>　近期财报口径：营收同比大致持平、利润端承压（综合行情解读）；精确财报数字以公司公告为准。</p>
+    </div>
+    <div class="sec">
+      <h3>作战计划 / 策略</h3>
+      <p class="note" style="padding-top:0;">休市日 · 参考区间 · 待开盘验证（不构成点位承诺）</p>
+      <div class="strat">
+        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">回踩回购带/近周下沿企稳 · 价位待开盘验证</span></div>
+        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">放量收复近周重心后再加</span></div>
+        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">有效跌破近两周摆动低点并放量（价待补）</span></div>
+        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">反弹至前阻力/均线密集区分批</span></div>
+      </div>
+      <ul class="risks">
+      <li>回购难阻阴跌</li>
+      <li>汽车交付不及预期</li>
+      <li>消费电子旺季证伪</li>
+      </ul>
+    </div>
+    <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
+  </article>
+
+  <article class="stock" id="HK06178">
+    <div class="stock-head">
+      <div class="row1">
+        <span class="name">光大证券</span>
+        <span class="code">06178.HK</span>
+        <span class="px up">HK$7.135　+0.78%</span>
+        <span class="session-tag">上一个交易日收盘 · 2026-09-18</span>
+      </div>
+    </div>
+    <div class="concl">
+      <h3>核心结论</h3>
+      <p class="summary">H 股处低位震荡：上半年盈利增速不弱、估值 PE/PB 偏低，但成交偏淡、板块风险偏好弱，股价贴近近端低位。情绪中性，操作以观察/轻仓波段为主，不发明精确支撑。</p>
+      <div class="metrics">
+        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s3">中性</span></span></div>
+        <div class="metric"><span class="k">情绪分</span><span class="v">52 / 100</span></div>
+        <div class="metric"><span class="k">操作建议</span><span class="v">观察 · 轻仓（参考）</span></div>
+        <div class="metric"><span class="k">趋势研判</span><span class="v">低估值底部区震荡 · 缺强催化剂</span></div>
+      </div>
+    </div>
+    <div class="sec">
+      <h3>数据视角</h3>
+      <p><span class="lbl">趋势状态</span>　周五收 7.135（+0.78%），贴近近端低位区域小幅反弹。</p>
+      <p><span class="lbl">价格位置</span>　52 周约 6.89–11.06（长桥）；PB 约 0.46、股息率约 4.5% 量级（行情页），均线数值待补。</p>
+      <p><span class="lbl">量能</span>　成交约 126 万股 / 约 898 万港元，流动性偏薄（长桥 9/18）。</p>
+      <p><span class="lbl">相关板块</span>　中资券商 H 股 / 经纪投行 / 市场成交 beta</p>
+    </div>
+    <div class="sec">
+      <h3>情报</h3>
+      <p><span class="lbl">新闻要点</span>　① H1/分季盈利同比增速公开解读偏强（长桥行情页综述）。② 2025 年末期息已派付；H 股股本约 7.04 亿股（港交所月报表）。</p>
+      <p><span class="lbl">风险警报</span>　港股交投回落拖累券商收入；AH 溢价与流动性折价；板块情绪持续低迷。</p>
+      <p><span class="lbl">积极催化</span>　市场成交回暖、中期分红/回购、政策托市预期。</p>
+      <p><span class="lbl">Financial</span>　以公司中期业绩公告为准；周末无新正式指引。</p>
+    </div>
+    <div class="sec">
+      <h3>作战计划 / 策略</h3>
+      <p class="note" style="padding-top:0;">休市日 · 参考区间 · 待开盘验证（不构成点位承诺）</p>
+      <div class="strat">
+        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">缩量贴近近端低位企稳后再轻仓试错 · 价待验证</span></div>
+        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">放量站上近周均价带确认后再加</span></div>
+        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">失守近端摆动低点并放量（约 6.9 区作观察，待开盘验证）</span></div>
+        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">反弹至前压力带减仓，不赌估值修复单边</span></div>
+      </div>
+      <ul class="risks">
+      <li>流动性差放大滑点</li>
+      <li>大市成交萎缩</li>
+      <li>政策预期落空</li>
+      </ul>
+    </div>
+    <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
+  </article>
+
+  <article class="stock" id="HK09660">
+    <div class="stock-head">
+      <div class="row1">
+        <span class="name">地平线机器人</span>
+        <span class="code">09660.HK</span>
+        <span class="px up">HK$4.195　+1.57%</span>
+        <span class="session-tag">上一个交易日收盘 · 2026-09-18</span>
+      </div>
+    </div>
+    <div class="concl">
+      <h3>核心结论</h3>
+      <p class="summary">智驾芯片收入增长仍在，但经调整亏损扩大、现金与可转债压力被市场反复计价；多家卖方下调目标价后股价处深度回撤。周五小反弹偏技术性，情绪谨慎偏中性，按主题仓管理。</p>
+      <div class="metrics">
+        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s2">悲观</span></span></div>
+        <div class="metric"><span class="k">情绪分</span><span class="v">44 / 100</span></div>
+        <div class="metric"><span class="k">操作建议</span><span class="v">观察 · 轻仓主题（参考）</span></div>
+        <div class="metric"><span class="k">趋势研判</span><span class="v">深度回撤 · 盈利拐点待验证</span></div>
+      </div>
+    </div>
+    <div class="sec">
+      <h3>数据视角</h3>
+      <p><span class="lbl">趋势状态</span>　周五收 4.195（+1.57%），低位弱反弹。</p>
+      <p><span class="lbl">价格位置</span>　52 周约 3.60–11.32（长桥）；距高点回撤巨大，精确均线待补。</p>
+      <p><span class="lbl">量能</span>　成交约 1.32 亿股 / 约 5.50 亿港元（长桥 9/18）。</p>
+      <p><span class="lbl">相关板块</span>　智能驾驶芯片 / ADAS / 汽车电子</p>
+    </div>
+    <div class="sec">
+      <h3>情报</h3>
+      <p><span class="lbl">新闻要点</span>　① H1 营收约 20.55 亿元（+32.9%），毛利率约 66%；经调整净亏损约 16.71 亿元（扩大）；账面净利含一次性/公允价值项（中期业绩/媒体解读）。② 多家机构近期下调目标价（JPM/美银等，长桥综述）；管理层公开称约 2028 年盈亏平衡预期。</p>
+      <p><span class="lbl">风险警报</span>　经营亏损与现金消耗；可转债/融资条款；目标价下修潮；量产份额竞争。</p>
+      <p><span class="lbl">积极催化</span>　征程系列定点放量、舱驾一体量产节奏、订单超预期。</p>
+      <p><span class="lbl">Financial</span>　见中期业绩公告；周末无新正式财报。</p>
+    </div>
+    <div class="sec">
+      <h3>作战计划 / 策略</h3>
+      <p class="note" style="padding-top:0;">休市日 · 参考区间 · 待开盘验证（不构成点位承诺）</p>
+      <div class="strat">
+        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">不设主动买点直至缩量止跌确认 · 价待补</span></div>
+        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">仅极端错杀且量能配合时轻仓主题试错</span></div>
+        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">跌破近端摆动低点并放量离场（价待补）</span></div>
+        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">反弹至前阻力/卖方目标路径前减仓</span></div>
+      </div>
+      <ul class="risks">
+      <li>盈利拐点推迟</li>
+      <li>再融资/稀释</li>
+      <li>智驾竞争加剧</li>
+      <li>高波动散户拥挤</li>
+      </ul>
+    </div>
+    <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
+  </article>
+
+  <article class="stock" id="HK02050">
+    <div class="stock-head">
+      <div class="row1">
+        <span class="name">三花智控</span>
+        <span class="code">02050.HK</span>
+        <span class="px up">HK$24.90　+2.05%</span>
+        <span class="session-tag">上一个交易日收盘 · 2026-09-18</span>
+      </div>
+    </div>
+    <div class="concl">
+      <h3>核心结论</h3>
+      <p class="summary">制冷零部件龙头 + 机器人/热管理主题映射；周五收涨，Schroders 增持披露与临近除净构成短线因素。情绪中性偏多，但需防主题退潮与除权波动，操作持有/逢弱观察。</p>
+      <div class="metrics">
+        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s3">中性</span></span></div>
+        <div class="metric"><span class="k">情绪分</span><span class="v">57 / 100</span></div>
+        <div class="metric"><span class="k">操作建议</span><span class="v">持有 · 逢弱观察（参考）</span></div>
+        <div class="metric"><span class="k">趋势研判</span><span class="v">主题博弈下的高位回撤后修复</span></div>
+      </div>
+    </div>
+    <div class="sec">
+      <h3>数据视角</h3>
+      <p><span class="lbl">趋势状态</span>　周五收 24.90（+2.05%），自近端低位反弹。</p>
+      <p><span class="lbl">价格位置</span>　52 周约 23.08–46.03（长桥）；仍处高点大幅回撤后的中低位区，均线待补。</p>
+      <p><span class="lbl">量能</span>　成交约 692 万股 / 约 1.72 亿港元（长桥 9/18）。</p>
+      <p><span class="lbl">相关板块</span>　制冷空调零部件 / 新能源汽车热管理 / 机器人执行器映射</p>
+    </div>
+    <div class="sec">
+      <h3>情报</h3>
+      <p><span class="lbl">新闻要点</span>　① 港交所披露 Schroders 约 9/16 增持约 239.66 万股，持股升至约 16.39%（新浪港股转述）。② 中期息除净约 9/22，每股约 0.13888 港元（公司股息公告）。③ 卖方目标价口径分化（行情页共识约偏多）。</p>
+      <p><span class="lbl">风险警报</span>　除权后技术性回吐；机器人主题退潮；下游需求不及预期。</p>
+      <p><span class="lbl">积极催化</span>　机构增持延续、热管理订单、机器人零部件订单兑现。</p>
+      <p><span class="lbl">Financial</span>　以中期报告/股息公告为准；周末无新正式业绩。</p>
+    </div>
+    <div class="sec">
+      <h3>作战计划 / 策略</h3>
+      <p class="note" style="padding-top:0;">休市日 · 参考区间 · 待开盘验证（不构成点位承诺）</p>
+      <div class="strat">
+        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">回踩近周下沿/除净后重心企稳 · 价待开盘验证</span></div>
+        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">放量站稳周五高点后再确认</span></div>
+        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">失守近端摆动低点并放量（价待补）</span></div>
+        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">反弹至前阻力带分批；事件兑现降仓</span></div>
+      </div>
+      <ul class="risks">
+      <li>除净日波动</li>
+      <li>主题一日游</li>
+      <li>AH 联动干扰</li>
+      </ul>
+    </div>
+    <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
+  </article>
+
+    <section class="block">
+      <h2><span class="n">4</span>暂无标签</h2>
+      <div class="empty-state">「已出货」「新加坡」当前无持仓明细 · 暂无内容</div>
+    </section>
+  </div>
 
   <section class="block">
     <h2><span class="n">5</span>数据与信心说明</h2>
     <ul class="dense">
-      <li>报价来源：Exa 行情库 / stockanalysis / 证券时报数据宝 / 智通财经 / 商业电台等公开稿；个别「相对开盘」涨跌幅已标注 *。</li>
+      <li>报价来源：长桥行情页 / Exa / stockanalysis / 证券时报数据宝 / 智通财经 / 港交所公告等公开稿；个别「相对开盘」涨跌幅已标注 *。</li>
       <li>NVDA 收盘：新闻稿多记 $222.27（+1.34%）；部分行情页显示约 $222.08，若不一致以交易所正式结算为准。</li>
+      <li>港股五只 9/18 收盘取自长桥延迟行情：01788 2.895、01810 26.40、06178 7.135、09660 4.195、02050 24.90。</li>
       <li>未取得可靠数值处已写「待补」，策略多为条件式 +「待开盘验证」。</li>
       <li>情绪分 / 操作建议为信息归纳口径，非实时资金流或投顾建议。</li>
     </ul>
@@ -639,8 +1121,66 @@
 
   <footer>
     Gaspar · 自选速递 DSA 详版 · 工作日 08:50 目标自动更新<br />
-    https://casparhuan.github.io/gaspar-watchlist-digest/
+    GitHub Pages · https://casparhuan.github.io/gaspar-watchlist-digest/
   </footer>
 </div>
+<script>
+(function () {
+  var buttons = document.querySelectorAll('.tab-btn');
+  var panels = {
+    us: document.getElementById('panel-us'),
+    hk: document.getElementById('panel-hk')
+  };
+
+  function activate(name, pushHash) {
+    if (!panels[name]) name = 'us';
+    buttons.forEach(function (btn) {
+      var on = btn.getAttribute('data-tab') === name;
+      btn.classList.toggle('active', on);
+      btn.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    Object.keys(panels).forEach(function (key) {
+      panels[key].classList.toggle('active', key === name);
+    });
+    if (pushHash) {
+      try {
+        history.replaceState(null, '', '#' + name);
+      } catch (e) {}
+    }
+  }
+
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      activate(btn.getAttribute('data-tab'), true);
+    });
+  });
+
+  // Optional swipe on tab bar wrap
+  var wrap = document.querySelector('.tab-bar-wrap');
+  var startX = null;
+  if (wrap) {
+    wrap.addEventListener('touchstart', function (e) {
+      startX = e.changedTouches[0].clientX;
+    }, { passive: true });
+    wrap.addEventListener('touchend', function (e) {
+      if (startX == null) return;
+      var dx = e.changedTouches[0].clientX - startX;
+      startX = null;
+      if (Math.abs(dx) < 48) return;
+      var cur = document.querySelector('.tab-btn.active');
+      var name = cur ? cur.getAttribute('data-tab') : 'us';
+      if (dx < 0 && name === 'us') activate('hk', true);
+      if (dx > 0 && name === 'hk') activate('us', true);
+    }, { passive: true });
+  }
+
+  function fromHash() {
+    var h = (location.hash || '#us').replace('#', '').toLowerCase();
+    activate(h === 'hk' ? 'hk' : 'us', false);
+  }
+  window.addEventListener('hashchange', fromHash);
+  fromHash();
+})();
+</script>
 </body>
 </html>
