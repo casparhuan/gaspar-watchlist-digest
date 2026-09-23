@@ -1,1971 +1,255 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>自选速递 · Gaspar</title>
-<style>
-
-  :root {
-    --bg: #0f1115;
-    --card: #1a1e27;
-    --card2: #222833;
-    --border: #2e3544;
-    --text: #e8eaef;
-    --muted: #8b93a7;
-    --accent: #ffb84d;
-    --blue: #6aa8ff;
-    --green: #3dcf8e;
-    --red: #ff6b6b;
-    --neutral: #9aa3b5;
-    --purple: #b794f6;
-    --orange: #ff9f6b;
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.5;
-    padding: 16px 12px 56px;
-    font-size: 15px;
-  }
-  .wrap { max-width: 760px; margin: 0 auto; }
-  header {
-    background: linear-gradient(145deg, #1c2230, #151922);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 18px 16px;
-    margin-bottom: 12px;
-  }
-  h1 { margin: 0 0 6px; font-size: 1.45rem; letter-spacing: 0.02em; }
-  .meta { color: var(--muted); font-size: 0.88rem; }
-  .badge {
-    display: inline-block; margin-top: 10px; padding: 3px 10px;
-    border-radius: 999px; background: #2a3140; color: var(--accent); font-size: 0.75rem;
-  }
-  section.block {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 14px; padding: 14px 14px 10px; margin-bottom: 10px;
-  }
-  h2 {
-    margin: 0 0 10px; font-size: 1rem; color: var(--accent);
-    display: flex; align-items: center; gap: 8px;
-  }
-  h2 .n {
-    width: 20px; height: 20px; border-radius: 6px; background: #2a3140;
-    color: var(--text); font-size: 0.72rem; display: inline-flex;
-    align-items: center; justify-content: center; flex-shrink: 0;
-  }
-  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
-  .chip {
-    border-radius: 999px; padding: 4px 10px; font-size: 0.78rem;
-    border: 1px solid var(--border); background: var(--card2);
-  }
-  .chip.up { color: var(--green); border-color: #2f5a45; }
-  .chip.down { color: var(--red); border-color: #5a3030; }
-  .chip.mid { color: var(--neutral); }
-  .chip.theme { color: var(--blue); border-color: #3a4f73; }
-  ul.dense { margin: 0 0 8px; padding-left: 1.1rem; }
-  ul.dense li { margin: 0 0 6px; color: #d5dae6; font-size: 0.9rem; }
-  ul.dense strong { color: var(--blue); }
-  table.focus {
-    width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-bottom: 6px;
-  }
-  table.focus th, table.focus td {
-    text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--border); vertical-align: top;
-  }
-  table.focus th { color: var(--muted); font-weight: 600; font-size: 0.72rem; }
-  table.focus td.t { color: var(--blue); font-weight: 700; white-space: nowrap; }
-  table.focus td.nm { color: var(--text); font-weight: 600; white-space: nowrap; }
-  .sent {
-    display: inline-block; padding: 2px 7px; border-radius: 6px; font-size: 0.72rem; font-weight: 600;
-  }
-  .sent.s5 { background: #1e3d2f; color: var(--green); }
-  .sent.s4 { background: #1e3a2a; color: #6ed9a0; }
-  .sent.s3 { background: #2a3140; color: var(--neutral); }
-  .sent.s2 { background: #3a2a22; color: var(--orange); }
-  .sent.s1 { background: #3a2222; color: var(--red); }
-  .note { color: var(--muted); font-size: 0.8rem; padding: 2px 0 8px; }
-
-  .stock {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 14px; padding: 0; margin-bottom: 12px; overflow: hidden;
-  }
-  .stock-head {
-    padding: 14px 14px 10px; background: linear-gradient(180deg, #1e2430, var(--card));
-    border-bottom: 1px solid var(--border);
-  }
-  .stock-head .row1 {
-    display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 12px; margin-bottom: 4px;
-  }
-  .stock-head .name { font-size: 1.12rem; font-weight: 700; }
-  .stock-head .code { color: var(--muted); font-size: 0.85rem; }
-  .px { font-variant-numeric: tabular-nums; font-weight: 700; }
-  .px.up { color: var(--green); }
-  .px.down { color: var(--red); }
-  .px.flat { color: var(--neutral); }
-  .session-tag {
-    font-size: 0.72rem; color: var(--accent); background: #2a3140;
-    padding: 2px 8px; border-radius: 999px;
-  }
-  .concl {
-    padding: 12px 14px; border-bottom: 1px solid var(--border);
-  }
-  .concl h3, .sec h3 {
-    margin: 0 0 8px; font-size: 0.82rem; color: var(--accent); letter-spacing: 0.04em;
-  }
-  .summary { font-size: 0.95rem; margin: 0 0 10px; color: #eef1f7; }
-  .metrics {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
-  }
-  @media (min-width: 520px) {
-    .metrics { grid-template-columns: 1fr 1fr 1fr 1fr; }
-  }
-  .metric {
-    background: var(--card2); border: 1px solid var(--border);
-    border-radius: 10px; padding: 8px 10px;
-  }
-  .metric .k { display: block; color: var(--muted); font-size: 0.68rem; margin-bottom: 2px; }
-  .metric .v { font-size: 0.86rem; font-weight: 600; }
-  .sec { padding: 12px 14px; border-bottom: 1px solid var(--border); }
-  .sec:last-of-type { border-bottom: none; }
-  .sec p { margin: 0 0 6px; font-size: 0.88rem; color: #d5dae6; }
-  .sec .lbl { color: var(--purple); font-weight: 600; font-size: 0.8rem; }
-  .strat {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0;
-  }
-  .strat .cell {
-    background: #181c26; border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px;
-  }
-  .strat .cell .k { color: var(--muted); font-size: 0.68rem; display: block; margin-bottom: 2px; }
-  .strat .cell .v { font-size: 0.84rem; font-weight: 600; color: #e8eaef; }
-  .strat .cell.stop .v { color: var(--red); }
-  .strat .cell.tp .v { color: var(--green); }
-  .risks { margin: 6px 0 0; padding-left: 1.05rem; }
-  .risks li { margin: 0 0 4px; font-size: 0.84rem; color: #c9cfdc; }
-  .disclaimer-mini {
-    padding: 10px 14px 12px; color: var(--muted); font-size: 0.78rem;
-    background: #161a22; border-top: 1px dashed #3a4152;
-  }
-  details.mini {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 12px; margin-bottom: 8px; padding: 0;
-  }
-  details.mini summary {
-    cursor: pointer; padding: 12px 14px; list-style: none;
-    display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center;
-  }
-  details.mini summary::-webkit-details-marker { display: none; }
-  details.mini summary .nm { font-weight: 700; color: var(--blue); }
-  details.mini .body { padding: 0 14px 12px; font-size: 0.86rem; color: #d0d5e2; }
-  details.mini .body p { margin: 0 0 6px; }
-  footer {
-    margin-top: 16px; color: var(--muted); font-size: 0.78rem;
-    text-align: center; line-height: 1.6;
-  }
-  .disclaimer {
-    background: #1b1f28; border: 1px dashed #3a4152;
-    border-radius: 12px; padding: 12px 14px; color: var(--muted);
-    font-size: 0.85rem; margin-top: 8px;
-  }
-
-  /* Sticky tabs */
-  .tab-bar-wrap {
-    position: sticky; top: 0; z-index: 40;
-    background: rgba(15,17,21,0.92);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    margin: 0 -4px 12px; padding: 8px 4px 10px;
-    border-bottom: 1px solid var(--border);
-  }
-  .tab-bar {
-    display: flex; gap: 6px; overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding: 2px;
-  }
-  .tab-bar::-webkit-scrollbar { display: none; }
-  .tab-btn {
-    flex: 0 0 auto; border: 1px solid var(--border);
-    background: var(--card2); color: var(--muted);
-    border-radius: 999px; padding: 8px 14px;
-    font-size: 0.88rem; font-weight: 600;
-    cursor: pointer; font-family: inherit;
-    white-space: nowrap; transition: background .15s, color .15s, border-color .15s;
-  }
-  .tab-btn.active {
-    background: var(--accent); color: #1a1208;
-    border-color: var(--accent);
-  }
-  .tab-btn:not(.active):hover { color: var(--text); border-color: #4a5568; }
-  .tab-chip-muted {
-    flex: 0 0 auto; border: 1px dashed #3a4152;
-    background: transparent; color: #5c6578;
-    border-radius: 999px; padding: 8px 12px;
-    font-size: 0.78rem; white-space: nowrap;
-    user-select: none;
-  }
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; }
-  .empty-state {
-    text-align: center; color: var(--muted);
-    padding: 28px 16px; font-size: 0.9rem;
-  }
-  .seg-hint { color: var(--muted); font-size: 0.75rem; margin: 0 0 8px; padding: 0 2px; }
-
-
-
-  .tab-btn { padding: 7px 11px; font-size: 0.82rem; }
-  @media (min-width: 520px) {
-    .tab-btn { padding: 8px 14px; font-size: 0.88rem; }
-  }
-  .seg-row { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 4px; }
-  .seg-label {
-    width: 100%; color: var(--muted); font-size: 0.68rem;
-    letter-spacing: 0.06em; padding: 2px 4px 0; text-transform: none;
-  }
-
-  /* 推特舆情 */
-  .tw-strip {
-    margin: 10px 0 4px; padding: 10px 12px;
-    background: #1a2030; border: 1px dashed #3a4a66; border-radius: 10px;
-  }
-  .tw-strip h3 {
-    margin: 0 0 6px; font-size: 0.82rem; color: var(--purple); letter-spacing: 0.04em;
-  }
-  .tw-strip p { margin: 0; font-size: 0.84rem; color: #cfd5e4; }
-  .tw-strip .src { margin-top: 6px; font-size: 0.72rem; color: var(--muted); }
-  .tw-sec {
-    margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border);
-  }
-  .tw-sec > h3 {
-    margin: 0 0 8px; font-size: 0.9rem; color: var(--purple);
-  }
-  .tw-grid { display: flex; flex-direction: column; gap: 8px; }
-  .tw-card {
-    background: var(--card2); border: 1px solid #343c50; border-radius: 10px;
-    padding: 10px 12px;
-  }
-  .tw-card .tw-head {
-    display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-bottom: 6px;
-  }
-  .tw-card .tw-code { color: var(--blue); font-weight: 700; font-size: 0.88rem; }
-  .tw-card .tw-name { font-weight: 600; }
-  .tw-pill {
-    display: inline-block; padding: 1px 7px; border-radius: 999px;
-    font-size: 0.7rem; font-weight: 600; border: 1px solid var(--border);
-  }
-  .tw-pill.bull { color: var(--green); background: #1e3d2f; border-color: #2f5a45; }
-  .tw-pill.neut { color: var(--neutral); background: #2a3140; }
-  .tw-pill.bear { color: var(--orange); background: #3a2a22; border-color: #5a4030; }
-  .tw-pill.heat-h { color: var(--accent); background: #3a3020; border-color: #5a4a30; }
-  .tw-pill.heat-m { color: var(--blue); background: #1e2a40; border-color: #3a4f73; }
-  .tw-pill.heat-l { color: var(--muted); background: #222833; }
-  .tw-card ul { margin: 4px 0 0; padding-left: 1.1rem; }
-  .tw-card li { font-size: 0.8rem; color: #d0d5e2; margin: 0 0 3px; }
-  .tw-card .tw-debate { margin-top: 6px; font-size: 0.78rem; color: #b8c0d4; }
-  .tw-card .tw-debate strong { color: var(--orange); }
-  .tw-inline {
-    margin-top: 8px; padding: 8px 10px; background: #1a2030;
-    border-left: 3px solid var(--purple); border-radius: 0 8px 8px 0;
-  }
-  .tw-inline h4 {
-    margin: 0 0 4px; font-size: 0.78rem; color: var(--purple); font-weight: 700;
-  }
-  .tw-inline p { margin: 0 0 4px; font-size: 0.8rem; color: #d0d5e2; }
-  .tw-inline .meta-line { font-size: 0.72rem; color: var(--muted); }
-  .badge-ver {
-    display: inline-block; margin-top: 8px; margin-left: 6px; padding: 3px 10px;
-    border-radius: 999px; background: #2a2438; color: var(--purple); font-size: 0.75rem;
-    border: 1px solid #4a3f66;
-  }
-
-</style>
-</head>
-<body>
-<div class="wrap">
-  <header>
-    <h1>自选速递</h1>
-    <div class="meta">2026-09-21（周一）· 开盘前瞻 / 上一交易日(9/18)收盘 · Asia/Shanghai (CST)</div>
-    <div class="meta" style="margin-top:4px;">六标签：美股大盘 / 美股关注 / A股大盘 / A股关注 / 港股大盘 / 港股关注</div>
-    <span class="badge">周一开盘前瞻 · A/港尚未开盘 · 报价为 9/18 收盘 · 参考口径</span>
-    <span class="badge-ver" id="ver-20260921">含推特舆情 · v=20260921</span>
-    <div class="meta" style="margin-top:6px;font-size:0.75rem;">推特舆情来自公开网页检索 X/Twitter 讨论主题（非官方 API）；定性不代表资金流向，不构成投资建议。缓存参数 <code>?v=20260922-intc</code></div>
-  </header>
-
-  <div class="tab-bar-wrap">
-    <p class="seg-hint">左右滑动切换 · 支持 #us-mkt #us-watch #cn-mkt #cn-watch #hk-mkt #hk-watch</p>
-    <div class="tab-bar" role="tablist" aria-label="市场标签">
-      <button type="button" class="tab-btn active" role="tab" aria-selected="true" data-tab="us-mkt" id="tab-us-mkt">美股大盘</button>
-      <button type="button" class="tab-btn" role="tab" aria-selected="false" data-tab="us-watch" id="tab-us-watch">美股关注</button>
-      <button type="button" class="tab-btn" role="tab" aria-selected="false" data-tab="cn-mkt" id="tab-cn-mkt">A股大盘</button>
-      <button type="button" class="tab-btn" role="tab" aria-selected="false" data-tab="cn-watch" id="tab-cn-watch">A股关注</button>
-      <button type="button" class="tab-btn" role="tab" aria-selected="false" data-tab="hk-mkt" id="tab-hk-mkt">港股大盘</button>
-      <button type="button" class="tab-btn" role="tab" aria-selected="false" data-tab="hk-watch" id="tab-hk-watch">港股关注</button>
-    </div>
-  </div>
-
-  <!-- ========== 1 美股大盘 ========== -->
-  <div class="tab-panel active" id="panel-us-mkt" role="tabpanel" aria-labelledby="tab-us-mkt">
-    <section class="block">
-      <h2><span class="n">1</span>美股大盘概览</h2>
-      <div class="chips">
-        <span class="chip up">隔夜(9/18)：纳指 +0.39% · 26522.55</span>
-        <span class="chip up">标普 +0.17% · 7650.50</span>
-        <span class="chip down">道指 -0.18% · 51682.64</span>
-        <span class="chip up">费城半导体 +2.78%（连续第4日上涨）</span>
-        <span class="chip mid">本周：道指约 -1.7% · 纳指约 +0.7% · 标普约 -0.1%</span>
-      </div>
-      <ul class="dense">
-        <li><strong>隔夜定性</strong>：三大指数分化；10 年期美债收益率反弹至接近 5% + 大规模期权到期（四巫日）抬升波动。半导体仍受买盘推动，存储/算力链领涨。（来源：Gate/中新经纬/21 经济网）</li>
-        <li><strong>板块强弱</strong>：领涨侧——半导体（ARM +4.04%、ASML +3.08%、AVGO +2.97%、AMD +2.70%）、中概（金龙 +0.76%；阿里约 +4%、金山云约 +5%）。落后侧——能源股偏弱、黄金股相对强；高通 -5.82% 等个股分化。（来源：21 经济网 9/19）</li>
-        <li><strong>广度</strong>：全市场涨跌家数精确统计待补；定性为科技/半导体偏强、道指权重股拖累。</li>
-        <li><strong>自选侧提示</strong>：美股关注名单（NVDA/ORCL/RKLB 等）详见「美股关注」标签，本页不展开个股深卡。</li>
-      </ul>
-    </section>
-    <section class="block">
-      <h2><span class="n">2</span>未来数日宏观 / 事件</h2>
-      <ul class="dense">
-        <li><strong>周一 9/21</strong>：美联储 Goolsbee 讲话（消化 9/15–16 议息后路径信号）。</li>
-        <li><strong>周二 9/22</strong>：Williams / Jefferson / Barkin 讲话窗口。</li>
-        <li><strong>周三 9/23</strong>：S&amp;P Global 制造业/服务业 PMI 初值（闪现）+ Barr 讲话。</li>
-        <li><strong>周四 9/24</strong>：初请失业金、新屋销售；Hammack / Paulson 讲话。</li>
-        <li><strong>周五 9/25</strong>：耐用品订单、密歇根消费者信心终值。</li>
-        <li><strong>个股事件轴（仅提示）</strong>：RKLB–Iridium 股东投票约 9/24；TSLA Cybercab NHTSA 书面答复约 9/30。（详见美股关注）</li>
-      </ul>
-      <p class="note">以上为公开日历归纳，不构成投资建议。</p>
-    </section>
-    <section class="block">
-      <h2><span class="n">3</span>风险提示</h2>
-      <ul class="dense">
-        <li>收益率若再度逼近/突破 5%，成长股估值承压。</li>
-        <li>上周五四巫日期权仓位重置后余波，周一美股开盘短线波动仍可能偏大。</li>
-        <li>地缘/能源与美联储讲话交叉，隔夜跳空风险升高。</li>
-      </ul>
-      <div class="disclaimer">以上为信息整理与参考，不构成投资建议。</div>
-    </section>
-
-    <section class="block">
-      <h2><span class="n">※</span>推特舆情（大盘横切）</h2>
-      <div class="tw-strip">
-        <h3>跨资产公开讨论主题（X/Twitter · 网页检索）</h3>
-        <p>周一开盘前瞻：公开讨论主轴仍是 <strong>AI 算力/云基建</strong>（NVDA 需求与估值辩论、AMD 跟涨叙事）、<strong>加密高 beta</strong>（COIN/HOOD 随 BTC 风险偏好）、以及 <strong>自动驾驶监管</strong>（TSLA Cybercab 书面答复窗口）。ORCL 讨论偏「积压 vs 自由现金流/融资压力」对立；航天链 RKLB 以事件轴（Iridium/Neutron）为主。</p>
-        <p class="src">来源说明：公开网页对 X/Twitter 提及与情绪追踪页的归纳（AltIndex / TickerTalks / LunarCrush 等二手汇总），非认证 API；不编造推文原文或账号。</p>
-      </div>
-      <p class="note">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
-    </section>
-  </div>
-
-  <!-- ========== 2 美股关注 ========== -->
-  <div class="tab-panel" id="panel-us-watch" role="tabpanel" aria-labelledby="tab-us-watch">
-    <section class="block">
-      <h2><span class="n">1</span>美股焦点表</h2>
-      <table class="focus">
-        <thead>
-          <tr><th>代码</th><th>名称</th><th>情绪</th><th>一句话</th><th>操作参考</th></tr>
-        </thead>
-        <tbody>
-          <tr><td class="t">NVDA</td><td class="nm">英伟达</td><td><span class="sent s4">乐观 68</span></td><td>需求叙事仍强，毛利指引被反复计价</td><td>持有 / 回踩再加</td></tr>
-          <tr><td class="t">ORCL</td><td class="nm">甲骨文</td><td><span class="sent s2">悲观 38</span></td><td>积压亮眼但 FCF 承压、客户集中受质疑</td><td>观察 / 减仓博弈</td></tr>
-          <tr><td class="t">RKLB</td><td class="nm">Rocket Lab</td><td><span class="sent s4">乐观 62</span></td><td>FCC 过关 + 约 9/24 股东投票窗口</td><td>事件交易 / 轻仓试错</td></tr>
-          <tr><td class="t">WRD</td><td class="nm">文远知行</td><td><span class="sent s3">中性 48</span></td><td>政策主题相关，个股硬催化偏薄</td><td>观察</td></tr>
-          <tr><td class="t">AMD</td><td class="nm">超微半导体</td><td><span class="sent s4">乐观 66</span></td><td>半导体重估日跟涨；映射 AMDL</td><td>持有</td></tr>
-          <tr><td class="t">INTC</td><td class="nm">英特尔</td><td><span class="sent s3">中性 —</span></td><td>已加入观察名单（2026-09-22）；待晨报补全深卡</td><td>观察</td></tr>
-          <tr><td class="t">TSLA</td><td class="nm">特斯拉</td><td><span class="sent s2">悲观 42</span></td><td>Cybercab 监管书面答复临近（约 9/30）</td><td>观察 / 轻仓</td></tr>
-          <tr><td class="t">BABA</td><td class="nm">阿里巴巴</td><td><span class="sent s4">乐观 64</span></td><td>周五放量反弹；云增速预期上修</td><td>持有 / 轻仓试错</td></tr>
-          <tr><td class="t">COIN</td><td class="nm">Coinbase</td><td><span class="sent s5">极度乐观 78</span></td><td>加密 beta；映射 CONL</td><td>持有 / 勿追高</td></tr>
-          <tr><td class="t">CRCL</td><td class="nm">Circle</td><td><span class="sent s4">乐观 70</span></td><td>稳定币/加密基建；映射 CRCA</td><td>观察 / 轻仓</td></tr>
-          <tr><td class="t">CRWV</td><td class="nm">CoreWeave</td><td><span class="sent s3">中性 55</span></td><td>AI 算力租赁；$81.36（+1.85%）· 映射 CWVX</td><td>观察</td></tr>
-          <tr><td class="t">HOOD</td><td class="nm">Robinhood</td><td><span class="sent s5">极度乐观 76</span></td><td>加密+零售情绪；映射 ROBN</td><td>持有 / 勿追高</td></tr>
-          <tr><td class="t">OKLO</td><td class="nm">Oklo</td><td><span class="sent s3">中性 52</span></td><td>能源政策叙事；映射 OKLL</td><td>观察</td></tr>
-        </tbody>
-      </table>
-      <p class="note">正股：NVDA ORCL RKLB WRD AMD INTC TSLA BABA；杠杆映射 COIN→CONL、AMD→AMDL、CRCL→CRCA、CRWV→CWVX、HOOD→ROBN、OKLO→OKLL。</p>
-    </section>
-
-    <section class="block">
-      <h2><span class="n">1b</span>推特舆情</h2>
-      <p class="note">公开网页检索 X/Twitter 讨论主题（非认证 API）；只归纳主题，不编造推文/账号。舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
-      <div class="tw-grid">
-        <div class="tw-card">
-          <div class="tw-head">
-            <span class="tw-code">NVDA</span><span class="tw-name">英伟达</span>
-            <span class="tw-pill bull">情绪 · 偏多</span>
-            <span class="tw-pill heat-h">热度 · 高</span>
-          </div>
-          <ul>
-            <li>主题：AI 基础设施需求 / 云基建与交付质量</li>
-            <li>主题：TickerTalks 二手汇总约 18.8k X 帖/7 日，热度约正常 1×，偏多</li>
-            <li>主题：Burry 回补看跌期权叙事、Stevens 大额减持辩论仍在</li>
-            <li>主题：下一财报窗口约 11/18；技术侧关注 50DMA 约 $217</li>
-          </ul>
-          <div class="tw-debate"><strong>争议点：</strong>多头讲算力刚需；空头盯估值、内部人卖出与竞争。来源为 AltIndex/TickerTalks 等二手汇总，非 API；不编造推文。</div>
-        </div>
-        <div class="tw-card">
-          <div class="tw-head">
-            <span class="tw-code">TSLA</span><span class="tw-name">特斯拉</span>
-            <span class="tw-pill neut">情绪 · 中性</span>
-            <span class="tw-pill heat-h">热度 · 高</span>
-          </div>
-          <ul>
-            <li>主题：Robotaxi / 佛罗里达等地监管推进乐观声</li>
-            <li>主题：Cybercab / Autopilot 安全与监管审查</li>
-            <li>主题：事件驱动波动，多空分裂明显</li>
-          </ul>
-          <div class="tw-debate"><strong>争议点：</strong>自动驾驶落地时间表 vs 安全/监管阻力；X 情绪分数多落在中性区间。</div>
-        </div>
-        <div class="tw-card">
-          <div class="tw-head">
-            <span class="tw-code">ORCL</span><span class="tw-name">甲骨文</span>
-            <span class="tw-pill neut">情绪 · 中性偏空</span>
-            <span class="tw-pill heat-m">热度 · 中</span>
-          </div>
-          <ul>
-            <li>主题：OpenAI / Stargate 积压与云增速故事</li>
-            <li>主题：负 FCF、资本开支与项目融资压力</li>
-            <li>主题：知名空头仓位与许可/项目进度争论</li>
-          </ul>
-          <div class="tw-debate"><strong>争议点：</strong>巨额 backlog 能否兑现成现金流；数据中心贷款定价压力是否外溢到估值。</div>
-        </div>
-        <div class="tw-card">
-          <div class="tw-head">
-            <span class="tw-code">RKLB</span><span class="tw-name">Rocket Lab</span>
-            <span class="tw-pill bull">情绪 · 偏多</span>
-            <span class="tw-pill heat-m">热度 · 中</span>
-          </div>
-          <ul>
-            <li>主题：积压增长 / Iridium 交易与卫星项目</li>
-            <li>主题：Neutron 进度与太阳能电池产品叙事</li>
-            <li>主题：稀释、现金消耗与内部人卖出担忧</li>
-          </ul>
-          <div class="tw-debate"><strong>争议点：</strong>事件多头 vs Neutron 时间表/ATM 稀释空头；热度较峰值回落。</div>
-        </div>
-        <div class="tw-card">
-          <div class="tw-head">
-            <span class="tw-code">AMD</span><span class="tw-name">超微半导体</span>
-            <span class="tw-pill bull">情绪 · 偏多</span>
-            <span class="tw-pill heat-m">热度 · 中</span>
-          </div>
-          <ul>
-            <li>主题：AI GPU / 数据中心份额「第二曲线」</li>
-            <li>主题：财报 beat-and-raise 后的跟涨讨论</li>
-            <li>主题：相对 NVDA 的估值与竞争差距</li>
-          </ul>
-          <div class="tw-debate"><strong>争议点：</strong>X 侧偏多、可信评论者分歧仍在（供应/中国/竞争）。</div>
-        </div>
-        <div class="tw-card">
-          <div class="tw-head">
-            <span class="tw-code">COIN</span><span class="tw-name">Coinbase</span>
-            <span class="tw-pill bull">情绪 · 偏多</span>
-            <span class="tw-pill heat-h">热度 · 高</span>
-          </div>
-          <ul>
-            <li>主题：BTC 反弹下的高 beta 加密交易所交易</li>
-            <li>主题：稳定币 / Base / 代币化与衍生品叙事</li>
-            <li>主题：现货成交与监管不确定性对冲声</li>
-          </ul>
-          <div class="tw-debate"><strong>争议点：</strong>加密回暖 beta vs 交易量波动与监管；勿把热度等同资金流入。</div>
-        </div>
-        <div class="tw-card">
-          <div class="tw-head">
-            <span class="tw-code">HOOD</span><span class="tw-name">Robinhood</span>
-            <span class="tw-pill bull">情绪 · 偏多</span>
-            <span class="tw-pill heat-m">热度 · 中</span>
-          </div>
-          <ul>
-            <li>主题：加密 + 期权/事件合约的零售情绪</li>
-            <li>主题：相对 COIN 更「多元化」平台叙事</li>
-            <li>主题：估值溢价与增长放缓风险</li>
-          </ul>
-          <div class="tw-debate"><strong>争议点：</strong>零售风险偏好回升可持续性；热度较近期均值偏冷。</div>
-        </div>
-      </div>
-      <p class="note" style="margin-top:8px;">其余自选（WRD/BABA/CRCL 等）本轮未做专项 X 检索块。</p>
-    </section>
-
-    <section class="block" style="background:transparent;border:none;padding:0;">
-      <h2 style="padding:0 2px 8px;"><span class="n">2</span>详细个股卡（优先有料）</h2>
-    </section>
-
-<article class="stock" id="NVDA">
-    <div class="stock-head">
-      <div class="row1">
-        <span class="name">英伟达</span>
-        <span class="code">NVDA</span>
-        <span class="px up">$222.27　+1.34%</span>
-        <span class="session-tag">上一交易日收盘 · 2026-09-18 · 今日尚未开盘</span>
-      </div>
-    </div>
-    <div class="concl">
-      <h3>核心结论</h3>
-      <p class="summary">AI 需求侧仍被黄仁勋「明年芯片销量翻倍」等口径强化，但市场定价已从「要不要买算力」转向「毛利与交付质量」；周一亚盘时段先核对周末标题是否已被定价；美股夜盘待开。</p>
-      <div class="metrics">
-        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s4">乐观</span></span></div>
-        <div class="metric"><span class="k">情绪分</span><span class="v">68 / 100</span></div>
-        <div class="metric"><span class="k">操作建议</span><span class="v">持有 · 回踩再加（参考）</span></div>
-        <div class="metric"><span class="k">趋势研判</span><span class="v">中期偏多 · 短线震荡消化指引</span></div>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>数据视角</h3>
-      <p><span class="lbl">趋势状态</span>　周五收涨并跟半导体板块走强；费城半导体当日 +2.78%，存储链领涨，算力龙头同步受益风险偏好。</p>
-      <p><span class="lbl">价格位置</span>　相对近期高低与均线：精确 MA 数值待补；定性为仍处中期上升通道内的高位震荡区，不宜按「突破追涨」口径处理隔夜缺口。</p>
-      <p><span class="lbl">量能</span>　公开报道成交约 1.9 亿股量级（来源：综合行情库）；四巫日整体交投放大，个股量能需与近 20 日均值对比（待补）。</p>
-      <p><span class="lbl">相关板块</span>　AI GPU / 数据中心 / 半导体设备与存储映射。</p>
-    </div>
-    <div class="sec">
-      <h3>情报</h3>
-      <p><span class="lbl">新闻要点</span>　① 收购 Hugging Face 约 $119 亿（另有员工留任股权激励上限约 $10 亿），预计 2027 上半年交割待批（综合新闻）。② 黄仁勋称明年芯片销量有望达今年两倍，瓶颈在产能非需求（智通财经转述）。</p>
-      <p><span class="lbl">风险警报</span>　Q3 毛利率指引约 74% 及后续或下探至约 71%–72% 的讨论仍在定价中；反垄断/出口管制与大额收购交割不确定性。</p>
-      <p><span class="lbl">积极催化</span>　数据中心需求叙事强化；存储周期上行对 AI 硬件链情绪外溢。</p>
-      <p><span class="lbl">Financial</span>　8/26 已披露：Q2 FY27 营收约 $962 亿（+106% YoY）；数据中心约 $890 亿（+117%）；Q3 营收指引约 $1080 亿 ±2%。</p>
-    
-      <div class="tw-inline">
-        <h4>推特舆情 · NVDA 英伟达</h4>
-        <p class="meta-line"><span class="tw-pill bull">情绪 · 偏多</span> <span class="tw-pill heat-h">热度 · 高</span> · AltIndex/TickerTalks 二手汇总（非 API）</p>
-        <ul><li>约 18.8k X 帖/7 日，热度约正常 1×，偏多</li><li>主题：AI 基建需求、Burry 回补 put 叙事、Stevens 大额减持辩论</li><li>下一财报约 11/18；50DMA 约 $217 为公开讨论关注位</li></ul>
-        <p><strong>争议点：</strong>多头讲算力刚需，空头讲估值与内部人卖出。舆情定性≠资金流向。</p>
-        <p class="meta-line">不编造推文/账号；不构成投资建议。</p>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>作战计划 / 策略</h3>
-      <p class="note" style="padding-top:0;">周一开盘前瞻 · 参考区间 · 待开盘验证（不构成点位承诺）</p>
-      <div class="strat">
-        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">回踩近 5 日波动下沿或缺口回补后再观察 · 数值待补</span></div>
-        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">若高开后快速回落至日内均价附近企稳再试 · 条件式</span></div>
-        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">有效跌破近两周摆动低点（待补具体价）并放量</span></div>
-        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">挑战前高区域分批；事件兑现后降仓位</span></div>
-      </div>
-      <ul class="risks">
-        <li>毛利指引下修预期若再被卖方强化，高估值标的弹性向下。</li>
-        <li>休市后消息面（收购审批、出口政策）可能造成跳空。</li>
-        <li>四巫日后续期权仓位重置，短线波动或放大。</li>
-        <li>追涨隔夜标题易买在情绪峰值。</li>
-      </ul>
-    </div>
-    <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
-  </article>
-
-<article class="stock" id="ORCL">
-    <div class="stock-head">
-      <div class="row1">
-        <span class="name">甲骨文</span>
-        <span class="code">ORCL</span>
-        <span class="px down">$147.61　-1.98%</span>
-        <span class="session-tag">上一交易日收盘 · 2026-09-18 · 今日尚未开盘（JSON prevClose $150.28）</span>
-      </div>
-    </div>
-    <div class="concl">
-      <h3>核心结论</h3>
-      <p class="summary">云基建增速与巨额积压仍是多头故事，但负自由现金流、资本开支高峰与客户集中度使空头叙事更易主导短线定价；情绪偏谨慎，操作以观察与风控优先。</p>
-      <div class="metrics">
-        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s2">悲观</span></span></div>
-        <div class="metric"><span class="k">情绪分</span><span class="v">38 / 100</span></div>
-        <div class="metric"><span class="k">操作建议</span><span class="v">观察 · 减仓博弈（参考）</span></div>
-        <div class="metric"><span class="k">趋势研判</span><span class="v">财报后承压整理 · 需等 FCF 拐点信号</span></div>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>数据视角</h3>
-      <p><span class="lbl">趋势状态</span>　周五收跌约 2%，弱于纳指与费城半导体，显示个股层仍在消化财报后争议。</p>
-      <p><span class="lbl">价格位置</span>　相对均线/近期高低：精确数值待补；定性为财报后回撤段，未确认重新站上关键均线多头排列。</p>
-      <p><span class="lbl">量能</span>　成交约 3930 万股量级（行情库）；需对比财报周峰值是否缩量（待补）。</p>
-      <p><span class="lbl">相关板块</span>　云基础设施 / AI 训练推理托管 / 企业软件。</p>
-    </div>
-    <div class="sec">
-      <h3>情报</h3>
-      <p><span class="lbl">新闻要点</span>　约 9/10 财报：云基建收入约 +121% 至约 $74 亿；剩余履约义务/积压约 $6640 亿；GPU 利用率披露约 97.9%；单季资本开支约 $285 亿（综合财报解读）。</p>
-      <p><span class="lbl">风险警报</span>　自由现金流仍为负；OpenAI 等相关大客户集中度与融资条件变化；毛利率一度承压至约 61% 的讨论。</p>
-      <p><span class="lbl">积极催化</span>　若后续披露资本开支高峰见顶或大客户合同现金回收加速，估值逻辑可重定价。</p>
-      <p><span class="lbl">Financial</span>　见上；周末无新增正式披露。</p>
-    
-      <div class="tw-inline">
-        <h4>推特舆情 · ORCL 甲骨文</h4>
-        <p class="meta-line"><span class="tw-pill neut">情绪 · 中性偏空</span> <span class="tw-pill heat-m">热度 · 中</span> · 公开网页检索 X/Twitter 主题（非 API）</p>
-        <ul><li>云积压/OpenAI 叙事 vs 负 FCF 与融资压力</li><li>知名空头与项目许可争议抬升对立</li></ul>
-        <p><strong>争议点：</strong>积压兑现速度与数据中心贷款定价是否冲击估值。</p>
-        <p class="meta-line">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>作战计划 / 策略</h3>
-      <p class="note" style="padding-top:0;">周一开盘前瞻 · 参考区间 · 待开盘验证</p>
-      <div class="strat">
-        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">等待缩量止跌 + 重新站上财报后压力带 · 价位待补</span></div>
-        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">仅事件驱动轻仓试错，严格仓位上限</span></div>
-        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">跌破财报后摆动低点（待补）并放量离场</span></div>
-        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">反弹至缺口/前收附近减仓，不赌单边 V 反</span></div>
-      </div>
-      <ul class="risks">
-        <li>高积压无法短期转化为自由现金流。</li>
-        <li>大客户融资或推迟扩容冲击指引。</li>
-        <li>板块强、个股弱的相对弱势可能延续。</li>
-      </ul>
-    </div>
-    <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
-  </article>
-
-<article class="stock" id="RKLB">
-    <div class="stock-head">
-      <div class="row1">
-        <span class="name">Rocket Lab</span>
-        <span class="code">RKLB</span>
-        <span class="px down">$64.57　-4.79%</span>
-        <span class="session-tag">上一交易日收盘 · 2026-09-18 · 今日尚未开盘</span>
-      </div>
-    </div>
-    <div class="concl">
-      <h3>核心结论</h3>
-      <p class="summary">FCC 对收购 Iridium 约 $81 亿交易过首道关，股东投票约在 9/24——属明确事件轴；周五大跌更像利好兑现/波动出货后的回吐，情绪仍偏事件乐观，但仓位需按「事件交易」管理。</p>
-      <div class="metrics">
-        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s4">乐观</span></span></div>
-        <div class="metric"><span class="k">情绪分</span><span class="v">62 / 100</span></div>
-        <div class="metric"><span class="k">操作建议</span><span class="v">轻仓试错 · 事件交易（参考）</span></div>
-        <div class="metric"><span class="k">趋势研判</span><span class="v">中期主题偏多 · 短线高波动</span></div>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>数据视角</h3>
-      <p><span class="lbl">趋势状态</span>　周五收 $64.57（-4.79%），前一日曾大涨；典型事件股双向波动。</p>
-      <p><span class="lbl">价格位置</span>　52 周区间公开约 $37.57–$151（行情库）；现价远离高点，亦远非低位，属中高波动中轴区。</p>
-      <p><span class="lbl">量能</span>　约 3200 万股，显著放量（stockanalysis）。</p>
-      <p><span class="lbl">相关板块</span>　航天发射 / 卫星通信 / 太空基建。</p>
-    </div>
-    <div class="sec">
-      <h3>情报</h3>
-      <p><span class="lbl">新闻要点</span>　FCC 过 Iridium 交易首道监管关；Iridium 股东投票约 9/24；Neutron 硬件测试推进，年底首飞窗口公司此前称正在收窄（综合新闻）。</p>
-      <p><span class="lbl">风险警报</span>　投票或后续监管不及预期；发射延期；并购整合与稀释风险。</p>
-      <p><span class="lbl">积极催化</span>　交易推进节点、积压订单兑现、发射节奏超预期。</p>
-      <p><span class="lbl">Financial</span>　8/10：Q2 营收约 $2.34 亿创纪录（约 +62%）；积压约 $23.6 亿。</p>
-    
-      <div class="tw-inline">
-        <h4>推特舆情 · RKLB Rocket Lab</h4>
-        <p class="meta-line"><span class="tw-pill bull">情绪 · 偏多</span> <span class="tw-pill heat-m">热度 · 中</span> · 公开网页检索 X/Twitter 主题（非 API）</p>
-        <ul><li>积压/Iridium/太阳能产品等事件叙事</li><li>Neutron 进度、稀释与内部人卖出担忧</li></ul>
-        <p><strong>争议点：</strong>事件多头与执行/稀释空头并存；热度较峰值回落。</p>
-        <p class="meta-line">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>作战计划 / 策略</h3>
-      <p class="note" style="padding-top:0;">周一开盘前瞻 · 参考区间 · 待开盘验证</p>
-      <div class="strat">
-        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">投票前缩量回踩周五低点区域附近 · 轻仓（条件式，价待验证）</span></div>
-        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">投票通过后回踩确认再加，不追首根缺口</span></div>
-        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">跌破周五低点 $63.79 下方有效区域并放量</span></div>
-        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">接近前一日冲高区或事件落地脉冲时减仓</span></div>
-      </div>
-      <ul class="risks">
-        <li>9/24 投票结果二元波动。</li>
-        <li>利好兑现后「卖事实」。</li>
-        <li>航天执行风险（发射/技术）。</li>
-        <li>流动性与散户拥挤度高。</li>
-      </ul>
-    </div>
-    <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
-  </article>
-
-<article class="stock" id="TSLA">
-    <div class="stock-head">
-      <div class="row1">
-        <span class="name">特斯拉</span>
-        <span class="code">TSLA</span>
-        <span class="px down">$364.27　-0.53%</span>
-        <span class="session-tag">上一交易日收盘 · 2026-09-18 · 今日尚未开盘</span>
-      </div>
-    </div>
-    <div class="concl">
-      <h3>核心结论</h3>
-      <p class="summary">NHTSA 就 Cybercab FMVSS 认证要求约 9/30 前宣誓式书面答复，监管不确定性上升压制风险偏好；在答复口径明朗前，情绪偏谨慎，操作以观察为主。</p>
-      <div class="metrics">
-        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s2">悲观</span></span></div>
-        <div class="metric"><span class="k">情绪分</span><span class="v">42 / 100</span></div>
-        <div class="metric"><span class="k">操作建议</span><span class="v">观察 · 轻仓（参考）</span></div>
-        <div class="metric"><span class="k">趋势研判</span><span class="v">事件驱动震荡 · 方向待监管文件</span></div>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>数据视角</h3>
-      <p><span class="lbl">趋势状态</span>　周五小跌，弱于纳指；属 Mag7 中偏弱一侧。</p>
-      <p><span class="lbl">价格位置</span>　均线与近期高低精确值待补；定性为监管事件前的高波动整理。</p>
-      <p><span class="lbl">量能</span>　成交约 5190 万股量级（行情库）。</p>
-      <p><span class="lbl">相关板块</span>　电动车 / 自动驾驶 / 机器人叙事映射。</p>
-    </div>
-    <div class="sec">
-      <h3>情报</h3>
-      <p><span class="lbl">新闻要点</span>　NHTSA 特别令：就 Cybercab 无方向盘/踏板等合规路径，要求约 9/30 前书面答复（综合监管新闻）。</p>
-      <p><span class="lbl">风险警报</span>　书面答复若暗示认证路径受阻或延期，机器人出租车叙事可能重定价；交付与价格战旧风险仍在。</p>
-      <p><span class="lbl">积极催化</span>　若答复给出清晰合规路径，事件溢价可能快速修复。</p>
-      <p><span class="lbl">Financial</span>　本周末无新增正式财报；沿用既有季度披露即可。</p>
-    
-      <div class="tw-inline">
-        <h4>推特舆情 · TSLA 特斯拉</h4>
-        <p class="meta-line"><span class="tw-pill neut">情绪 · 中性</span> <span class="tw-pill heat-h">热度 · 高</span> · 公开网页检索 X/Twitter 主题（非 API）</p>
-        <ul><li>Robotaxi 监管推进乐观与安全审查悲观并存</li><li>Cybercab 书面答复窗口抬升事件讨论</li></ul>
-        <p><strong>争议点：</strong>自动驾驶时间表 vs 监管/安全阻力，多空分裂。</p>
-        <p class="meta-line">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>作战计划 / 策略</h3>
-      <p class="note" style="padding-top:0;">周一开盘前瞻 · 参考区间 · 待开盘验证</p>
-      <div class="strat">
-        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">监管文件落地后视口径再定 · 此前不设主动买点</span></div>
-        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">仅极端错杀且量能配合时轻仓试错</span></div>
-        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">事件交易仓：隔夜跳空不利即减 / 破近期低点（待补）</span></div>
-        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">利好落地后的脉冲高点分批兑现</span></div>
-      </div>
-      <ul class="risks">
-        <li>9/30 答复窗口前波动加大。</li>
-        <li>自动驾驶监管口径超预期严格。</li>
-        <li>大盘风险偏好切换时高 beta 先跌。</li>
-      </ul>
-    </div>
-    <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
-  </article>
-
-<article class="stock" id="BABA">
-    <div class="stock-head">
-      <div class="row1">
-        <span class="name">阿里巴巴</span>
-        <span class="code">BABA / 09988.HK</span>
-        <span class="px up">BABA $113.24　+4.33%*　|　09988 HK$109.30　约 +4%</span>
-        <span class="session-tag">上一交易日收盘 · 2026-09-18 · 今日尚未开盘</span>
-      </div>
-    </div>
-    <div class="concl">
-      <h3>核心结论</h3>
-      <p class="summary">周五美股/港股两地共振放量反弹；高盛下调目标价仍买入并上修阿里云 9 月季增速估计至约 53%，云与电商修复叙事占优，情绪转乐观，但需防「一日游行情」。</p>
-      <div class="metrics">
-        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s4">乐观</span></span></div>
-        <div class="metric"><span class="k">情绪分</span><span class="v">64 / 100</span></div>
-        <div class="metric"><span class="k">操作建议</span><span class="v">持有 · 轻仓试错（参考）</span></div>
-        <div class="metric"><span class="k">趋势研判</span><span class="v">短线反弹确认中 · 中期看云增速兑现</span></div>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>数据视角</h3>
-      <p><span class="lbl">趋势状态</span>　BABA 收 $113.24，高 $113.77 / 低 $110.85；09988 收约 109.3，为周五港股科网领涨之一。</p>
-      <p><span class="lbl">价格位置</span>　均线数值待补；定性为反弹初期，需周一验证是否延续。</p>
-      <p><span class="lbl">量能</span>　BABA 约 1325 万股；港股大市成交回升至约 2665 亿。</p>
-      <p><span class="lbl">相关板块</span>　中国互联网 / 云计算 / 电商。</p>
-    </div>
-    <div class="sec">
-      <h3>情报</h3>
-      <p><span class="lbl">新闻要点</span>　高盛下调阿里港股目标至 172 港元、美股约 177 美元，仍买入；上调云增速估计（卖方转述）。港股收评指阿里升约 4%（商业电台/智通）。</p>
-      <p><span class="lbl">风险警报</span>　消费复苏不及预期；云资本开支与竞争；中概流动性折价。</p>
-      <p><span class="lbl">积极催化</span>　云增速上修、电商促销数据、回购/分红预期。</p>
-      <p><span class="lbl">Financial</span>　周末无新正式财报数字。</p>
-    </div>
-    <div class="sec">
-      <h3>作战计划 / 策略</h3>
-      <p class="note" style="padding-top:0;">周一开盘前瞻 · 参考区间 · 待开盘验证</p>
-      <div class="strat">
-        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">回踩周五重心 / 开盘区间下沿企稳（BABA 约 111 附近作观察，待验证）</span></div>
-        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">放量站稳周五高点后再追确认阳</span></div>
-        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">失守周五低点 $110.85 / 港股对应低点并放量</span></div>
-        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">接近卖方美股目标路径前的阻力带分批</span></div>
-      </div>
-      <ul class="risks">
-        <li>反弹一日游，周一高开低走。</li>
-        <li>目标价下修与股价上涨背离引发分歧。</li>
-        <li>ADR/港股溢价波动干扰。</li>
-      </ul>
-    </div>
-    <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
-  </article>
-
-    <section class="block">
-      <h2><span class="n">3</span>其余美股自选 · 简版</h2>
-      <p class="note">结论 + 新闻一句 + 策略一句；杠杆仅映射标注。</p>
-<details class="mini">
-      <summary><span class="nm">AMD</span> <span class="px up">$559.82　+2.70%*</span> <span class="sent s4">乐观 66</span> <span class="session-tag">9/18 收盘</span></summary>
-      <div class="body">
-        <p><strong>结论</strong>：半导体/存储情绪日跟涨，数据中心份额叙事仍在，但整体增速对比 NVDA 仍被市场讨论。</p>
-        <p><strong>新闻</strong>：周五费城半导体大涨背景下普涨（综合行情）。</p>
-        <p><strong>策略</strong>：持有为主；回踩再加，数值待补 · 待开盘验证。映射杠杆 <strong>AMDL</strong>。</p>
-        
-        <div class="tw-inline">
-          <h4>推特舆情 · AMD</h4>
-          <p class="meta-line"><span class="tw-pill bull">情绪 · 偏多</span> <span class="tw-pill heat-m">热度 · 中</span> · 公开网页检索</p>
-          <p>主题：AI GPU 份额叙事、财报后跟涨；争议：相对 NVDA 差距与竞争/供应风险。热度较均值偏冷。</p>
-          <p class="meta-line">舆情定性≠资金流向；不构成投资建议。</p>
-        </div>
-        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
-      </div>
-    </details>
-<details class="mini">
-      <summary><span class="nm">WRD 文远知行</span> <span class="px down">$5.50　-1.79%*</span> <span class="sent s3">中性 48</span></summary>
-      <div class="body">
-        <p><strong>结论</strong>：与「词元经济」等政策主题相关，但周末缺公司层硬催化，信息偏薄。</p>
-        <p><strong>新闻</strong>：北京约 9/18「词元经济十条」主题映射（政策稿转述）。</p>
-        <p><strong>策略</strong>：观察；不设主动买点直至公司层催化出现。</p>
-        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
-      </div>
-    </details>
-<details class="mini">
-      <summary><span class="nm">COIN</span> <span class="px up">$194.25　+11.66%</span> <span class="sent s5">极度乐观 78</span></summary>
-      <div class="body">
-        <p><strong>结论</strong>：加密风险偏好回暖主导定价，周五大涨；情绪过热，操作「持有但勿追高」。</p>
-        <p><strong>新闻</strong>：周末 BTC 重上约 $8 万关口、加密总市值报道升温（综合加密媒体）。</p>
-        <p><strong>策略</strong>：已有仓持有；新仓等回撤。映射杠杆 <strong>CONL</strong>（波动显著更大）。</p>
-        
-        <div class="tw-inline">
-          <h4>推特舆情 · COIN</h4>
-          <p class="meta-line"><span class="tw-pill bull">情绪 · 偏多</span> <span class="tw-pill heat-h">热度 · 高</span> · 公开网页检索</p>
-          <p>主题：BTC/加密 beta、稳定币与平台扩张叙事；争议：现货量波动与监管。勿追热度峰值。</p>
-          <p class="meta-line">舆情定性≠资金流向；不构成投资建议。</p>
-        </div>
-        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
-      </div>
-    </details>
-<details class="mini">
-      <summary><span class="nm">HOOD</span> <span class="px up">$119.82　+9.12%*</span> <span class="sent s5">极度乐观 76</span></summary>
-      <div class="body">
-        <p><strong>结论</strong>：加密 + 零售交易情绪共振，周五强势；与 COIN 同属高 beta。</p>
-        <p><strong>新闻</strong>：加密市场回暖叙事（综合）。</p>
-        <p><strong>策略</strong>：持有 / 勿追高；回撤再评估。映射 <strong>ROBN</strong>。</p>
-        
-        <div class="tw-inline">
-          <h4>推特舆情 · HOOD</h4>
-          <p class="meta-line"><span class="tw-pill bull">情绪 · 偏多</span> <span class="tw-pill heat-m">热度 · 中</span> · 公开网页检索</p>
-          <p>主题：零售+加密共振、相对 COIN 更分散；争议：估值溢价与增长放缓。讨论量低于近期均值。</p>
-          <p class="meta-line">舆情定性≠资金流向；不构成投资建议。</p>
-        </div>
-        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
-      </div>
-    </details>
-<details class="mini">
-      <summary><span class="nm">CRCL</span> <span class="px up">$91.78　+7.86%*</span> <span class="sent s4">乐观 70</span></summary>
-      <div class="body">
-        <p><strong>结论</strong>：稳定币/加密基础设施 beta，随风险偏好上行。</p>
-        <p><strong>新闻</strong>：加密板块普涨日跟涨（行情）。</p>
-        <p><strong>策略</strong>：观察仓或轻仓；映射 <strong>CRCA</strong>。</p>
-        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
-      </div>
-    </details>
-<details class="mini">
-      <summary><span class="nm">OKLO</span> <span class="px down">$38.00　-4.16%*</span> <span class="sent s3">中性 52</span></summary>
-      <div class="body">
-        <p><strong>结论</strong>：数据中心能源/核能政策叙事仍在，但周五回调，情绪从高潮回落至中性。</p>
-        <p><strong>新闻</strong>：此前有众议院数据中心能源相关议案催化讨论（综合报道）。</p>
-        <p><strong>策略</strong>：观察；事件冷静后再定。映射 <strong>OKLL</strong>。</p>
-        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
-      </div>
-    </details>
-<details class="mini">
-      <summary><span class="nm">CRWV / CWVX</span> <span class="px up">$81.36　+1.85%</span> <span class="sent s3">中性 55</span> <span class="session-tag">9/18 收盘</span></summary>
-      <div class="body">
-        <p><strong>结论</strong>：AI 算力租赁/云主题映射；正股 CRWV $81.36（+1.85%），杠杆 CWVX $13.41（+3.55%）。</p>
-        <p><strong>情报</strong>：映射 AI 算力/云基建公开讨论轴；策略点位待补。</p>
-        <p><strong>策略</strong>：观察；正股 CRWV → 杠杆 <strong>CWVX</strong>。idealBuy/止损待补 · 待开盘验证。</p>
-        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
-      </div>
-    </details>
-    </section>
-  </div>
-
-  <!-- ========== 3 A股大盘 ========== -->
-  <div class="tab-panel" id="panel-cn-mkt" role="tabpanel" aria-labelledby="tab-cn-mkt">
-    <section class="block">
-      <h2><span class="n">1</span>A股大盘概览（周一开盘前瞻 · 上一交易日 9/18）</h2>
-      <div class="chips">
-        <span class="chip up">上证 +0.94% · 3911.87（+36.27）</span>
-        <span class="chip up">深成指 +1.72% · 13640.87（+230.96）</span>
-        <span class="chip up">北证50 +1.79% · 1044.340（+18.343）</span>
-        <span class="chip up">创业板指 +2.25% · 3372.68</span>
-        <span class="chip up">涨跌家数 4234↑ / 1152↓ · 涨停 79 / 跌停 1</span>
-        <span class="chip mid">两市成交约 2.08–2.09 万亿（放量约 +2500 亿）</span>
-      </div>
-      <ul class="dense">
-        <li><strong>开盘前瞻</strong>：今日（9/21 周一）A 股尚未开盘；指数与个股口径均为上一交易日 9/18（周五）收盘。（来源：报价 JSON / 新浪财经 / 东方财富）</li>
-        <li><strong>主线题材</strong>：① 半导体/AI 算力全链（存储、先进封装、国产算力、设备）绝对主线——隔夜费城半导、英伟达需求指引、华为昇腾 960/NPO、「十五五」电子信息规划共振；② 卫星/商业航天情绪外溢（周末另有力箭一号发射报道，个股兑现度不一）；③ 地产午后脉冲 + 次新股。落后：银行、煤炭等防御/红利。</li>
-        <li><strong>资金</strong>：主力净流入约 424.82 亿元；电子行业净流入约 206 亿元居首。北向成交约 3339 亿元；净买入额记「待补」。</li>
-        <li><strong>自选侧提示</strong>：A 股关注 17 只详见「A股关注」；01810 小米仅在「港股关注」，不重复入 A 股卡。</li>
-        <li><strong>风险提示</strong>：题材急涨后高低切换；连板高度与指数背离，勿误判情绪主升；不宜盲目追高一日游。</li>
-      </ul>
-      <div class="disclaimer">以上为信息整理与参考，不构成投资建议。</div>
-    </section>
-
-    <section class="block">
-      <h2><span class="n">※</span>推特舆情（大盘横切）</h2>
-      <div class="tw-strip">
-        <h3>跨资产公开讨论主题（X/Twitter · 网页检索）</h3>
-        <p>英文 X 上对 A 股个股原生讨论整体偏少；可检索到的跨市场叙事多为 <strong>国产算力/信创</strong>（龙芯等映射）、<strong>商业航天/卫星互联网</strong>（中国卫星等主题外溢）、以及 <strong>新能源龙头「去宁化」</strong> 与资源股 beta。更多实质讨论仍集中在中文社区，X 侧记「公开检索偏少」。</p>
-        <p class="src">来源说明：公开网页检索 X/Twitter 及舆情汇总页主题归纳；非认证 API。舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
-      </div>
-    </section>
-  </div>
-
-  <!-- ========== 4 A股关注 ========== -->
-  <div class="tab-panel" id="panel-cn-watch" role="tabpanel" aria-labelledby="tab-cn-watch">
-    <section class="block">
-      <h2><span class="n">1</span>A股焦点表</h2>
-      <table class="focus">
-        <thead>
-          <tr><th>代码</th><th>名称</th><th>情绪</th><th>一句话</th><th>操作参考</th></tr>
-        </thead>
-        <tbody>
-          <tr><td class="t">000158</td><td class="nm">常山北明</td><td><span class="sent s3">中性 54</span></td><td>信创/算力主题映射；个股硬催化偏薄</td><td>观察</td></tr>
-          <tr><td class="t">002739</td><td class="nm">万达电影</td><td><span class="sent s3">中性 50</span></td><td>影视内容复苏叙事；缺短线强催化</td><td>观察</td></tr>
-          <tr><td class="t">002920</td><td class="nm">德赛西威</td><td><span class="sent s3">中性 55</span></td><td>智驾/舱驾电子龙头；近季盈利承压</td><td>持有 / 逢弱观察</td></tr>
-          <tr><td class="t">600118</td><td class="nm">中国卫星</td><td><span class="sent s4">乐观 66</span></td><td>商业航天+卫星应用；周五强于大盘</td><td>持有 / 回踩再加</td></tr>
-          <tr><td class="t">601127</td><td class="nm">赛力斯</td><td><span class="sent s3">中性 48</span></td><td>问界合作模式调整扰动；股价偏弱整理</td><td>观察 / 轻仓</td></tr>
-          <tr><td class="t">601818</td><td class="nm">光大银行</td><td><span class="sent s2">偏弱 42</span></td><td>银行股逆势承压；防御风格被抛弃</td><td>观察</td></tr>
-          <tr><td class="t">601899</td><td class="nm">紫金矿业</td><td><span class="sent s4">乐观 64</span></td><td>贵金属/资源 beta + 10 亿创投 AI 布局</td><td>持有 / 逢弱吸</td></tr>
-          <tr><td class="t">603099</td><td class="nm">长白山</td><td><span class="sent s3">中性 52</span></td><td>文旅景区；交投平稳缺强催化</td><td>观察</td></tr>
-          <tr><td class="t">688047</td><td class="nm">龙芯中科</td><td><span class="sent s4">乐观 65</span></td><td>国产 CPU/信创；定增受理 + 算力情绪</td><td>持有 / 勿追高</td></tr>
-          <tr><td class="t">002230</td><td class="nm">科大讯飞</td><td><span class="sent s4">乐观 62</span></td><td>AI 应用/大模型；回购进行中 · 38.48（+0.37%）</td><td>持有 / 回踩</td></tr>
-          <tr><td class="t">603019</td><td class="nm">中科曙光</td><td><span class="sent s4">乐观 63</span></td><td>算力服务器/先进计算；主线映射 · 84.30（+1.96%）</td><td>观察 / 回踩</td></tr>
-          <tr><td class="t">600536</td><td class="nm">中国软件</td><td><span class="sent s3">中性 56</span></td><td>信创软件；跟涨弹性弱于硬件链 · 31.66（+1.90%）</td><td>观察</td></tr>
-          <tr><td class="t">601138</td><td class="nm">工业富联</td><td><span class="sent s4">乐观 64</span></td><td>AI 服务器代工/出海；算力链映射 · 62.71（+2.35%）</td><td>持有 / 回踩</td></tr>
-          <tr><td class="t">600585</td><td class="nm">海螺水泥</td><td><span class="sent s3">中性 50</span></td><td>水泥周期；地产脉冲外溢有限 · 17.02（+0.47%）</td><td>观察</td></tr>
-          <tr><td class="t">600048</td><td class="nm">保利发展</td><td><span class="sent s3">中性 53</span></td><td>龙头房企；政策脉冲受益但持续性存疑 · 5.32（+5.56%）</td><td>观察 / 轻仓</td></tr>
-          <tr><td class="t">600036</td><td class="nm">招商银行</td><td><span class="sent s3">中性 48</span></td><td>银行权重；风格上攻日相对落后 · 40.59（-0.02%）</td><td>观察</td></tr>
-          <tr><td class="t">300750</td><td class="nm">宁德时代</td><td><span class="sent s2">偏弱 40</span></td><td>车企「去宁化」叙事压制；回购托底进行中</td><td>观察 / 逢弱</td></tr>
-        </tbody>
-      </table>
-      <p class="note">名单 17 只（不含 01810 小米，已在港股关注）。报价来自 9/18 JSON；小米仅在港股关注出卡，不重复入 A 股。</p>
-    </section>
-
-    <section class="block">
-      <h2><span class="n">1b</span>推特舆情</h2>
-      <p class="note">公开网页检索 X/Twitter（及可检索舆情汇总）主题归纳；英文 X 对 A 股单票讨论普遍偏少。舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
-      <div class="tw-grid">
-        <div class="tw-card">
-          <div class="tw-head">
-            <span class="tw-code">600118</span><span class="tw-name">中国卫星</span>
-            <span class="tw-pill bull">情绪 · 偏多</span>
-            <span class="tw-pill heat-m">热度 · 中</span>
-          </div>
-          <ul>
-            <li>主题：商业航天 / 卫星互联网组网情绪外溢</li>
-            <li>主题：通感智算 / 发射窗口催化讨论</li>
-            <li>主题：公开 X 英文讨论偏少，多映射板块热度</li>
-          </ul>
-          <div class="tw-debate"><strong>争议点：</strong>主题一日游 vs 订单兑现；股东减持等风险被提及。英文 cashtag 检索：公开检索偏少 / 待补。</div>
-        </div>
-        <div class="tw-card">
-          <div class="tw-head">
-            <span class="tw-code">688047</span><span class="tw-name">龙芯中科</span>
-            <span class="tw-pill bull">情绪 · 偏多</span>
-            <span class="tw-pill heat-l">热度 · 低</span>
-          </div>
-          <ul>
-            <li>主题：国产 CPU / 信创自主可控映射</li>
-            <li>主题：定增与算力情绪外溢</li>
-          </ul>
-          <div class="tw-debate"><strong>争议点：</strong>主题估值扩张 vs 盈利兑现。X 侧：公开检索偏少 / 待补。</div>
-        </div>
-        <div class="tw-card">
-          <div class="tw-head">
-            <span class="tw-code">002230</span><span class="tw-name">科大讯飞</span>
-            <span class="tw-pill neut">情绪 · 中性偏空</span>
-            <span class="tw-pill heat-m">热度 · 中</span>
-          </div>
-          <ul>
-            <li>主题：大模型商业化与盈利兑现质疑</li>
-            <li>主题：AI 应用长期叙事仍在</li>
-            <li>主题：品牌/公关层负面讨论抬升噪音（非基本面主线）</li>
-          </ul>
-          <div class="tw-debate"><strong>争议点：</strong>「再等等」式失望情绪 vs 国产 AI 刚需信仰。英文 X：公开检索偏少 / 待补。</div>
-        </div>
-        <div class="tw-card">
-          <div class="tw-head">
-            <span class="tw-code">300750</span><span class="tw-name">宁德时代</span>
-            <span class="tw-pill bear">情绪 · 偏空</span>
-            <span class="tw-pill heat-m">热度 · 中</span>
-          </div>
-          <ul>
-            <li>主题：车企「去宁化」与份额担忧</li>
-            <li>主题：全球动力电池龙头地位仍被引用</li>
-            <li>主题：回购托底叙事对冲情绪</li>
-          </ul>
-          <div class="tw-debate"><strong>争议点：</strong>竞争加剧压估值 vs 龙头壁垒。英文 X 讨论：公开检索偏少 / 待补。</div>
-        </div>
-        <div class="tw-card">
-          <div class="tw-head">
-            <span class="tw-code">601899</span><span class="tw-name">紫金矿业</span>
-            <span class="tw-pill bull">情绪 · 偏多</span>
-            <span class="tw-pill heat-l">热度 · 低</span>
-          </div>
-          <ul>
-            <li>主题：贵金属/铜金资源 beta</li>
-            <li>主题：公司层创投/AI 布局被当作边缘叙事</li>
-          </ul>
-          <div class="tw-debate"><strong>争议点：</strong>商品价格周期 vs 成长溢价。X 侧：公开检索偏少 / 待补。</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="block" style="background:transparent;border:none;padding:0;">
-      <h2 style="padding:0 2px 8px;"><span class="n">2</span>详细个股卡（优先有料）</h2>
-    </section>
-
-<article class="stock" id="CN600118">
-    <div class="stock-head">
-      <div class="row1">
-        <span class="name">中国卫星</span>
-        <span class="code">600118.SH</span>
-        <span class="px up">¥59.60　+3.85%</span>
-        <span class="session-tag">用户截图 · 上一交易日 2026-09-18</span>
-      </div>
-    </div>
-    <div class="concl">
-      <h3>核心结论</h3>
-      <p class="summary">商业航天/卫星互联网与「制造+应用」叙事下，周五涨幅显著强于沪指；周末另有国内多星发射与通感智算验证星报道，板块情绪有外溢，但公司层当日精确订单/参与度需逐条核对。情绪偏乐观，操作持有/回踩再加，勿追一日脉冲。</p>
-      <div class="metrics">
-        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s4">乐观</span></span></div>
-        <div class="metric"><span class="k">情绪分</span><span class="v">66 / 100</span></div>
-        <div class="metric"><span class="k">操作建议</span><span class="v">持有 · 回踩再加（参考）</span></div>
-        <div class="metric"><span class="k">趋势研判</span><span class="v">主题偏强 · 短线高波动</span></div>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>数据视角</h3>
-      <p><span class="lbl">趋势状态</span>　截图收 59.60（+3.85%），强于上证 +0.94%。</p>
-      <p><span class="lbl">价格位置</span>　精确均线/52 周极值待补；定性为主题行情中的中高波动区间。</p>
-      <p><span class="lbl">量能</span>　截图未给成交额，记待补。</p>
-      <p><span class="lbl">相关板块</span>　商业航天 / 卫星制造与应用 / 卫星互联网</p>
-    </div>
-    <div class="sec">
-      <h3>情报</h3>
-      <p><span class="lbl">新闻要点</span>　① 卖方口径长期强调小卫星/微小星研制 + 星网应用终端布局（研报综述）。② 9/20 力箭一号遥十八成功发射秦岭星等 9 星，含通感智算一体化验证星（新华社/经参）；属板块情绪催化，非公司单独公告。</p>
-      <p><span class="lbl">风险警报</span>　主题一日游；盈利弹性弱于估值扩张；订单兑现节奏不及预期。</p>
-      <p><span class="lbl">积极催化</span>　星座组网加速、星载单机/地面终端中标、发射窗口密集。</p>
-      <p><span class="lbl">Financial</span>　以公司年报/半年报为准；周末无新正式业绩指引。</p>
-    
-      <div class="tw-inline">
-        <h4>推特舆情 · 600118 中国卫星</h4>
-        <p class="meta-line"><span class="tw-pill bull">情绪 · 偏多</span> <span class="tw-pill heat-m">热度 · 中</span> · 公开网页检索 X/Twitter 主题（非 API）</p>
-        <ul><li>商业航天/星网主题外溢</li><li>英文 X 原生讨论：公开检索偏少 / 待补</li></ul>
-        <p><strong>争议点：</strong>主题脉冲 vs 订单兑现与减持风险。</p>
-        <p class="meta-line">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>作战计划 / 策略</h3>
-      <p class="note" style="padding-top:0;">周一开盘前瞻 · 参考区间 · 待开盘验证（不构成点位承诺）</p>
-      <div class="strat">
-        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">回踩周五重心/近周均价带企稳 · 价待补</span></div>
-        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">放量站稳周五高点后再确认 · 条件式</span></div>
-        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">失守近端摆动低点并放量（价待补）</span></div>
-        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">主题脉冲高位分批；事件兑现降仓</span></div>
-      </div>
-      <ul class="risks">
-      <li>板块情绪与公司订单脱节</li>
-      <li>高波动追涨回撤</li>
-      <li>国防/航天订单披露滞后</li>
-      </ul>
-    </div>
-    <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
-  </article>
-
-<article class="stock" id="CN688047">
-    <div class="stock-head">
-      <div class="row1">
-        <span class="name">龙芯中科</span>
-        <span class="code">688047.SH</span>
-        <span class="px up">¥103.11　+3.21%</span>
-        <span class="session-tag">用户截图 · 上一交易日 2026-09-18</span>
-      </div>
-    </div>
-    <div class="concl">
-      <h3>核心结论</h3>
-      <p class="summary">国产 CPU/信创标的，叠加算力半导体主线情绪；定增申请此前已获上交所受理（尚待审核注册）。周五收涨，情绪偏乐观，但科创板弹性大，操作持有/勿追高，回踩再评估。</p>
-      <div class="metrics">
-        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s4">乐观</span></span></div>
-        <div class="metric"><span class="k">情绪分</span><span class="v">65 / 100</span></div>
-        <div class="metric"><span class="k">操作建议</span><span class="v">持有 · 勿追高（参考）</span></div>
-        <div class="metric"><span class="k">趋势研判</span><span class="v">主线映射偏强 · 定增稀释需跟踪</span></div>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>数据视角</h3>
-      <p><span class="lbl">趋势状态</span>　截图收 103.11（+3.21%），跟半导体/信创情绪。</p>
-      <p><span class="lbl">价格位置</span>　均线与 52 周极值待补。</p>
-      <p><span class="lbl">量能</span>　待补。</p>
-      <p><span class="lbl">相关板块</span>　国产 CPU / 信创 / 半导体设计</p>
-    </div>
-    <div class="sec">
-      <h3>情报</h3>
-      <p><span class="lbl">新闻要点</span>　① 2026 年 8 月公告：向特定对象发行 A 股申请获上交所受理，尚需审核与证监会注册（上证报/智通）。② 周五半导体/AI 算力链放量普涨，国产算力情绪外溢（盘面综述）。</p>
-      <p><span class="lbl">风险警报</span>　定增稀释与审核不确定性；生态与性能竞争；主题退潮回撤。</p>
-      <p><span class="lbl">积极催化</span>　信创招标放量、新品导入、定增落地用于研发/扩产。</p>
-      <p><span class="lbl">Financial</span>　以公司定期报告为准。</p>
-    
-      <div class="tw-inline">
-        <h4>推特舆情 · 688047 龙芯中科</h4>
-        <p class="meta-line"><span class="tw-pill bull">情绪 · 偏多</span> <span class="tw-pill heat-l">热度 · 低</span> · 公开网页检索 X/Twitter 主题（非 API）</p>
-        <ul><li>国产 CPU/信创映射</li><li>X：公开检索偏少 / 待补</li></ul>
-        <p><strong>争议点：</strong>主题估值 vs 盈利兑现。</p>
-        <p class="meta-line">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>作战计划 / 策略</h3>
-      <p class="note" style="padding-top:0;">周一开盘前瞻 · 参考区间 · 待开盘验证</p>
-      <div class="strat">
-        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">缩量回踩近周下沿企稳 · 价待补</span></div>
-        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">主线回踩确认后再轻仓</span></div>
-        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">跌破近端摆动低点并放量（价待补）</span></div>
-        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">脉冲高位分批；定增关键节点降预期管理</span></div>
-      </div>
-      <ul class="risks">
-      <li>科创板高波动</li>
-      <li>定增审核延期/否决</li>
-      <li>半导体一日游</li>
-      </ul>
-    </div>
-    <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
-  </article>
-
-<article class="stock" id="CN002230">
-    <div class="stock-head">
-      <div class="row1">
-        <span class="name">科大讯飞</span>
-        <span class="code">002230.SZ</span>
-        <span class="px up">38.48　+0.37%</span>
-        <span class="session-tag">上一交易日收盘 · 2026-09-18 · 今日尚未开盘</span>
-      </div>
-    </div>
-    <div class="concl">
-      <h3>核心结论</h3>
-      <p class="summary">AI 应用/大模型国产龙头之一；公司层有回购实施与半年报披露在前，周五收 38.48（+0.37%）。周一尚未开盘，情绪偏乐观，操作持有/回踩，策略点位待开盘验证。</p>
-      <div class="metrics">
-        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s4">乐观</span></span></div>
-        <div class="metric"><span class="k">情绪分</span><span class="v">62 / 100</span></div>
-        <div class="metric"><span class="k">操作建议</span><span class="v">持有 · 回踩（参考）</span></div>
-        <div class="metric"><span class="k">趋势研判</span><span class="v">AI 应用映射 · 回踩观察</span></div>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>数据视角</h3>
-      <p><span class="lbl">趋势状态</span>　9/18 收 38.48（+0.37%）；周一开盘前瞻。</p>
-      <p><span class="lbl">价格位置</span>　均线精确值待补；定性为 AI 应用链中位震荡。</p>
-      <p><span class="lbl">量能</span>　待补。</p>
-      <p><span class="lbl">相关板块</span>　人工智能应用 / 语音与大模型 / 教育信息化</p>
-    </div>
-    <div class="sec">
-      <h3>情报</h3>
-      <p><span class="lbl">新闻要点</span>　① 约 9/1 披露首次回购及进展公告；此前 7–8 月有回购方案与进展（公司公告列表）。② 8/21 披露 2026 年半年度报告及投资者交流材料。</p>
-      <p><span class="lbl">风险警报</span>　AI 应用商业化节奏；估值波动；教育/toG 订单季节性。</p>
-      <p><span class="lbl">积极催化</span>　回购持续、大模型产品落地、算力链情绪外溢。</p>
-      <p><span class="lbl">Financial</span>　见半年报；精确数字以公告为准。</p>
-    
-      <div class="tw-inline">
-        <h4>推特舆情 · 002230 科大讯飞</h4>
-        <p class="meta-line"><span class="tw-pill neut">情绪 · 中性偏空</span> <span class="tw-pill heat-m">热度 · 中</span> · 公开网页检索 X/Twitter 主题（非 API）</p>
-        <ul><li>大模型商业化兑现质疑</li><li>品牌层噪音抬升讨论离散度；英文 X 偏少</li></ul>
-        <p><strong>争议点：</strong>长期国产 AI 信仰 vs 短期盈利失望。</p>
-        <p class="meta-line">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>作战计划 / 策略</h3>
-      <p class="note" style="padding-top:0;">周一开盘前瞻 · 参考区间 · 待开盘验证</p>
-      <div class="strat">
-        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">待补 · 回踩近周下沿企稳后再定</span></div>
-        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">条件式 · 待开盘验证</span></div>
-        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">待补</span></div>
-        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">事件/主题脉冲分批</span></div>
-      </div>
-      <ul class="risks">
-      <li>报价未校准导致误判</li>
-      <li>主题退潮</li>
-      <li>回购难阻阴跌</li>
-      </ul>
-    </div>
-    <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
-  </article>
-
-<article class="stock" id="CN300750">
-    <div class="stock-head">
-      <div class="row1">
-        <span class="name">宁德时代</span>
-        <span class="code">300750.SZ</span>
-        <span class="px flat">约 ¥301.95　待截图核对</span>
-        <span class="session-tag">上一交易日收盘 · 2026-09-18 · 今日尚未开盘</span>
-      </div>
-    </div>
-    <div class="concl">
-      <h3>核心结论</h3>
-      <p class="summary">车企供应链「去宁化」/自研电池叙事压制估值，股价较年内高点大幅回撤；公司启动大额回购并已分批实施，管理层公开回应专业制造壁垒。情绪偏弱，操作观察/逢弱，不发明精确抄底点。</p>
-      <div class="metrics">
-        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s2">偏弱</span></span></div>
-        <div class="metric"><span class="k">情绪分</span><span class="v">40 / 100</span></div>
-        <div class="metric"><span class="k">操作建议</span><span class="v">观察 · 逢弱（参考）</span></div>
-        <div class="metric"><span class="k">趋势研判</span><span class="v">高位回撤后寻底 · 叙事未清</span></div>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>数据视角</h3>
-      <p><span class="lbl">趋势状态</span>　公开媒体记 9/18 收约 301.95；用户截图未覆盖，表内以「待截图核对」标注。</p>
-      <p><span class="lbl">价格位置</span>　报道称较年内高点约 467 回撤超 35%（东方财富等综述）。</p>
-      <p><span class="lbl">量能</span>　待补。</p>
-      <p><span class="lbl">相关板块</span>　动力电池 / 储能 / 新能源车供应链</p>
-    </div>
-    <div class="sec">
-      <h3>情报</h3>
-      <p><span class="lbl">新闻要点</span>　① 车企加速二供/自研电池，市场担忧份额与议价（9/19–20 媒体综述）。② 回购：拟 200–400 亿注销式回购；截至约 9/18 已实施约三笔、合计约 16 亿量级（报道口径）。③ H1 净利约 432.84 亿（+41.98%）仍强。</p>
-      <p><span class="lbl">风险警报</span>　客户结构变化；毛利率承压；叙事发酵期波动加大。</p>
-      <p><span class="lbl">积极催化</span>　回购加码、高端车型份额稳住、海外产能兑现。</p>
-      <p><span class="lbl">Financial</span>　见半年报与回购进展公告。</p>
-    
-      <div class="tw-inline">
-        <h4>推特舆情 · 300750 宁德时代</h4>
-        <p class="meta-line"><span class="tw-pill bear">情绪 · 偏空</span> <span class="tw-pill heat-m">热度 · 中</span> · 公开网页检索 X/Twitter 主题（非 API）</p>
-        <ul><li>「去宁化」份额担忧</li><li>回购托底对冲；英文 X：公开检索偏少 / 待补</li></ul>
-        <p><strong>争议点：</strong>竞争加剧 vs 龙头壁垒。</p>
-        <p class="meta-line">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>作战计划 / 策略</h3>
-      <p class="note" style="padding-top:0;">周一开盘前瞻 · 参考区间 · 待开盘验证</p>
-      <div class="strat">
-        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">不设主动买点直至叙事降温 + 缩量止跌 · 价待补</span></div>
-        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">仅极端错杀且回购带确认时轻仓 · 条件式</span></div>
-        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">跌破近端摆动低点并放量（价待补）</span></div>
-        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">反弹至前阻力/均线密集区分批</span></div>
-      </div>
-      <ul class="risks">
-      <li>「去宁化」叙事延续</li>
-      <li>回购节奏慢于预期</li>
-      <li>高波动误判底部</li>
-      </ul>
-    </div>
-    <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
-  </article>
-
-<article class="stock" id="CN601899">
-    <div class="stock-head">
-      <div class="row1">
-        <span class="name">紫金矿业</span>
-        <span class="code">601899.SH</span>
-        <span class="px up">¥31.41　+1.65%</span>
-        <span class="session-tag">用户截图 · 上一交易日 2026-09-18</span>
-      </div>
-    </div>
-    <div class="concl">
-      <h3>核心结论</h3>
-      <p class="summary">铜金等资源 beta 仍在，叠加子公司拟出资约 10 亿元参投创投基金、布局人工智能/具身智能等前沿方向（约 9/16 公告口径）。周五收涨，情绪偏乐观，操作持有/逢弱吸，策略点位待补。</p>
-      <div class="metrics">
-        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s4">乐观</span></span></div>
-        <div class="metric"><span class="k">情绪分</span><span class="v">64 / 100</span></div>
-        <div class="metric"><span class="k">操作建议</span><span class="v">持有 · 逢弱吸（参考）</span></div>
-        <div class="metric"><span class="k">趋势研判</span><span class="v">资源 beta + 主题外溢</span></div>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>数据视角</h3>
-      <p><span class="lbl">趋势状态</span>　截图收 31.41（+1.65%）。</p>
-      <p><span class="lbl">价格位置</span>　均线待补。</p>
-      <p><span class="lbl">量能</span>　待补。</p>
-      <p><span class="lbl">相关板块</span>　有色金属 / 黄金铜矿 / 资源股</p>
-    </div>
-    <div class="sec">
-      <h3>情报</h3>
-      <p><span class="lbl">新闻要点</span>　① 约 9/16：全资子公司拟 10 亿元参投厦门时代深远创投基金，投向 AI、具身智能等（公告/快讯）。② 金属价格与美元利率预期仍是主定价因子。</p>
-      <p><span class="lbl">风险警报</span>　大宗商品回撤；海外矿山运营与地缘；创投布局与主业协同不确定。</p>
-      <p><span class="lbl">积极催化</span>　铜金价格回升、产量超预期、分红/回购。</p>
-      <p><span class="lbl">Financial</span>　以定期报告为准。</p>
-    
-      <div class="tw-inline">
-        <h4>推特舆情 · 601899 紫金矿业</h4>
-        <p class="meta-line"><span class="tw-pill bull">情绪 · 偏多</span> <span class="tw-pill heat-l">热度 · 低</span> · 公开网页检索 X/Twitter 主题（非 API）</p>
-        <ul><li>资源/贵金属 beta</li><li>X：公开检索偏少 / 待补</li></ul>
-        <p><strong>争议点：</strong>商品周期定价主导，社交讨论稀薄。</p>
-        <p class="meta-line">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>作战计划 / 策略</h3>
-      <p class="note" style="padding-top:0;">周一开盘前瞻 · 参考区间 · 待开盘验证</p>
-      <div class="strat">
-        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">回踩近周下沿企稳 · 价待补</span></div>
-        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">金属价格同步走强时确认加仓 · 条件式</span></div>
-        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">失守近端摆动低点并放量（价待补）</span></div>
-        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">前高/成本区附近分批</span></div>
-      </div>
-      <ul class="risks">
-      <li>商品价格波动</li>
-      <li>海外项目风险</li>
-      <li>主题炒作回吐</li>
-      </ul>
-    </div>
-    <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
-  </article>
-
-<article class="stock" id="CN002920">
-    <div class="stock-head">
-      <div class="row1">
-        <span class="name">德赛西威</span>
-        <span class="code">002920.SZ</span>
-        <span class="px up">¥84.73　+0.36%</span>
-        <span class="session-tag">用户截图 · 上一交易日 2026-09-18</span>
-      </div>
-    </div>
-    <div class="concl">
-      <h3>核心结论</h3>
-      <p class="summary">智能座舱/智驾域控龙头，映射汽车电子与机器人主题；近季公开财务口径显示营收/净利同比有所承压。周五小涨，情绪中性，操作持有/逢弱观察，勿按主题一日游追高。</p>
-      <div class="metrics">
-        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s3">中性</span></span></div>
-        <div class="metric"><span class="k">情绪分</span><span class="v">55 / 100</span></div>
-        <div class="metric"><span class="k">操作建议</span><span class="v">持有 · 逢弱观察（参考）</span></div>
-        <div class="metric"><span class="k">趋势研判</span><span class="v">中期主题在 · 短线整理</span></div>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>数据视角</h3>
-      <p><span class="lbl">趋势状态</span>　截图收 84.73（+0.36%），弱于科技主线弹性。</p>
-      <p><span class="lbl">价格位置</span>　均线待补。</p>
-      <p><span class="lbl">量能</span>　待补。</p>
-      <p><span class="lbl">相关板块</span>　汽车电子 / 智能驾驶 / 座舱域控</p>
-    </div>
-    <div class="sec">
-      <h3>情报</h3>
-      <p><span class="lbl">新闻要点</span>　① 公开行情页记 2026Q1 营收约 64.95 亿（约 -4.4%）、净利约 4.61 亿（约 -20.7%）（搜狐证券等转载口径，以公告为准）。② 智驾/舱驾一体仍是中期产业叙事。</p>
-      <p><span class="lbl">风险警报</span>　车企降本挤压；定点节奏放缓；估值回调。</p>
-      <p><span class="lbl">积极催化</span>　新定点放量、高阶智驾渗透、出口订单。</p>
-      <p><span class="lbl">Financial</span>　以公司定期报告为准。</p>
-    </div>
-    <div class="sec">
-      <h3>作战计划 / 策略</h3>
-      <p class="note" style="padding-top:0;">周一开盘前瞻 · 参考区间 · 待开盘验证</p>
-      <div class="strat">
-        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">回踩近周下沿企稳 · 价待补</span></div>
-        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">放量站稳整理平台后再加 · 条件式</span></div>
-        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">失守近端摆动低点并放量（价待补）</span></div>
-        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">反弹至前阻力分批</span></div>
-      </div>
-      <ul class="risks">
-      <li>盈利同比承压延续</li>
-      <li>主题退潮</li>
-      <li>汽车销量不及预期</li>
-      </ul>
-    </div>
-    <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
-  </article>
-
-<article class="stock" id="CN601127">
-    <div class="stock-head">
-      <div class="row1">
-        <span class="name">赛力斯</span>
-        <span class="code">601127.SH</span>
-        <span class="px up">¥47.19　+0.15%</span>
-        <span class="session-tag">用户截图 · 上一交易日 2026-09-18</span>
-      </div>
-    </div>
-    <div class="concl">
-      <h3>核心结论</h3>
-      <p class="summary">问界/华为智选合作模式调整传闻此前扰动股价（报道称转向「赛力斯主导、华为赋能」）；周五仅小涨，弱于科技主线。情绪中性偏谨慎，操作观察/轻仓，策略点位待补。</p>
-      <div class="metrics">
-        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s3">中性</span></span></div>
-        <div class="metric"><span class="k">情绪分</span><span class="v">48 / 100</span></div>
-        <div class="metric"><span class="k">操作建议</span><span class="v">观察 · 轻仓（参考）</span></div>
-        <div class="metric"><span class="k">趋势研判</span><span class="v">事件扰动后的弱整理</span></div>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>数据视角</h3>
-      <p><span class="lbl">趋势状态</span>　截图收 47.19（+0.15%）。</p>
-      <p><span class="lbl">价格位置</span>　均线待补；此前有大跌报道（约 9/15 港股/汽车链共振）。</p>
-      <p><span class="lbl">量能</span>　待补。</p>
-      <p><span class="lbl">相关板块</span>　新能源车 / 华为汽车产业链 / 问界</p>
-    </div>
-    <div class="sec">
-      <h3>情报</h3>
-      <p><span class="lbl">新闻要点</span>　① 媒体报道华为与赛力斯智选车模式调整讨论（产品/营销/销售主导权变化）；需以双方正式口径为准。② 汽车链与电池龙头调整日情绪外溢。</p>
-      <p><span class="lbl">风险警报</span>　合作条款落地不及预期；交付与毛利波动；高估值回撤。</p>
-      <p><span class="lbl">积极催化</span>　新车周期、销量超预期、合作关系澄清。</p>
-      <p><span class="lbl">Financial</span>　以公司公告为准。</p>
-    </div>
-    <div class="sec">
-      <h3>作战计划 / 策略</h3>
-      <p class="note" style="padding-top:0;">周一开盘前瞻 · 参考区间 · 待开盘验证</p>
-      <div class="strat">
-        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">待补 · 等合作口径澄清后再定</span></div>
-        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">缩量止跌确认后轻仓试错 · 条件式</span></div>
-        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">待补</span></div>
-        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">反弹至前阻力分批</span></div>
-      </div>
-      <ul class="risks">
-      <li>合作模式不确定性</li>
-      <li>销量证伪</li>
-      <li>板块联动杀跌</li>
-      </ul>
-    </div>
-    <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
-  </article>
-
-    <section class="block">
-      <h2><span class="n">3</span>其余 A 股自选 · 简版</h2>
-      <p class="note">结论 + 情报一句 + 策略一句；截图价优先，其余价待补。</p>
-<details class="mini">
-      <summary><span class="nm">000158 常山北明</span> <span class="px up">¥12.80　+1.27%</span> <span class="sent s3">中性 54</span></summary>
-      <div class="body">
-        <p><strong>结论</strong>：信创/算力主题映射，周五跟涨但个股层硬催化偏薄。</p>
-        <p><strong>情报</strong>：半导体/AI 算力链放量日情绪外溢（盘面）。</p>
-        <p><strong>策略</strong>：观察；不设主动买点直至公司层催化 · 价位策略待补。</p>
-        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
-      </div>
-    </details>
-<details class="mini">
-      <summary><span class="nm">002739 儒意电影（万达电影）</span> <span class="px up">¥8.62　+1.77%</span> <span class="sent s3">中性 50</span></summary>
-      <div class="body">
-        <p><strong>结论</strong>：影视内容复苏叙事，短线缺强催化，情绪中性。</p>
-        <p><strong>情报</strong>：周末无公司层重大新公告（公开检索）。</p>
-        <p><strong>策略</strong>：观察；策略点位待补 · 待开盘验证。</p>
-        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
-      </div>
-    </details>
-<details class="mini">
-      <summary><span class="nm">601818 光大银行</span> <span class="px down">¥3.02　-0.98%</span> <span class="sent s2">偏弱 42</span></summary>
-      <div class="body">
-        <p><strong>结论</strong>：银行股在科技进攻日逆势收跌，防御风格被抛弃。</p>
-        <p><strong>情报</strong>：9/18 盘面银行/红利相对落后（复盘综述）。</p>
-        <p><strong>策略</strong>：观察；非当前主线仓 · 策略待补。</p>
-        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
-      </div>
-    </details>
-<details class="mini">
-      <summary><span class="nm">603099 长白山</span> <span class="px up">¥39.26　+0.18%</span> <span class="sent s3">中性 52</span></summary>
-      <div class="body">
-        <p><strong>结论</strong>：文旅景区标的，交投平稳，缺短线强催化。</p>
-        <p><strong>情报</strong>：周末无重大新公告检索结果。</p>
-        <p><strong>策略</strong>：观察；策略点位待补。</p>
-        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
-      </div>
-    </details>
-<details class="mini">
-      <summary><span class="nm">603019 中科曙光</span> <span class="px up">84.30　+1.96%</span> <span class="session-tag">9/18</span> <span class="sent s4">乐观 63</span></summary>
-      <div class="body">
-        <p><strong>结论</strong>：算力服务器/先进计算，映射周五半导体 AI 主线；截图未覆盖报价。</p>
-        <p><strong>情报</strong>：算力基础设施与「十五五」电子信息规划情绪（盘面/政策综述）。</p>
-        <p><strong>策略</strong>：观察/回踩；理想买点与止损待补 · 待开盘验证。</p>
-        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
-      </div>
-    </details>
-<details class="mini">
-      <summary><span class="nm">600536 中国软件</span> <span class="px up">31.66　+1.90%</span> <span class="session-tag">9/18</span> <span class="sent s3">中性 56</span></summary>
-      <div class="body">
-        <p><strong>结论</strong>：信创软件，弹性通常弱于硬件算力链；价待补。</p>
-        <p><strong>情报</strong>：信创主题映射，周末无单独硬催化检索。</p>
-        <p><strong>策略</strong>：观察；策略待补。</p>
-        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
-      </div>
-    </details>
-<details class="mini">
-      <summary><span class="nm">601138 工业富联</span> <span class="px up">62.71　+2.35%</span> <span class="session-tag">9/18</span> <span class="sent s4">乐观 64</span></summary>
-      <div class="body">
-        <p><strong>结论</strong>：AI 服务器代工/出海链条核心映射；截图未覆盖价。</p>
-        <p><strong>情报</strong>：海外算力交付与服务器订单叙事（板块综述）。</p>
-        <p><strong>策略</strong>：持有/回踩；点位待补 · 待开盘验证。</p>
-        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
-      </div>
-    </details>
-<details class="mini">
-      <summary><span class="nm">600585 海螺水泥</span> <span class="px up">17.02　+0.47%</span> <span class="session-tag">9/18</span> <span class="sent s3">中性 50</span></summary>
-      <div class="body">
-        <p><strong>结论</strong>：水泥周期，地产脉冲外溢有限；价待补。</p>
-        <p><strong>情报</strong>：地产仅为辅线，非周五主线。</p>
-        <p><strong>策略</strong>：观察；策略待补。</p>
-        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
-      </div>
-    </details>
-<details class="mini">
-      <summary><span class="nm">600048 保利发展</span> <span class="px up">5.32　+5.56%</span> <span class="session-tag">9/18</span> <span class="sent s3">中性 53</span></summary>
-      <div class="body">
-        <p><strong>结论</strong>：龙头房企，受益政策/地产脉冲但持续性存疑；价待补。</p>
-        <p><strong>情报</strong>：9/18 地产午后脉冲（万科 A、世联行等）为辅线。</p>
-        <p><strong>策略</strong>：观察/轻仓；策略待补。</p>
-        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
-      </div>
-    </details>
-<details class="mini">
-      <summary><span class="nm">600036 招商银行</span> <span class="px flat">40.59　-0.02%</span> <span class="session-tag">9/18</span> <span class="sent s3">中性 48</span></summary>
-      <div class="body">
-        <p><strong>结论</strong>：银行权重，科技进攻日相对落后；价待补。</p>
-        <p><strong>情报</strong>：盘面银行/红利承压（复盘）。</p>
-        <p><strong>策略</strong>：观察；非当前进攻仓 · 策略待补。</p>
-        <p class="note">以上为信息整理与参考，不构成投资建议。</p>
-      </div>
-    </details>
-      <p class="note" style="margin-top:10px;">脚注：01810 小米集团亦出现在用户 App 自选列表，但已在「港股关注」出卡，本页不重复；港股截图价 HK$26.40（+0.99%）。</p>
-      <div class="disclaimer">以上为信息整理与参考，不构成投资建议。</div>
-    </section>
-  </div>
-
-  <!-- ========== 5 港股大盘 ========== -->
-  <div class="tab-panel" id="panel-hk-mkt" role="tabpanel" aria-labelledby="tab-hk-mkt">
-    <section class="block">
-      <h2><span class="n">1</span>港股大盘概览（周一开盘前瞻 · 上一交易日 9/18）</h2>
-      <div class="chips">
-        <span class="chip up">恒指 +0.60% · 24750.78（+146.49 点）</span>
-        <span class="chip up">恒科 +2.20% · 4405.50</span>
-        <span class="chip up">国指 +0.61% · 8225.40</span>
-        <span class="chip mid">全日成交约 2665 亿港元</span>
-        <span class="chip mid">全周：恒指约 -0.22% · 恒科约 +1.97%</span>
-        <span class="chip up">南向净买入约 11.93 亿港元</span>
-      </div>
-      <ul class="dense">
-        <li><strong>开盘前瞻</strong>：今日（9/21 周一）港股尚未开盘；指数与五只关注均为 9/18 收盘口径。</li>
-        <li><strong>定性</strong>：油价及长债收益率高位回落后，市场淡化美联储加息冲击，三大指数反弹；科技链弹性大于恒指。（来源：智通财经 9/18）</li>
-        <li><strong>主题</strong>：AI / 光通信、内房、机器人概念活跃；联想等硬件链有新高报道。跌幅侧见健康 160、解禁相关个股等（个股层面，非大盘）。</li>
-        <li><strong>南向</strong>：净买入约 11.93 亿港元（沪约 +0.17 亿、深约 +11.76 亿）。净买居前：百度、智谱、长飞等；净卖居前：盈富、阿里、小米等。（来源：东方财富 / 经济通）</li>
-        <li><strong>自选侧提示</strong>：港股关注五只（01788/01810/06178/09660/02050）详见「港股关注」。</li>
-      </ul>
-      <div class="disclaimer">以上为信息整理与参考，不构成投资建议。</div>
-    </section>
-
-    <section class="block">
-      <h2><span class="n">※</span>推特舆情（大盘横切）</h2>
-      <div class="tw-strip">
-        <h3>跨资产公开讨论主题（X/Twitter · 网页检索）</h3>
-        <p>港股相关公开讨论主题：<strong>消费电子+汽车+AI 生态</strong>（小米业绩承压 vs 长期叙事）、<strong>智驾芯片</strong>（地平线订单/毛利权衡）、以及 <strong>私有化套利</strong>（01788 贴近作价）。英文 X 对港股单票讨论热度整体低于美股 AI/加密链。</p>
-        <p class="src">来源说明：公开网页检索 X/Twitter 讨论主题；非认证 API。舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
-      </div>
-    </section>
-  </div>
-
-  <!-- ========== 6 港股关注 ========== -->
-  <div class="tab-panel" id="panel-hk-watch" role="tabpanel" aria-labelledby="tab-hk-watch">
-    <section class="block">
-      <h2><span class="n">1</span>港股焦点表</h2>
-      <table class="focus">
-        <thead>
-          <tr><th>代码</th><th>名称</th><th>情绪</th><th>一句话</th><th>操作参考</th></tr>
-        </thead>
-        <tbody>
-          <tr><td class="t">01788</td><td class="nm">国泰君安国际</td><td><span class="sent s3">中性 58</span></td><td>私有化作价 3.00 锚定价；贴近折价博弈</td><td>观察 / 事件跟踪</td></tr>
-          <tr><td class="t">01810</td><td class="nm">小米集团</td><td><span class="sent s3">中性 56</span></td><td>回购托底 + 深度回撤；盈利仍承压</td><td>持有 / 逢弱吸</td></tr>
-          <tr><td class="t">06178</td><td class="nm">光大证券</td><td><span class="sent s3">中性 52</span></td><td>低估值底部区，成交偏淡缺强催化</td><td>观察 / 轻仓</td></tr>
-          <tr><td class="t">09660</td><td class="nm">地平线机器人</td><td><span class="sent s2">悲观 44</span></td><td>收入增、经调整亏扩大；目标价下修</td><td>观察 / 轻仓主题</td></tr>
-          <tr><td class="t">02050</td><td class="nm">三花智控</td><td><span class="sent s3">中性 57</span></td><td>热管理/机器人映射；增持+临近除净</td><td>持有 / 逢弱观察</td></tr>
-        </tbody>
-      </table>
-      <p class="note">仅覆盖当前港股关注五只；不编造其他持仓。</p>
-    </section>
-
-    <section class="block">
-      <h2><span class="n">1b</span>推特舆情</h2>
-      <p class="note">公开网页检索 X/Twitter 讨论主题；港股单票英文讨论整体偏少。舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
-      <div class="tw-grid">
-        <div class="tw-card">
-          <div class="tw-head">
-            <span class="tw-code">01810</span><span class="tw-name">小米集团</span>
-            <span class="tw-pill neut">情绪 · 中性</span>
-            <span class="tw-pill heat-m">热度 · 中</span>
-          </div>
-          <ul>
-            <li>主题：手机毛利/存储成本与销量压力</li>
-            <li>主题：汽车交付增长 vs 盈利承压</li>
-            <li>主题：AI / 芯片 / 增程 SUV 长期反转叙事</li>
-          </ul>
-          <div class="tw-debate"><strong>争议点：</strong>发布会热度难换股价；南向净卖与回购托底并存。</div>
-        </div>
-        <div class="tw-card">
-          <div class="tw-head">
-            <span class="tw-code">09660</span><span class="tw-name">地平线机器人</span>
-            <span class="tw-pill bear">情绪 · 偏空</span>
-            <span class="tw-pill heat-l">热度 · 低</span>
-          </div>
-          <ul>
-            <li>主题：HSD 铺量节奏与低毛利换订单</li>
-            <li>主题：车企合作（比亚迪/长安/大众等）进展</li>
-          </ul>
-          <div class="tw-debate"><strong>争议点：</strong>收入增长质量 vs 经调整亏损扩大。X：公开检索偏少 / 待补。</div>
-        </div>
-        <div class="tw-card">
-          <div class="tw-head">
-            <span class="tw-code">01788</span><span class="tw-name">国泰君安国际</span>
-            <span class="tw-pill neut">情绪 · 中性</span>
-            <span class="tw-pill heat-l">热度 · 低</span>
-          </div>
-          <ul>
-            <li>主题：私有化现金作价 3.00 港元套利讨论</li>
-            <li>主题：股东批准门槛与时间表博弈</li>
-          </ul>
-          <div class="tw-debate"><strong>争议点：</strong>折价收窄后收益率吸引力；方案失败回吐风险。X：公开检索偏少 / 待补。</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="block" style="background:transparent;border:none;padding:0;">
-      <h2 style="padding:0 2px 8px;"><span class="n">2</span>港股详细个股卡</h2>
-    </section>
-
-<article class="stock" id="HK01788">
-    <div class="stock-head">
-      <div class="row1">
-        <span class="name">国泰君安国际</span>
-        <span class="code">01788.HK</span>
-        <span class="px down">HK$2.895　-0.17%</span>
-        <span class="session-tag">上一交易日收盘 · 2026-09-18 · 今日尚未开盘</span>
-      </div>
-    </div>
-    <div class="concl">
-      <h3>核心结论</h3>
-      <p class="summary">母公司国泰海通以每股 3.00 港元协议安排私有化（相对停牌前约 +44%）仍是定价锚；现价贴近作价下方，上半年收入/净利改善，但方案须过监管与计划批准，情绪偏事件中性偏多。</p>
-      <div class="metrics">
-        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s3">中性</span></span></div>
-        <div class="metric"><span class="k">情绪分</span><span class="v">58 / 100</span></div>
-        <div class="metric"><span class="k">操作建议</span><span class="v">观察 · 事件跟踪（参考）</span></div>
-        <div class="metric"><span class="k">趋势研判</span><span class="v">贴近私有化作价震荡 · 进度驱动</span></div>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>数据视角</h3>
-      <p><span class="lbl">趋势状态</span>　周五收 2.895（-0.17%），窄幅贴近私有化现金作价 3.00 下方。</p>
-      <p><span class="lbl">价格位置</span>　52 周约 1.90–5.27（长桥）；现价显著高于停牌前低位，但距作价仍有约 3–4% 折价空间（开盘验证）。</p>
-      <p><span class="lbl">量能</span>　成交约 1323 万股 / 约 3834 万港元（长桥 9/18）。</p>
-      <p><span class="lbl">相关板块</span>　港股券商 / 私有化套利 / 财富管理与投行</p>
-    </div>
-    <div class="sec">
-      <h3>情报</h3>
-      <p><span class="lbl">新闻要点</span>　① 国泰海通拟以每股 3 港元现金私有化并退市（最终出价口径，港交所联合公告）。② H1 收入约 38.7 亿港元（+37%），普通股股东应占溢利约 6.75 亿（+23%）；董事会因私有化先决条件未宣派中期息（公司公告/长桥）。</p>
-      <p><span class="lbl">风险警报</span>　私有化先决条件/股东批准不及预期；作价不再上调；方案失败则溢价回吐。</p>
-      <p><span class="lbl">积极催化</span>　计划进度节点、复牌后成交确认、最终交割确定性上升。</p>
-      <p><span class="lbl">Financial</span>　见上；周末无新增正式交割完成公告。</p>
-    
-      <div class="tw-inline">
-        <h4>推特舆情 · 01788 国泰君安国际</h4>
-        <p class="meta-line"><span class="tw-pill neut">情绪 · 中性</span> <span class="tw-pill heat-l">热度 · 低</span> · 公开网页检索 X/Twitter 主题（非 API）</p>
-        <ul><li>私有化 3.00 作价套利</li><li>X：公开检索偏少 / 待补</li></ul>
-        <p><strong>争议点：</strong>批准进度与方案失败回吐。</p>
-        <p class="meta-line">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>作战计划 / 策略</h3>
-      <p class="note" style="padding-top:0;">周一开盘前瞻 · 参考区间 · 待开盘验证（不构成点位承诺）</p>
-      <div class="strat">
-        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">贴近作价下方缩量企稳再轻仓事件仓 · 数值待开盘验证</span></div>
-        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">仅在方案重大进展落地后回踩确认</span></div>
-        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">有效跌破近期摆动低点并放量，或方案重大不利（条件式 · 价待补）</span></div>
-        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">接近 3.00 作价区减仓，不赌超额上修</span></div>
-      </div>
-      <ul class="risks">
-      <li>私有化失败或延期导致折价扩大</li>
-      <li>监管/少数股东否决风险</li>
-      <li>成交萎缩时进出滑点</li>
-      </ul>
-    </div>
-    <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
-  </article>
-
-<article class="stock" id="HK01810">
-    <div class="stock-head">
-      <div class="row1">
-        <span class="name">小米集团</span>
-        <span class="code">01810.HK</span>
-        <span class="px up">HK$26.40　+0.99%</span>
-        <span class="session-tag">上一交易日收盘 · 2026-09-18 · 今日尚未开盘</span>
-      </div>
-    </div>
-    <div class="concl">
-      <h3>核心结论</h3>
-      <p class="summary">周五小幅收涨，连续回购托底；手机/IoT 与汽车交付叙事并存，但盈利同比承压、股价处深度回撤区。情绪中性偏多，操作以持有/逢弱吸为主，勿追短线反弹。</p>
-      <div class="metrics">
-        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s3">中性</span></span></div>
-        <div class="metric"><span class="k">情绪分</span><span class="v">56 / 100</span></div>
-        <div class="metric"><span class="k">操作建议</span><span class="v">持有 · 逢弱吸（参考）</span></div>
-        <div class="metric"><span class="k">趋势研判</span><span class="v">深度回撤后的震荡修复</span></div>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>数据视角</h3>
-      <p><span class="lbl">趋势状态</span>　周五收 26.40（+0.99%）；周内多日在约 26 关口附近争夺。</p>
-      <p><span class="lbl">价格位置</span>　52 周约 21.30–59.90（长桥）；现价距高点回撤显著，均线精确对比待补。</p>
-      <p><span class="lbl">量能</span>　成交约 1.10 亿股 / 约 28.9 亿港元（长桥 9/18）。</p>
-      <p><span class="lbl">相关板块</span>　智能手机 / IoT / 智能汽车 / 人形机器人主题映射</p>
-    </div>
-    <div class="sec">
-      <h3>情报</h3>
-      <p><span class="lbl">新闻要点</span>　① 9/16 回购约 190 万股、耗资约 4986 万港元（证券时报数据宝）；年内累计回购规模较大。② 汽车与机器人主题持续被市场讨论，但公司层硬催化需逐条核对。</p>
-      <p><span class="lbl">风险警报</span>　盈利同比下滑与汽车交付波动；消费电子竞争；高估值回撤后的二次探底。</p>
-      <p><span class="lbl">积极催化</span>　回购持续、新品周期、汽车交付改善。</p>
-      <p><span class="lbl">Financial</span>　近期财报口径：营收同比大致持平、利润端承压（综合行情解读）；精确财报数字以公司公告为准。</p>
-    
-      <div class="tw-inline">
-        <h4>推特舆情 · 01810 小米集团</h4>
-        <p class="meta-line"><span class="tw-pill neut">情绪 · 中性</span> <span class="tw-pill heat-m">热度 · 中</span> · 公开网页检索 X/Twitter 主题（非 API）</p>
-        <ul><li>手机毛利压力 vs 汽车/AI 长期叙事</li><li>发布会热度与股价背离被反复讨论</li></ul>
-        <p><strong>争议点：</strong>短期盈利承压 vs 生态反转预期。</p>
-        <p class="meta-line">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>作战计划 / 策略</h3>
-      <p class="note" style="padding-top:0;">周一开盘前瞻 · 参考区间 · 待开盘验证（不构成点位承诺）</p>
-      <div class="strat">
-        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">回踩回购带/近周下沿企稳 · 价位待开盘验证</span></div>
-        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">放量收复近周重心后再加</span></div>
-        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">有效跌破近两周摆动低点并放量（价待补）</span></div>
-        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">反弹至前阻力/均线密集区分批</span></div>
-      </div>
-      <ul class="risks">
-      <li>回购难阻阴跌</li>
-      <li>汽车交付不及预期</li>
-      <li>消费电子旺季证伪</li>
-      </ul>
-    </div>
-    <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
-  </article>
-
-<article class="stock" id="HK06178">
-    <div class="stock-head">
-      <div class="row1">
-        <span class="name">光大证券</span>
-        <span class="code">06178.HK</span>
-        <span class="px up">HK$7.135　+0.78%</span>
-        <span class="session-tag">上一交易日收盘 · 2026-09-18 · 今日尚未开盘</span>
-      </div>
-    </div>
-    <div class="concl">
-      <h3>核心结论</h3>
-      <p class="summary">H 股处低位震荡：上半年盈利增速不弱、估值 PE/PB 偏低，但成交偏淡、板块风险偏好弱，股价贴近近端低位。情绪中性，操作以观察/轻仓波段为主，不发明精确支撑。</p>
-      <div class="metrics">
-        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s3">中性</span></span></div>
-        <div class="metric"><span class="k">情绪分</span><span class="v">52 / 100</span></div>
-        <div class="metric"><span class="k">操作建议</span><span class="v">观察 · 轻仓（参考）</span></div>
-        <div class="metric"><span class="k">趋势研判</span><span class="v">低估值底部区震荡 · 缺强催化剂</span></div>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>数据视角</h3>
-      <p><span class="lbl">趋势状态</span>　周五收 7.135（+0.78%），贴近近端低位区域小幅反弹。</p>
-      <p><span class="lbl">价格位置</span>　52 周约 6.89–11.06（长桥）；PB 约 0.46、股息率约 4.5% 量级（行情页），均线数值待补。</p>
-      <p><span class="lbl">量能</span>　成交约 126 万股 / 约 898 万港元，流动性偏薄（长桥 9/18）。</p>
-      <p><span class="lbl">相关板块</span>　中资券商 H 股 / 经纪投行 / 市场成交 beta</p>
-    </div>
-    <div class="sec">
-      <h3>情报</h3>
-      <p><span class="lbl">新闻要点</span>　① H1/分季盈利同比增速公开解读偏强（长桥行情页综述）。② 2025 年末期息已派付；H 股股本约 7.04 亿股（港交所月报表）。</p>
-      <p><span class="lbl">风险警报</span>　港股交投回落拖累券商收入；AH 溢价与流动性折价；板块情绪持续低迷。</p>
-      <p><span class="lbl">积极催化</span>　市场成交回暖、中期分红/回购、政策托市预期。</p>
-      <p><span class="lbl">Financial</span>　以公司中期业绩公告为准；周末无新正式指引。</p>
-    </div>
-    <div class="sec">
-      <h3>作战计划 / 策略</h3>
-      <p class="note" style="padding-top:0;">周一开盘前瞻 · 参考区间 · 待开盘验证（不构成点位承诺）</p>
-      <div class="strat">
-        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">缩量贴近近端低位企稳后再轻仓试错 · 价待验证</span></div>
-        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">放量站上近周均价带确认后再加</span></div>
-        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">失守近端摆动低点并放量（约 6.9 区作观察，待开盘验证）</span></div>
-        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">反弹至前压力带减仓，不赌估值修复单边</span></div>
-      </div>
-      <ul class="risks">
-      <li>流动性差放大滑点</li>
-      <li>大市成交萎缩</li>
-      <li>政策预期落空</li>
-      </ul>
-    </div>
-    <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
-  </article>
-
-<article class="stock" id="HK09660">
-    <div class="stock-head">
-      <div class="row1">
-        <span class="name">地平线机器人</span>
-        <span class="code">09660.HK</span>
-        <span class="px up">HK$4.195　+1.57%</span>
-        <span class="session-tag">上一交易日收盘 · 2026-09-18 · 今日尚未开盘</span>
-      </div>
-    </div>
-    <div class="concl">
-      <h3>核心结论</h3>
-      <p class="summary">智驾芯片收入增长仍在，但经调整亏损扩大、现金与可转债压力被市场反复计价；多家卖方下调目标价后股价处深度回撤。周五小反弹偏技术性，情绪谨慎偏中性，按主题仓管理。</p>
-      <div class="metrics">
-        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s2">悲观</span></span></div>
-        <div class="metric"><span class="k">情绪分</span><span class="v">44 / 100</span></div>
-        <div class="metric"><span class="k">操作建议</span><span class="v">观察 · 轻仓主题（参考）</span></div>
-        <div class="metric"><span class="k">趋势研判</span><span class="v">深度回撤 · 盈利拐点待验证</span></div>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>数据视角</h3>
-      <p><span class="lbl">趋势状态</span>　周五收 4.195（+1.57%），低位弱反弹。</p>
-      <p><span class="lbl">价格位置</span>　52 周约 3.60–11.32（长桥）；距高点回撤巨大，精确均线待补。</p>
-      <p><span class="lbl">量能</span>　成交约 1.32 亿股 / 约 5.50 亿港元（长桥 9/18）。</p>
-      <p><span class="lbl">相关板块</span>　智能驾驶芯片 / ADAS / 汽车电子</p>
-    </div>
-    <div class="sec">
-      <h3>情报</h3>
-      <p><span class="lbl">新闻要点</span>　① H1 营收约 20.55 亿元（+32.9%），毛利率约 66%；经调整净亏损约 16.71 亿元（扩大）；账面净利含一次性/公允价值项（中期业绩/媒体解读）。② 多家机构近期下调目标价（JPM/美银等，长桥综述）；管理层公开称约 2028 年盈亏平衡预期。</p>
-      <p><span class="lbl">风险警报</span>　经营亏损与现金消耗；可转债/融资条款；目标价下修潮；量产份额竞争。</p>
-      <p><span class="lbl">积极催化</span>　征程系列定点放量、舱驾一体量产节奏、订单超预期。</p>
-      <p><span class="lbl">Financial</span>　见中期业绩公告；周末无新正式财报。</p>
-    
-      <div class="tw-inline">
-        <h4>推特舆情 · 09660 地平线机器人</h4>
-        <p class="meta-line"><span class="tw-pill bear">情绪 · 偏空</span> <span class="tw-pill heat-l">热度 · 低</span> · 公开网页检索 X/Twitter 主题（非 API）</p>
-        <ul><li>HSD 铺量与低毛利换订单</li><li>X：公开检索偏少 / 待补</li></ul>
-        <p><strong>争议点：</strong>收入增 vs 亏损扩大与目标价下修。</p>
-        <p class="meta-line">舆情为公开讨论定性，不代表资金流向；不构成投资建议。</p>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>作战计划 / 策略</h3>
-      <p class="note" style="padding-top:0;">周一开盘前瞻 · 参考区间 · 待开盘验证（不构成点位承诺）</p>
-      <div class="strat">
-        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">不设主动买点直至缩量止跌确认 · 价待补</span></div>
-        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">仅极端错杀且量能配合时轻仓主题试错</span></div>
-        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">跌破近端摆动低点并放量离场（价待补）</span></div>
-        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">反弹至前阻力/卖方目标路径前减仓</span></div>
-      </div>
-      <ul class="risks">
-      <li>盈利拐点推迟</li>
-      <li>再融资/稀释</li>
-      <li>智驾竞争加剧</li>
-      <li>高波动散户拥挤</li>
-      </ul>
-    </div>
-    <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
-  </article>
-
-<article class="stock" id="HK02050">
-    <div class="stock-head">
-      <div class="row1">
-        <span class="name">三花智控</span>
-        <span class="code">02050.HK</span>
-        <span class="px up">HK$24.90　+2.05%</span>
-        <span class="session-tag">上一交易日收盘 · 2026-09-18 · 今日尚未开盘</span>
-      </div>
-    </div>
-    <div class="concl">
-      <h3>核心结论</h3>
-      <p class="summary">制冷零部件龙头 + 机器人/热管理主题映射；周五收涨，Schroders 增持披露与临近除净构成短线因素。情绪中性偏多，但需防主题退潮与除权波动，操作持有/逢弱观察。</p>
-      <div class="metrics">
-        <div class="metric"><span class="k">情绪标签</span><span class="v"><span class="sent s3">中性</span></span></div>
-        <div class="metric"><span class="k">情绪分</span><span class="v">57 / 100</span></div>
-        <div class="metric"><span class="k">操作建议</span><span class="v">持有 · 逢弱观察（参考）</span></div>
-        <div class="metric"><span class="k">趋势研判</span><span class="v">主题博弈下的高位回撤后修复</span></div>
-      </div>
-    </div>
-    <div class="sec">
-      <h3>数据视角</h3>
-      <p><span class="lbl">趋势状态</span>　周五收 24.90（+2.05%），自近端低位反弹。</p>
-      <p><span class="lbl">价格位置</span>　52 周约 23.08–46.03（长桥）；仍处高点大幅回撤后的中低位区，均线待补。</p>
-      <p><span class="lbl">量能</span>　成交约 692 万股 / 约 1.72 亿港元（长桥 9/18）。</p>
-      <p><span class="lbl">相关板块</span>　制冷空调零部件 / 新能源汽车热管理 / 机器人执行器映射</p>
-    </div>
-    <div class="sec">
-      <h3>情报</h3>
-      <p><span class="lbl">新闻要点</span>　① 港交所披露 Schroders 约 9/16 增持约 239.66 万股，持股升至约 16.39%（新浪港股转述）。② 中期息除净约 9/22，每股约 0.13888 港元（公司股息公告）。③ 卖方目标价口径分化（行情页共识约偏多）。</p>
-      <p><span class="lbl">风险警报</span>　除权后技术性回吐；机器人主题退潮；下游需求不及预期。</p>
-      <p><span class="lbl">积极催化</span>　机构增持延续、热管理订单、机器人零部件订单兑现。</p>
-      <p><span class="lbl">Financial</span>　以中期报告/股息公告为准；周末无新正式业绩。</p>
-    </div>
-    <div class="sec">
-      <h3>作战计划 / 策略</h3>
-      <p class="note" style="padding-top:0;">周一开盘前瞻 · 参考区间 · 待开盘验证（不构成点位承诺）</p>
-      <div class="strat">
-        <div class="cell"><span class="k">理想买点 idealBuy</span><span class="v">回踩近周下沿/除净后重心企稳 · 价待开盘验证</span></div>
-        <div class="cell"><span class="k">次优买点 secondaryBuy</span><span class="v">放量站稳周五高点后再确认</span></div>
-        <div class="cell stop"><span class="k">止损 stopLoss</span><span class="v">失守近端摆动低点并放量（价待补）</span></div>
-        <div class="cell tp"><span class="k">止盈 takeProfit</span><span class="v">反弹至前阻力带分批；事件兑现降仓</span></div>
-      </div>
-      <ul class="risks">
-      <li>除净日波动</li>
-      <li>主题一日游</li>
-      <li>AH 联动干扰</li>
-      </ul>
-    </div>
-    <div class="disclaimer-mini">以上为信息整理与参考，不构成投资建议。</div>
-  </article>
-  </div>
-
-  <section class="block">
-    <h2><span class="n">※</span>数据与信心说明</h2>
-    <ul class="dense">
-      <li>报价来源：长桥 / Exa / stockanalysis / 证券时报数据宝 / 智通财经 / 21 经济网 / 东方财富 / 港交所公告等公开稿；个别「相对开盘」涨跌幅已标注 *。</li>
-      <li>美股指数 9/18：道指 51682.64（-0.18%）、标普 7650.50（+0.17%）、纳指 26522.55（+0.39%）。</li>
-      <li>A 股 9/18（截图）：上证 3911.87（+0.94%）、深成指 13640.87（+1.72%）、北证50 1044.340（+1.79%）；创业板指 3372.68（+2.25%）。A 股关注 17 只（不含 01810）；报价 JSON 已回填此前「价待补」个股。</li>
-      <li>港股 9/18：恒指 24750.78、恒科 4405.50；南向净买入约 11.93 亿港元。</li>
-      <li>港股五只 9/18 收盘（长桥）：01788 2.895、01810 26.40、06178 7.135、09660 4.195、02050 24.90。</li>
-      <li>未取得可靠数值处已写「待补」；策略多为条件式 +「待开盘验证」。</li>
-      <li>推特舆情：公开网页检索 X/Twitter 讨论主题与二手情绪汇总（非认证 API）；只归纳主题，不编造推文或账号。舆情为公开讨论定性，不代表资金流向；不构成投资建议。版本标记 <strong>v=20260921</strong>。</li>
-    </ul>
-    <div class="disclaimer">以上为信息整理与参考，不构成投资建议。</div>
-  </section>
-
-  <footer>
-    Gaspar · 自选速递 · 六标签（美/A/港 × 大盘/关注）· 工作日 08:50 目标自动更新<br />
-    GitHub Pages · https://casparhuan.github.io/gaspar-watchlist-digest/?v=20260922-intc<br />
-    以上为信息整理与参考，不构成投资建议。
-  </footer>
-</div>
-<script>
-(function () {
-  var TAB_ORDER = ['us-mkt','us-watch','cn-mkt','cn-watch','hk-mkt','hk-watch'];
-  var buttons = document.querySelectorAll('.tab-btn');
-  var panels = {};
-  TAB_ORDER.forEach(function (id) {
-    panels[id] = document.getElementById('panel-' + id);
-  });
-
-  function activate(name, pushHash) {
-    if (!panels[name]) name = 'us-mkt';
-    buttons.forEach(function (btn) {
-      var on = btn.getAttribute('data-tab') === name;
-      btn.classList.toggle('active', on);
-      btn.setAttribute('aria-selected', on ? 'true' : 'false');
-    });
-    Object.keys(panels).forEach(function (key) {
-      panels[key].classList.toggle('active', key === name);
-    });
-    if (pushHash) {
-      try { history.replaceState(null, '', '#' + name); } catch (e) {}
-    }
-    // scroll active tab into view on mobile
-    var activeBtn = document.querySelector('.tab-btn.active');
-    if (activeBtn && activeBtn.scrollIntoView) {
-      try { activeBtn.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' }); } catch (e) {}
-    }
-  }
-
-  buttons.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      activate(btn.getAttribute('data-tab'), true);
-    });
-  });
-
-  var wrap = document.querySelector('.tab-bar-wrap');
-  var startX = null;
-  if (wrap) {
-    wrap.addEventListener('touchstart', function (e) {
-      startX = e.changedTouches[0].clientX;
-    }, { passive: true });
-    wrap.addEventListener('touchend', function (e) {
-      if (startX == null) return;
-      var dx = e.changedTouches[0].clientX - startX;
-      startX = null;
-      if (Math.abs(dx) < 48) return;
-      var cur = document.querySelector('.tab-btn.active');
-      var name = cur ? cur.getAttribute('data-tab') : 'us-mkt';
-      var idx = TAB_ORDER.indexOf(name);
-      if (idx < 0) idx = 0;
-      if (dx < 0 && idx < TAB_ORDER.length - 1) activate(TAB_ORDER[idx + 1], true);
-      if (dx > 0 && idx > 0) activate(TAB_ORDER[idx - 1], true);
-    }, { passive: true });
-  }
-
-  function fromHash() {
-    var h = (location.hash || '#us-mkt').replace('#', '').toLowerCase();
-    // legacy aliases
-    if (h === 'us') h = 'us-watch';
-    if (h === 'hk') h = 'hk-watch';
-    if (TAB_ORDER.indexOf(h) < 0) h = 'us-mkt';
-    activate(h, false);
-  }
-  window.addEventListener('hashchange', fromHash);
-  fromHash();
-})();
-</script>
-</body>
-</html>
+<!DOCTYPE html><html lang='zh-CN'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1,viewport-fit=cover'><title>每日自选速递 · 2026-09-23</title><style>
+:root{--bg:#0b0e14;--card:#151a24;--card2:#1c2330;--line:#2a3445;--text:#ecf1f8;--muted:#8f9bad;--gold:#ffbd59;--blue:#69a7ff;--green:#39d98a;--red:#ff6d75;--purple:#bd95ff}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 80% 0,#172237 0,#0b0e14 35%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Noto Sans CJK SC",sans-serif;line-height:1.55;padding:16px 12px 64px}.wrap{max-width:920px;margin:auto}header,.block,.stock{background:rgba(21,26,36,.96);border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 28px rgba(0,0,0,.18)}header{padding:20px;margin-bottom:12px}h1{font-size:1.55rem;margin:0 0 6px}.meta,.note{color:var(--muted);font-size:.82rem}.badges,.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.badge,.chip{padding:4px 10px;border:1px solid var(--line);border-radius:999px;background:var(--card2);font-size:.76rem}.badge{color:var(--gold)}.chip.up,.up{color:var(--green)}.chip.down,.down{color:var(--red)}.flat{color:var(--muted)}.tab-wrap{position:sticky;top:0;z-index:30;margin:0 -4px 12px;padding:8px 4px 10px;background:rgba(11,14,20,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.tabbar{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}.tabbar::-webkit-scrollbar{display:none}.tab-btn{flex:0 0 auto;border:1px solid var(--line);border-radius:999px;background:var(--card2);color:var(--muted);font:600 .83rem inherit;padding:8px 13px;cursor:pointer}.tab-btn.active{background:var(--gold);border-color:var(--gold);color:#211605}.tab-panel{display:none}.tab-panel.active{display:block}.block{padding:15px;margin-bottom:12px}h2{font-size:1.02rem;color:var(--gold);margin:0 0 10px}h3{font-size:.82rem;color:var(--gold);margin:0 0 7px;letter-spacing:.03em}ul{margin:4px 0 8px;padding-left:1.15rem}li{margin-bottom:5px;font-size:.9rem}.tw-strip{background:#191c2c;border:1px dashed #4f4571;border-radius:12px;padding:12px;margin-top:10px}.tw-strip strong{color:var(--purple)}table{width:100%;border-collapse:collapse;font-size:.8rem}th,td{padding:8px 6px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--muted);font-size:.7rem}.code{color:var(--blue);font-weight:700;white-space:nowrap}.name{font-weight:700}.stock{overflow:hidden;margin-bottom:13px}.stock-head{padding:14px;background:linear-gradient(135deg,#20293a,#151a24);border-bottom:1px solid var(--line)}.row1{display:flex;gap:8px 13px;flex-wrap:wrap;align-items:baseline}.stock-head .name{font-size:1.12rem}.px{font-weight:750;font-variant-numeric:tabular-nums}.tag{font-size:.7rem;color:var(--gold);padding:2px 8px;border-radius:999px;background:#2a303d}.core,.sec{padding:12px 14px;border-bottom:1px solid var(--line)}.core p,.sec p{margin:0 0 6px;font-size:.88rem;color:#d5dce8}.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.metric,.cell{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:8px 10px}.metric b,.cell b{display:block;color:var(--muted);font-size:.67rem;font-weight:500;margin-bottom:2px}.metric span,.cell span{font-size:.84rem;font-weight:650}.plan{display:grid;grid-template-columns:1fr 1fr;gap:8px}.twitter{border-left:3px solid var(--purple);padding-left:10px!important}.twitter h3{color:var(--purple)}.mini-disc{padding:9px 14px;background:#11161f;color:var(--muted);font-size:.74rem}.sources a{color:var(--blue);word-break:break-all}.disclaimer{border:1px dashed #4a5363;background:#11161f;border-radius:12px;padding:12px;color:var(--muted);font-size:.82rem}footer{text-align:center;color:var(--muted);font-size:.75rem;margin-top:14px}@media(min-width:620px){.metrics{grid-template-columns:repeat(4,1fr)}.plan{grid-template-columns:repeat(4,1fr)}}@media(max-width:600px){body{padding-left:9px;padding-right:9px}table{font-size:.74rem}th,td{padding:7px 4px}.hide-m{display:none}}
+</style></head><body><div class='wrap'><header><h1>每日自选股速递 · 2026-09-23</h1><div class='meta'>周三开盘前 · 上一交易日 2026-09-22 收盘 · Asia/Shanghai</div><div class='badges'><span class='badge'>六市场标签</span><span class='badge'>真实收盘报价</span><span class='badge'>含推特舆情</span><span class='badge'>含 INTC 观察</span><span class='badge'>v=20260923</span></div><p class='meta'>页面：https://casparhuan.github.io/gaspar-watchlist-digest/?v=20260923 · 舆情定性≠资金流向 · 不构成投资建议</p></header><div class='tab-wrap'><div class='tabbar' role='tablist'><button class='tab-btn active' data-tab='us-mkt' id='tab-us-mkt'>美股大盘</button><button class='tab-btn' data-tab='us-watch' id='tab-us-watch'>美股关注</button><button class='tab-btn' data-tab='cn-mkt' id='tab-cn-mkt'>A股大盘</button><button class='tab-btn' data-tab='cn-watch' id='tab-cn-watch'>A股关注</button><button class='tab-btn' data-tab='hk-mkt' id='tab-hk-mkt'>港股大盘</button><button class='tab-btn' data-tab='hk-watch' id='tab-hk-watch'>港股关注</button></div></div>
+<div class='tab-panel active' id='panel-us-mkt'><section class='block'><h2>1 · 美股大盘概览（9/22 收盘）</h2><div class='chips'><span class='chip down'>道指 51,863.69 -0.36%</span><span class='chip flat'>标普500 7,764.64 -0.00%</span><span class='chip up'>纳指 27,244.28 +0.45%</span><span class='chip up'>费城半导体 12,689.82 +2.06%</span></div><ul><li><b>定性：</b>油价回落支撑风险偏好，纳指再创收盘新高；道指回落、标普基本持平，结构分化。</li><li><b>跨资产：</b>AP 报道 Brent 结算约 99.25 美元/桶；存储芯片链领涨科技，银行股偏弱。</li><li><b>自选：</b>CONL +6.86%、COIN +3.51%、RKLB +2.99% 相对居前。</li></ul><div class='tw-strip'><strong>Twitter/X 主题带：</strong>半导体重估（NVDA/AMD/INTC）、加密反弹（COIN）、TSLA 自动驾驶；争议在急涨后回吐、估值与监管。舆情定性≠资金流向。</div></section><section class='block'><h2>风险与事件</h2><ul><li>道纳背离；半导体与杠杆 ETF 五日涨幅大，拥挤回吐风险上升。</li><li>关注 PMI 初值、初请失业金与美联储官员讲话；港股侧留意小米发布会。</li></ul></section><section class='block sources'><h2>数据与来源</h2><ul><li>报价：<a href='https://query1.finance.yahoo.com/v8/finance/chart/NVDA?interval=1d&amp;range=10d'>Yahoo Finance chart API</a>，拉取文件 /workspace/*-quotes-2026-09-22.json。美股使用 meta.regularMarketPrice（9/21真收盘），涨跌幅相对9/18最后日K计算。</li><li>美国市场：<a href='https://www.seattletimes.com/business/how-major-us-stock-indexes-fared-monday-9-21-2026/'>AP / Seattle Times</a>。</li><li>A股：<a href='https://www.21jingji.com/article/20260921/herald/eff3d5909eddd5637dfc1a2e22e5f34c.html'>21经济网 / 澎湃</a>。</li><li>港股：<a href='https://news.rthk.hk/rthk/en/component/k2/1870953-20260921.htm'>RTHK / Reuters / Xinhua</a>。</li><li>个股情报与X主题：公开网页搜索归纳，稀疏处明确写“公开检索偏少”；不伪造推文、账号或精确流量。</li></ul><div class='disclaimer'>本页为信息整理、情景推演与复盘参考，使用 Asia/Shanghai 时区。舆情定性≠资金流向，所有操作计划均不构成投资建议。</div></section></div>
+<div class='tab-panel' id='panel-us-watch'><section class='block'><h2>2 · 美股关注表（含杠杆映射 / INTC观察）</h2><table><thead><tr><th>代码</th><th>名称</th><th>9/22收盘</th><th>情绪</th><th>操作参考</th></tr></thead><tbody><tr><td class='code'>NVDA</td><td class='name'>英伟达</td><td class='up'>$228.87 +0.66%</td><td>中性</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>ORCL</td><td class='name'>甲骨文</td><td class='up'>$149.20 +0.43%</td><td>中性</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>RKLB</td><td class='name'>Rocket Lab</td><td class='up'>$71.98 +2.99%</td><td>偏多</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>WRD</td><td class='name'>文远知行</td><td class='up'>$5.92 +2.78%</td><td>偏多</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>AMD / AMDL</td><td class='name'>超微半导体</td><td class='up'>$623.77 +1.34%<br><span class='note'>$82.63 +2.81%</span></td><td>偏多</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>INTC</td><td class='name'>英特尔（观察）</td><td class='up'>$123.86 +1.71%</td><td>偏多</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>TSLA</td><td class='name'>特斯拉</td><td class='up'>$378.90 +0.96%</td><td>中性</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>BABA</td><td class='name'>阿里巴巴</td><td class='up'>$116.31 +0.48%</td><td>中性</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>COIN / CONL</td><td class='name'>Coinbase</td><td class='up'>$201.07 +3.51%<br><span class='note'>$6.70 +6.86%</span></td><td>偏多</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>CRCL / CRCA</td><td class='name'>Circle</td><td class='up'>$94.59 +0.11%<br><span class='note'>$23.33 +0.26%</span></td><td>中性</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>CRWV / CWVX</td><td class='name'>CoreWeave</td><td class='up'>$86.76 +1.56%<br><span class='note'>$15.18 +2.99%</span></td><td>偏多</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>HOOD / ROBN</td><td class='name'>Robinhood</td><td class='up'>$124.25 +0.77%<br><span class='note'>$39.46 +1.28%</span></td><td>中性</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>OKLO / OKLL</td><td class='name'>Oklo</td><td class='up'>$40.45 +0.67%<br><span class='note'>$11.52 +1.16%</span></td><td>中性</td><td>持有观察 / 等确认</td></tr></tbody></table><p class='note'>价格为真实收盘数据；美股涨跌幅按 9/21 meta 收盘相对 9/18 最后一根日K收盘计算。</p></section><section class='block'><h2>推特舆情说明</h2><p>每张卡均列情绪倾向、热度、话题与争议点；稀疏名称明确写“公开检索偏少”。舆情定性≠资金流向。</p></section><article class='stock' id='NVDA'>
+<div class='stock-head'><div class='row1'><span class='name'>英伟达</span><span class='code'>NVDA</span><span class='px up'>$228.87　+0.66%</span><span class='tag'>9/22收盘 · USD</span></div></div>
+<div class='core'><h3>核心结论</h3><p>隔夜稳步上行，AI 需求叙事仍在，但弹性弱于存储芯片与半导体重估交易。</p><div class='metrics'><div class='metric'><b>情绪</b><span>中性</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+7.87%</span></div><div class='metric'><b>币种</b><span>USD</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>$228.87，日变动 +0.66%；近5个可得收盘变动 +7.87%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>公开报道与讨论聚焦AI芯片销量增长预期、向上接近前高；估值、监管与内部人交易是争议点。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：偏多；热度：高；话题：AI基础设施需求、芯片销量增长、中国市场与估值；争议点：需求可见度对阵高估值、监管与内部人卖出。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>利率/油价反复会迅速压缩成长股估值；隔夜跳空和板块轮动风险高。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='ORCL'>
+<div class='stock-head'><div class='row1'><span class='name'>甲骨文</span><span class='code'>ORCL</span><span class='px up'>$149.20　+0.43%</span><span class='tag'>9/22收盘 · USD</span></div></div>
+<div class='core'><h3>核心结论</h3><p>小幅收高，云与AI订单叙事仍在，现金流和资本开支兑现仍是估值分歧核心。</p><div class='metrics'><div class='metric'><b>情绪</b><span>中性</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+6.31%</span></div><div class='metric'><b>币种</b><span>USD</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>$149.20，日变动 +0.43%；近5个可得收盘变动 +6.31%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>公开讨论聚焦云积压与AI基础设施订单，争议在高资本开支能否转化为自由现金流。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性偏多；热度：中；话题：AI云订单与积压；争议点：资本开支、融资和自由现金流。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>利率/油价反复会迅速压缩成长股估值；隔夜跳空和板块轮动风险高。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='RKLB'>
+<div class='stock-head'><div class='row1'><span class='name'>Rocket Lab</span><span class='code'>RKLB</span><span class='px up'>$71.98　+2.99%</span><span class='tag'>9/22收盘 · USD</span></div></div>
+<div class='core'><h3>核心结论</h3><p>大涨并显著跑赢大盘，评级催化叠加 Neutron/并购事件轴，事件交易属性很强。</p><div class='metrics'><div class='metric'><b>情绪</b><span>偏多</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+13.27%</span></div><div class='metric'><b>币种</b><span>USD</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>$71.98，日变动 +2.99%；近5个可得收盘变动 +13.27%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>Cantor Fitzgerald重申增持与122美元目标价，讨论集中Neutron首飞、Iridium交易及时间表风险。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：偏多；热度：中高；话题：Neutron、发射进度、Iridium并购与评级；争议点：时间表延误、亏损、稀释和内部人卖出。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>利率/油价反复会迅速压缩成长股估值；隔夜跳空和板块轮动风险高。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='WRD'>
+<div class='stock-head'><div class='row1'><span class='name'>文远知行</span><span class='code'>WRD</span><span class='px up'>$5.92　+2.78%</span><span class='tag'>9/22收盘 · USD</span></div></div>
+<div class='core'><h3>核心结论</h3><p>风险偏好修复带动自动驾驶概念反弹，低价股波动高，需观察持续量能。</p><div class='metrics'><div class='metric'><b>情绪</b><span>偏多</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+5.90%</span></div><div class='metric'><b>币种</b><span>USD</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>$5.92，日变动 +2.78%；近5个可得收盘变动 +5.90%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>未检索到可可靠归因于9月21日的单一公司级催化，更多是自动驾驶板块风险偏好修复。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性；热度：低；话题：自动驾驶与Robotaxi政策主题；争议点：公开检索偏少，缺少可核验的集中讨论。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>利率/油价反复会迅速压缩成长股估值；隔夜跳空和板块轮动风险高。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='AMD'>
+<div class='stock-head'><div class='row1'><span class='name'>超微半导体</span><span class='code'>AMD → AMDL</span><span class='px up'>$623.77　+1.34%</span><span class='tag'>9/22收盘 · USD</span></div></div>
+<div class='core'><h3>核心结论</h3><p>续创新高附近上行，AI 芯片与数据中心叙事仍强；五日涨幅很大，追高风险上升。</p><div class='metrics'><div class='metric'><b>情绪</b><span>偏多</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+23.71%</span></div><div class='metric'><b>杠杆映射</b><span>AMDL $82.63 +2.81%</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>$623.77，日变动 +1.34%；近5个可得收盘变动 +23.71%。价格均来自 Yahoo Finance chart 日线/元数据。 标的与AMDL方向映射，但杠杆ETF存在路径依赖、波动损耗和再平衡风险。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>延续万亿美元市值后的 AI 芯片交易；五日累计涨幅很大，公开讨论同时出现过热担忧。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：偏多但过热担忧；热度：很高；话题：万亿美元市值后的延续交易、数据中心 AI；争议点：五日急涨后是否透支。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>利率/油价反复会迅速压缩成长股估值；隔夜跳空和板块轮动风险高。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='INTC'>
+<div class='stock-head'><div class='row1'><span class='name'>英特尔（观察）</span><span class='code'>INTC</span><span class='px up'>$123.86　+1.71%</span><span class='tag'>9/22收盘 · USD</span></div></div>
+<div class='core'><h3>核心结论</h3><p>观察标的续涨，CPU 供需与代工预期被市场交易；执行力与估值仍是中期约束。</p><div class='metrics'><div class='metric'><b>情绪</b><span>偏多</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+27.51%</span></div><div class='metric'><b>币种</b><span>USD</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>$123.86，日变动 +1.71%；近5个可得收盘变动 +27.51%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>MarketBeat 等报道指股价约 +1.7%；市场交易 CPU 供需与代工预期，同时警示执行与估值风险。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：偏多；热度：高；话题：CPU 供需、代工预期、半导体重估；争议点：执行力、估值与竞争。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>利率/油价反复会迅速压缩成长股估值；隔夜跳空和板块轮动风险高。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='TSLA'>
+<div class='stock-head'><div class='row1'><span class='name'>特斯拉</span><span class='code'>TSLA</span><span class='px up'>$378.90　+0.96%</span><span class='tag'>9/22收盘 · USD</span></div></div>
+<div class='core'><h3>核心结论</h3><p>随成长风格回暖，自动驾驶与交付预期改善；监管、利润率仍约束估值扩张。</p><div class='metrics'><div class='metric'><b>情绪</b><span>中性</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+6.26%</span></div><div class='metric'><b>币种</b><span>USD</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>$378.90，日变动 +0.96%；近5个可得收盘变动 +6.26%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>讨论围绕自动驾驶/Robotaxi和Q3交付预期；利润率、监管与拥挤交易是主要反方。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：偏多但分化；热度：高；话题：Robotaxi、自动驾驶、Q3交付与400美元关口；争议点：利润率、监管与拥挤多头。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>利率/油价反复会迅速压缩成长股估值；隔夜跳空和板块轮动风险高。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='BABA'>
+<div class='stock-head'><div class='row1'><span class='name'>阿里巴巴</span><span class='code'>BABA</span><span class='px up'>$116.31　+0.48%</span><span class='tag'>9/22收盘 · USD</span></div></div>
+<div class='core'><h3>核心结论</h3><p>中概在中美关系稳定预期下延续修复，云业务和消费基本面仍需后续数据确认。</p><div class='metrics'><div class='metric'><b>情绪</b><span>中性</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+6.37%</span></div><div class='metric'><b>币种</b><span>USD</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>$116.31，日变动 +0.48%；近5个可得收盘变动 +6.37%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>港美中国资产受中美会晤与贸易休战延长预期支持，阿里云增速仍是核心观察点。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性偏多；热度：中；话题：中国资产修复、云业务和中美会晤；争议点：消费复苏与政策敏感度。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>利率/油价反复会迅速压缩成长股估值；隔夜跳空和板块轮动风险高。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='COIN'>
+<div class='stock-head'><div class='row1'><span class='name'>Coinbase</span><span class='code'>COIN → CONL</span><span class='px up'>$201.07　+3.51%</span><span class='tag'>9/22收盘 · USD</span></div></div>
+<div class='core'><h3>核心结论</h3><p>比特币风险偏好回暖带动上涨，加密 beta 弹性高；对应 CONL 放大方向也放大回撤。</p><div class='metrics'><div class='metric'><b>情绪</b><span>偏多</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+5.02%</span></div><div class='metric'><b>杠杆映射</b><span>CONL $6.70 +6.86%</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>$201.07，日变动 +3.51%；近5个可得收盘变动 +5.02%。价格均来自 Yahoo Finance chart 日线/元数据。 标的与CONL方向映射，但杠杆ETF存在路径依赖、波动损耗和再平衡风险。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>公开市场报道指比特币重回8.5万美元上方，交易所beta回暖；监管和成交量持续性仍有争议。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：偏多；热度：高；话题：BTC反弹、代币化、Base与交易量；争议点：监管与加密价格高beta。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>利率/油价反复会迅速压缩成长股估值；隔夜跳空和板块轮动风险高。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='CRCL'>
+<div class='stock-head'><div class='row1'><span class='name'>Circle</span><span class='code'>CRCL → CRCA</span><span class='px up'>$94.59　+0.11%</span><span class='tag'>9/22收盘 · USD</span></div></div>
+<div class='core'><h3>核心结论</h3><p>稳定币与代币化主题维持热度，股价跟随加密风险偏好，政策敏感度高。</p><div class='metrics'><div class='metric'><b>情绪</b><span>中性</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+9.61%</span></div><div class='metric'><b>杠杆映射</b><span>CRCA $23.33 +0.26%</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>$94.59，日变动 +0.11%；近5个可得收盘变动 +9.61%。价格均来自 Yahoo Finance chart 日线/元数据。 标的与CRCA方向映射，但杠杆ETF存在路径依赖、波动损耗和再平衡风险。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>稳定币、代币化与监管框架仍为主线；当日未检索到独立公司公告型催化。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：偏多；热度：中；话题：稳定币、代币化与监管框架；争议点：利率敏感度和政策不确定性。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>利率/油价反复会迅速压缩成长股估值；隔夜跳空和板块轮动风险高。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='CRWV'>
+<div class='stock-head'><div class='row1'><span class='name'>CoreWeave</span><span class='code'>CRWV → CWVX</span><span class='px up'>$86.76　+1.56%</span><span class='tag'>9/22收盘 · USD</span></div></div>
+<div class='core'><h3>核心结论</h3><p>AI算力租赁交易回暖，弹性突出；资本开支、融资和客户集中仍是关键风险。</p><div class='metrics'><div class='metric'><b>情绪</b><span>偏多</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+7.22%</span></div><div class='metric'><b>杠杆映射</b><span>CWVX $15.18 +2.99%</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>$86.76，日变动 +1.56%；近5个可得收盘变动 +7.22%。价格均来自 Yahoo Finance chart 日线/元数据。 标的与CWVX方向映射，但杠杆ETF存在路径依赖、波动损耗和再平衡风险。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>讨论集中AI算力需求与数据中心扩张，同时担忧融资、资本开支和客户集中。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：偏多但分化；热度：中；话题：AI算力租赁与数据中心扩张；争议点：客户集中、融资与折旧压力。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>利率/油价反复会迅速压缩成长股估值；隔夜跳空和板块轮动风险高。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='HOOD'>
+<div class='stock-head'><div class='row1'><span class='name'>Robinhood</span><span class='code'>HOOD → ROBN</span><span class='px up'>$124.25　+0.77%</span><span class='tag'>9/22收盘 · USD</span></div></div>
+<div class='core'><h3>核心结论</h3><p>零售交易与加密共振带动上行，平台多元化叙事改善，但高估值需成交活跃度兑现。</p><div class='metrics'><div class='metric'><b>情绪</b><span>中性</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+12.49%</span></div><div class='metric'><b>杠杆映射</b><span>ROBN $39.46 +1.28%</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>$124.25，日变动 +0.77%；近5个可得收盘变动 +12.49%。价格均来自 Yahoo Finance chart 日线/元数据。 标的与ROBN方向映射，但杠杆ETF存在路径依赖、波动损耗和再平衡风险。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>公开讨论集中SEC代币化规则、加密反弹和零售风险偏好；估值溢价是争议点。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：偏多；热度：中高；话题：零售交易、加密、代币化规则；争议点：高估值能否由活跃用户和收入兑现。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>利率/油价反复会迅速压缩成长股估值；隔夜跳空和板块轮动风险高。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='OKLO'>
+<div class='stock-head'><div class='row1'><span class='name'>Oklo</span><span class='code'>OKLO → OKLL</span><span class='px up'>$40.45　+0.67%</span><span class='tag'>9/22收盘 · USD</span></div></div>
+<div class='core'><h3>核心结论</h3><p>核能/AI电力主题反弹，题材弹性高于基本面可见度，仍属高波动事件股。</p><div class='metrics'><div class='metric'><b>情绪</b><span>中性</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+12.42%</span></div><div class='metric'><b>杠杆映射</b><span>OKLL $11.52 +1.16%</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>$40.45，日变动 +0.67%；近5个可得收盘变动 +12.42%。价格均来自 Yahoo Finance chart 日线/元数据。 标的与OKLL方向映射，但杠杆ETF存在路径依赖、波动损耗和再平衡风险。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>公开讨论仍围绕先进核能为AI数据中心供电；商业化时间表和监管许可是核心不确定性。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：偏多但投机；热度：中；话题：先进核能与AI电力需求；争议点：许可、建设周期和商业化可见度。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>利率/油价反复会迅速压缩成长股估值；隔夜跳空和板块轮动风险高。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><section class='block sources'><h2>数据与来源</h2><ul><li>报价：<a href='https://query1.finance.yahoo.com/v8/finance/chart/NVDA?interval=1d&amp;range=10d'>Yahoo Finance chart API</a>，拉取文件 /workspace/*-quotes-2026-09-22.json。美股使用 meta.regularMarketPrice（9/21真收盘），涨跌幅相对9/18最后日K计算。</li><li>美国市场：<a href='https://www.seattletimes.com/business/how-major-us-stock-indexes-fared-monday-9-21-2026/'>AP / Seattle Times</a>。</li><li>A股：<a href='https://www.21jingji.com/article/20260921/herald/eff3d5909eddd5637dfc1a2e22e5f34c.html'>21经济网 / 澎湃</a>。</li><li>港股：<a href='https://news.rthk.hk/rthk/en/component/k2/1870953-20260921.htm'>RTHK / Reuters / Xinhua</a>。</li><li>个股情报与X主题：公开网页搜索归纳，稀疏处明确写“公开检索偏少”；不伪造推文、账号或精确流量。</li></ul><div class='disclaimer'>本页为信息整理、情景推演与复盘参考，使用 Asia/Shanghai 时区。舆情定性≠资金流向，所有操作计划均不构成投资建议。</div></section></div>
+<div class='tab-panel' id='panel-cn-mkt'><section class='block'><h2>3 · A股大盘概览（9/22 收盘）</h2><div class='chips'><span class='chip up'>上证 3,952.13 +0.06%</span><span class='chip down'>深成指 13,723.74 -0.05%</span><span class='chip up'>创业板 3,399.93 +0.01%</span><span class='chip'>成交约 2.14–2.15 万亿元</span></div><ul><li><b>广度：</b>约 2370 家上涨、约 3030 家下跌；指数窄幅震荡、个股跌多涨少。</li><li><b>主线：</b>AI 应用/云游戏/财税数字化与算力芯片逆势活跃；交运、钢铁、建材偏弱。</li><li><b>自选：</b>宁德时代、龙芯相对强；长白山明显回吐。</li></ul><div class='tw-strip'><strong>Twitter/X 主题带：</strong>A 股单名公开 X 检索偏少。舆情定性≠资金流向。</div></section><section class='block'><h2>风险与策略</h2><ul><li>赚钱效应收敛，追高题材需防冲高回落。</li></ul></section><section class='block sources'><h2>数据与来源</h2><ul><li>报价：<a href='https://query1.finance.yahoo.com/v8/finance/chart/NVDA?interval=1d&amp;range=10d'>Yahoo Finance chart API</a>，拉取文件 /workspace/*-quotes-2026-09-22.json。美股使用 meta.regularMarketPrice（9/21真收盘），涨跌幅相对9/18最后日K计算。</li><li>美国市场：<a href='https://www.seattletimes.com/business/how-major-us-stock-indexes-fared-monday-9-21-2026/'>AP / Seattle Times</a>。</li><li>A股：<a href='https://www.21jingji.com/article/20260921/herald/eff3d5909eddd5637dfc1a2e22e5f34c.html'>21经济网 / 澎湃</a>。</li><li>港股：<a href='https://news.rthk.hk/rthk/en/component/k2/1870953-20260921.htm'>RTHK / Reuters / Xinhua</a>。</li><li>个股情报与X主题：公开网页搜索归纳，稀疏处明确写“公开检索偏少”；不伪造推文、账号或精确流量。</li></ul><div class='disclaimer'>本页为信息整理、情景推演与复盘参考，使用 Asia/Shanghai 时区。舆情定性≠资金流向，所有操作计划均不构成投资建议。</div></section></div>
+<div class='tab-panel' id='panel-cn-watch'><section class='block'><h2>4 · A股关注表（17只）</h2><table><thead><tr><th>代码</th><th>名称</th><th>9/22收盘</th><th>情绪</th><th>操作参考</th></tr></thead><tbody><tr><td class='code'>000158</td><td class='name'>常山北明</td><td class='up'>¥13.19 +0.30%</td><td>中性</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>002739</td><td class='name'>万达电影（儒意电影）</td><td class='down'>¥8.63 -0.69%</td><td>中性</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>002920</td><td class='name'>德赛西威</td><td class='up'>¥84.71 +0.17%</td><td>中性</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>600118</td><td class='name'>中国卫星</td><td class='down'>¥58.82 -0.29%</td><td>中性</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>601127</td><td class='name'>赛力斯</td><td class='up'>¥47.78 +0.04%</td><td>中性</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>601818</td><td class='name'>光大银行</td><td class='down'>¥3.01 -0.33%</td><td>中性</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>601899</td><td class='name'>紫金矿业</td><td class='up'>¥31.41 +0.35%</td><td>中性</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>603099</td><td class='name'>长白山</td><td class='down'>¥39.97 -5.46%</td><td>偏谨慎</td><td>观察承接 / 控仓</td></tr><tr><td class='code'>688047</td><td class='name'>龙芯中科</td><td class='up'>¥107.10 +2.41%</td><td>偏多</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>002230</td><td class='name'>科大讯飞</td><td class='up'>¥39.12 +0.80%</td><td>中性</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>603019</td><td class='name'>中科曙光</td><td class='up'>¥84.67 +0.87%</td><td>中性</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>600536</td><td class='name'>中国软件</td><td class='up'>¥32.10 +0.50%</td><td>中性</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>601138</td><td class='name'>工业富联</td><td class='down'>¥63.30 -0.47%</td><td>中性</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>600585</td><td class='name'>海螺水泥</td><td class='down'>¥17.12 -0.75%</td><td>中性</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>600048</td><td class='name'>保利发展</td><td class='flat'>¥5.68 +0.00%</td><td>中性</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>600036</td><td class='name'>招商银行</td><td class='down'>¥40.82 -0.54%</td><td>中性</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>300750</td><td class='name'>宁德时代</td><td class='up'>¥304.63 +2.53%</td><td>偏多</td><td>持有观察 / 等确认</td></tr></tbody></table><p class='note'>价格为真实收盘数据；美股涨跌幅按 9/21 meta 收盘相对 9/18 最后一根日K收盘计算。</p></section><section class='block'><h2>推特舆情说明</h2><p>A股单名在公开X网页检索样本总体稀疏，不把国内平台热度冒充X热度。舆情定性≠资金流向。</p></section><article class='stock' id='000158'>
+<div class='stock-head'><div class='row1'><span class='name'>常山北明</span><span class='code'>000158</span><span class='px up'>¥13.19　+0.30%</span><span class='tag'>9/22收盘 · CNY</span></div></div>
+<div class='core'><h3>核心结论</h3><p>跟随信创与算力情绪上行，收盘强于指数；中期仍需订单与利润兑现。</p><div class='metrics'><div class='metric'><b>情绪</b><span>中性</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+4.27%</span></div><div class='metric'><b>币种</b><span>CNY</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>¥13.19，日变动 +0.30%；近5个可得收盘变动 +4.27%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>截至本轮公开检索，未发现可可靠归因于9月21日的单一公司级新增催化；价格更多随行业与风格轮动。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性；热度：低；公开检索偏少，未发现可核验的集中 X 讨论主题；争议点：样本稀疏，不宜外推。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>节前风险偏好、板块轮动与成交缩量可能放大冲高回落。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='002739'>
+<div class='stock-head'><div class='row1'><span class='name'>万达电影（儒意电影）</span><span class='code'>002739</span><span class='px down'>¥8.63　-0.69%</span><span class='tag'>9/22收盘 · CNY</span></div></div>
+<div class='core'><h3>核心结论</h3><p>温和上涨，影视消费修复交易延续，但当日缺少强公司级催化。</p><div class='metrics'><div class='metric'><b>情绪</b><span>中性</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+1.29%</span></div><div class='metric'><b>币种</b><span>CNY</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>¥8.63，日变动 -0.69%；近5个可得收盘变动 +1.29%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>截至本轮公开检索，未发现可可靠归因于9月21日的单一公司级新增催化；价格更多随行业与风格轮动。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性；热度：低；公开检索偏少，未发现可核验的集中 X 讨论主题；争议点：样本稀疏，不宜外推。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>节前风险偏好、板块轮动与成交缩量可能放大冲高回落。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='002920'>
+<div class='stock-head'><div class='row1'><span class='name'>德赛西威</span><span class='code'>002920</span><span class='px up'>¥84.71　+0.17%</span><span class='tag'>9/22收盘 · CNY</span></div></div>
+<div class='core'><h3>核心结论</h3><p>逆市场小跌，智能驾驶主线未形成强共振，短线以区间承接观察为主。</p><div class='metrics'><div class='metric'><b>情绪</b><span>中性</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+3.02%</span></div><div class='metric'><b>币种</b><span>CNY</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>¥84.71，日变动 +0.17%；近5个可得收盘变动 +3.02%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>截至本轮公开检索，未发现可可靠归因于9月21日的单一公司级新增催化；价格更多随行业与风格轮动。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性；热度：低；公开检索偏少，未发现可核验的集中 X 讨论主题；争议点：样本稀疏，不宜外推。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>节前风险偏好、板块轮动与成交缩量可能放大冲高回落。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='600118'>
+<div class='stock-head'><div class='row1'><span class='name'>中国卫星</span><span class='code'>600118</span><span class='px down'>¥58.82　-0.29%</span><span class='tag'>9/22收盘 · CNY</span></div></div>
+<div class='core'><h3>核心结论</h3><p>商业航天题材回吐，逆势收跌；高波动主题需等待重新放量。</p><div class='metrics'><div class='metric'><b>情绪</b><span>中性</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+2.49%</span></div><div class='metric'><b>币种</b><span>CNY</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>¥58.82，日变动 -0.29%；近5个可得收盘变动 +2.49%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>截至本轮公开检索，未发现可可靠归因于9月21日的单一公司级新增催化；价格更多随行业与风格轮动。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性；热度：低；公开检索偏少，未发现可核验的集中 X 讨论主题；争议点：样本稀疏，不宜外推。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>节前风险偏好、板块轮动与成交缩量可能放大冲高回落。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='601127'>
+<div class='stock-head'><div class='row1'><span class='name'>赛力斯</span><span class='code'>601127</span><span class='px up'>¥47.78　+0.04%</span><span class='tag'>9/22收盘 · CNY</span></div></div>
+<div class='core'><h3>核心结论</h3><p>汽车链修复中小幅走高，问界销量与盈利改善仍是中期验证项。</p><div class='metrics'><div class='metric'><b>情绪</b><span>中性</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+5.10%</span></div><div class='metric'><b>币种</b><span>CNY</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>¥47.78，日变动 +0.04%；近5个可得收盘变动 +5.10%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>截至本轮公开检索，未发现可可靠归因于9月21日的单一公司级新增催化；价格更多随行业与风格轮动。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性；热度：低；公开检索偏少，未发现可核验的集中 X 讨论主题；争议点：样本稀疏，不宜外推。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>节前风险偏好、板块轮动与成交缩量可能放大冲高回落。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='601818'>
+<div class='stock-head'><div class='row1'><span class='name'>光大银行</span><span class='code'>601818</span><span class='px down'>¥3.01　-0.33%</span><span class='tag'>9/22收盘 · CNY</span></div></div>
+<div class='core'><h3>核心结论</h3><p>收平，银行防御属性稳定，但在医药地产领涨日弹性有限。</p><div class='metrics'><div class='metric'><b>情绪</b><span>中性</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='down'>-0.66%</span></div><div class='metric'><b>币种</b><span>CNY</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>¥3.01，日变动 -0.33%；近5个可得收盘变动 -0.66%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>截至本轮公开检索，未发现可可靠归因于9月21日的单一公司级新增催化；价格更多随行业与风格轮动。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性；热度：低；公开检索偏少，未发现可核验的集中 X 讨论主题；争议点：样本稀疏，不宜外推。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>节前风险偏好、板块轮动与成交缩量可能放大冲高回落。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='601899'>
+<div class='stock-head'><div class='row1'><span class='name'>紫金矿业</span><span class='code'>601899</span><span class='px up'>¥31.41　+0.35%</span><span class='tag'>9/22收盘 · CNY</span></div></div>
+<div class='core'><h3>核心结论</h3><p>黄金与有色当日偏弱，股价小幅回落；资源价格仍决定交易方向。</p><div class='metrics'><div class='metric'><b>情绪</b><span>中性</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='down'>-0.85%</span></div><div class='metric'><b>币种</b><span>CNY</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>¥31.41，日变动 +0.35%；近5个可得收盘变动 -0.85%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>截至本轮公开检索，未发现可可靠归因于9月21日的单一公司级新增催化；价格更多随行业与风格轮动。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性；热度：低；公开检索偏少，未发现可核验的集中 X 讨论主题；争议点：样本稀疏，不宜外推。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>节前风险偏好、板块轮动与成交缩量可能放大冲高回落。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='603099'>
+<div class='stock-head'><div class='row1'><span class='name'>长白山</span><span class='code'>603099</span><span class='px down'>¥39.97　-5.46%</span><span class='tag'>9/22收盘 · CNY</span></div></div>
+<div class='core'><h3>核心结论</h3><p>前日大涨后明显回吐，文旅客流叙事仍在但追高风险兑现。</p><div class='metrics'><div class='metric'><b>情绪</b><span>偏谨慎</span></div><div class='metric'><b>操作</b><span>观察承接 / 控仓</span></div><div class='metric'><b>5日表现</b><span class='up'>+8.79%</span></div><div class='metric'><b>币种</b><span>CNY</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>¥39.97，日变动 -5.46%；近5个可得收盘变动 +8.79%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>短线承压，先确认止跌与板块共振。</p></div>
+<div class='sec'><h3>情报</h3><p>前日文旅大涨后回吐，出行与客流预期进入消化阶段。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性；热度：低；公开检索偏少，未发现可核验的集中 X 讨论主题；争议点：样本稀疏，不宜外推。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>节前风险偏好、板块轮动与成交缩量可能放大冲高回落。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='688047'>
+<div class='stock-head'><div class='row1'><span class='name'>龙芯中科</span><span class='code'>688047</span><span class='px up'>¥107.10　+2.41%</span><span class='tag'>9/22收盘 · CNY</span></div></div>
+<div class='core'><h3>核心结论</h3><p>国产CPU与自主可控情绪支撑上行，但科创板整体涨幅有限，需业绩验证。</p><div class='metrics'><div class='metric'><b>情绪</b><span>偏多</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+11.33%</span></div><div class='metric'><b>币种</b><span>CNY</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>¥107.10，日变动 +2.41%；近5个可得收盘变动 +11.33%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>截至本轮公开检索，未发现可可靠归因于9月21日的单一公司级新增催化；价格更多随行业与风格轮动。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性；热度：低；公开检索偏少，未发现可核验的集中 X 讨论主题；争议点：样本稀疏，不宜外推。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>节前风险偏好、板块轮动与成交缩量可能放大冲高回落。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='002230'>
+<div class='stock-head'><div class='row1'><span class='name'>科大讯飞</span><span class='code'>002230</span><span class='px up'>¥39.12　+0.80%</span><span class='tag'>9/22收盘 · CNY</span></div></div>
+<div class='core'><h3>核心结论</h3><p>AI应用方向小幅走强，走势稳于指数，商业化效率仍是估值关键。</p><div class='metrics'><div class='metric'><b>情绪</b><span>中性</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+0.31%</span></div><div class='metric'><b>币种</b><span>CNY</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>¥39.12，日变动 +0.80%；近5个可得收盘变动 +0.31%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>截至本轮公开检索，未发现可可靠归因于9月21日的单一公司级新增催化；价格更多随行业与风格轮动。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性；热度：低；公开检索偏少，未发现可核验的集中 X 讨论主题；争议点：样本稀疏，不宜外推。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>节前风险偏好、板块轮动与成交缩量可能放大冲高回落。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='603019'>
+<div class='stock-head'><div class='row1'><span class='name'>中科曙光</span><span class='code'>603019</span><span class='px up'>¥84.67　+0.87%</span><span class='tag'>9/22收盘 · CNY</span></div></div>
+<div class='core'><h3>核心结论</h3><p>算力硬件板块内部分化，个股小跌；等待服务器订单和盈利兑现。</p><div class='metrics'><div class='metric'><b>情绪</b><span>中性</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+3.18%</span></div><div class='metric'><b>币种</b><span>CNY</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>¥84.67，日变动 +0.87%；近5个可得收盘变动 +3.18%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>截至本轮公开检索，未发现可可靠归因于9月21日的单一公司级新增催化；价格更多随行业与风格轮动。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性；热度：低；公开检索偏少，未发现可核验的集中 X 讨论主题；争议点：样本稀疏，不宜外推。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>节前风险偏好、板块轮动与成交缩量可能放大冲高回落。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='600536'>
+<div class='stock-head'><div class='row1'><span class='name'>中国软件</span><span class='code'>600536</span><span class='px up'>¥32.10　+0.50%</span><span class='tag'>9/22收盘 · CNY</span></div></div>
+<div class='core'><h3>核心结论</h3><p>信创软件温和修复，量价趋势尚不足以确认新一轮主升。</p><div class='metrics'><div class='metric'><b>情绪</b><span>中性</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+1.20%</span></div><div class='metric'><b>币种</b><span>CNY</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>¥32.10，日变动 +0.50%；近5个可得收盘变动 +1.20%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>截至本轮公开检索，未发现可可靠归因于9月21日的单一公司级新增催化；价格更多随行业与风格轮动。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性；热度：低；公开检索偏少，未发现可核验的集中 X 讨论主题；争议点：样本稀疏，不宜外推。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>节前风险偏好、板块轮动与成交缩量可能放大冲高回落。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='601138'>
+<div class='stock-head'><div class='row1'><span class='name'>工业富联</span><span class='code'>601138</span><span class='px down'>¥63.30　-0.47%</span><span class='tag'>9/22收盘 · CNY</span></div></div>
+<div class='core'><h3>核心结论</h3><p>AI服务器代工叙事支撑上涨，景气逻辑仍强，关注高位波动。</p><div class='metrics'><div class='metric'><b>情绪</b><span>中性</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+4.11%</span></div><div class='metric'><b>币种</b><span>CNY</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>¥63.30，日变动 -0.47%；近5个可得收盘变动 +4.11%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>截至本轮公开检索，未发现可可靠归因于9月21日的单一公司级新增催化；价格更多随行业与风格轮动。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性；热度：低；公开检索偏少，未发现可核验的集中 X 讨论主题；争议点：样本稀疏，不宜外推。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>节前风险偏好、板块轮动与成交缩量可能放大冲高回落。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='600585'>
+<div class='stock-head'><div class='row1'><span class='name'>海螺水泥</span><span class='code'>600585</span><span class='px down'>¥17.12　-0.75%</span><span class='tag'>9/22收盘 · CNY</span></div></div>
+<div class='core'><h3>核心结论</h3><p>受地产链回暖带动，水泥需求预期改善；价格与实际开工仍待验证。</p><div class='metrics'><div class='metric'><b>情绪</b><span>中性</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='down'>-0.93%</span></div><div class='metric'><b>币种</b><span>CNY</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>¥17.12，日变动 -0.75%；近5个可得收盘变动 -0.93%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>截至本轮公开检索，未发现可可靠归因于9月21日的单一公司级新增催化；价格更多随行业与风格轮动。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性；热度：低；公开检索偏少，未发现可核验的集中 X 讨论主题；争议点：样本稀疏，不宜外推。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>节前风险偏好、板块轮动与成交缩量可能放大冲高回落。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='600048'>
+<div class='stock-head'><div class='row1'><span class='name'>保利发展</span><span class='code'>600048</span><span class='px flat'>¥5.68　+0.00%</span><span class='tag'>9/22收盘 · CNY</span></div></div>
+<div class='core'><h3>核心结论</h3><p>地产脉冲后收平，前日涨幅已透支部分预期，不宜盲目追价。</p><div class='metrics'><div class='metric'><b>情绪</b><span>中性</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+13.15%</span></div><div class='metric'><b>币种</b><span>CNY</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>¥5.68，日变动 +0.00%；近5个可得收盘变动 +13.15%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>地产政策脉冲后收平，属于预期消化而非新催化。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性；热度：低；公开检索偏少，未发现可核验的集中 X 讨论主题；争议点：样本稀疏，不宜外推。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>节前风险偏好、板块轮动与成交缩量可能放大冲高回落。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='600036'>
+<div class='stock-head'><div class='row1'><span class='name'>招商银行</span><span class='code'>600036</span><span class='px down'>¥40.82　-0.54%</span><span class='tag'>9/22收盘 · CNY</span></div></div>
+<div class='core'><h3>核心结论</h3><p>银行权重跟随指数上涨，走势稳健；基本面和资产质量决定中期弹性。</p><div class='metrics'><div class='metric'><b>情绪</b><span>中性</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='down'>-0.68%</span></div><div class='metric'><b>币种</b><span>CNY</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>¥40.82，日变动 -0.54%；近5个可得收盘变动 -0.68%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>截至本轮公开检索，未发现可可靠归因于9月21日的单一公司级新增催化；价格更多随行业与风格轮动。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性；热度：低；公开检索偏少，未发现可核验的集中 X 讨论主题；争议点：样本稀疏，不宜外推。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>节前风险偏好、板块轮动与成交缩量可能放大冲高回落。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='300750'>
+<div class='stock-head'><div class='row1'><span class='name'>宁德时代</span><span class='code'>300750</span><span class='px up'>¥304.63　+2.53%</span><span class='tag'>9/22收盘 · CNY</span></div></div>
+<div class='core'><h3>核心结论</h3><p>反弹收复部分失地，「去宁化」与产业龙头逻辑并存；短线仍需量价确认。</p><div class='metrics'><div class='metric'><b>情绪</b><span>偏多</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='down'>-3.71%</span></div><div class='metric'><b>币种</b><span>CNY</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>¥304.63，日变动 +2.53%；近5个可得收盘变动 -3.71%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>电力设备情绪修复带动反弹；产业竞争与「去宁化」叙事仍在。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性；热度：低；公开检索偏少，未发现可核验的集中 X 讨论主题；争议点：样本稀疏，不宜外推。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>节前风险偏好、板块轮动与成交缩量可能放大冲高回落。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><section class='block sources'><h2>数据与来源</h2><ul><li>报价：<a href='https://query1.finance.yahoo.com/v8/finance/chart/NVDA?interval=1d&amp;range=10d'>Yahoo Finance chart API</a>，拉取文件 /workspace/*-quotes-2026-09-22.json。美股使用 meta.regularMarketPrice（9/21真收盘），涨跌幅相对9/18最后日K计算。</li><li>美国市场：<a href='https://www.seattletimes.com/business/how-major-us-stock-indexes-fared-monday-9-21-2026/'>AP / Seattle Times</a>。</li><li>A股：<a href='https://www.21jingji.com/article/20260921/herald/eff3d5909eddd5637dfc1a2e22e5f34c.html'>21经济网 / 澎湃</a>。</li><li>港股：<a href='https://news.rthk.hk/rthk/en/component/k2/1870953-20260921.htm'>RTHK / Reuters / Xinhua</a>。</li><li>个股情报与X主题：公开网页搜索归纳，稀疏处明确写“公开检索偏少”；不伪造推文、账号或精确流量。</li></ul><div class='disclaimer'>本页为信息整理、情景推演与复盘参考，使用 Asia/Shanghai 时区。舆情定性≠资金流向，所有操作计划均不构成投资建议。</div></section></div>
+<div class='tab-panel' id='panel-hk-mkt'><section class='block'><h2>5 · 港股大盘概览（9/22 收盘）</h2><div class='chips'><span class='chip up'>恒指 25,087.75 +0.18%</span><span class='chip up'>恒生科技 4,438.21 +0.34%</span><span class='chip up'>国企指数 8,362.60 +0.28%</span><span class='chip'>成交约 HK$2,492 亿</span></div><ul><li><b>定性：</b>早盘冲高午后回落；腾讯等权重科网股支撑。</li><li><b>南向：</b>净买入约 <b>126.9–127 亿港元</b>。</li><li><b>自选：</b>小米昨收回吐，今日关注 18 Pro 发布窗口。</li></ul><div class='tw-strip'><strong>Twitter/X 主题带：</strong>小米发布窗口热度最高。舆情定性≠资金流向。</div></section><section class='block'><h2>风险与策略</h2><ul><li>事件窗口可能放大波动，避免把预期一次性打满。</li></ul></section><section class='block sources'><h2>数据与来源</h2><ul><li>报价：<a href='https://query1.finance.yahoo.com/v8/finance/chart/NVDA?interval=1d&amp;range=10d'>Yahoo Finance chart API</a>，拉取文件 /workspace/*-quotes-2026-09-22.json。美股使用 meta.regularMarketPrice（9/21真收盘），涨跌幅相对9/18最后日K计算。</li><li>美国市场：<a href='https://www.seattletimes.com/business/how-major-us-stock-indexes-fared-monday-9-21-2026/'>AP / Seattle Times</a>。</li><li>A股：<a href='https://www.21jingji.com/article/20260921/herald/eff3d5909eddd5637dfc1a2e22e5f34c.html'>21经济网 / 澎湃</a>。</li><li>港股：<a href='https://news.rthk.hk/rthk/en/component/k2/1870953-20260921.htm'>RTHK / Reuters / Xinhua</a>。</li><li>个股情报与X主题：公开网页搜索归纳，稀疏处明确写“公开检索偏少”；不伪造推文、账号或精确流量。</li></ul><div class='disclaimer'>本页为信息整理、情景推演与复盘参考，使用 Asia/Shanghai 时区。舆情定性≠资金流向，所有操作计划均不构成投资建议。</div></section></div>
+<div class='tab-panel' id='panel-hk-watch'><section class='block'><h2>6 · 港股关注表（5只）</h2><table><thead><tr><th>代码</th><th>名称</th><th>9/22收盘</th><th>情绪</th><th>操作参考</th></tr></thead><tbody><tr><td class='code'>01788</td><td class='name'>国泰君安国际</td><td class='up'>HK$2.905 +0.17%</td><td>中性</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>01810</td><td class='name'>小米集团-W</td><td class='down'>HK$27.20 -1.38%</td><td>偏谨慎</td><td>观察承接 / 控仓</td></tr><tr><td class='code'>06178</td><td class='name'>光大证券</td><td class='up'>HK$7.160 +0.14%</td><td>中性</td><td>持有观察 / 等确认</td></tr><tr><td class='code'>09660</td><td class='name'>地平线机器人-W</td><td class='down'>HK$4.090 -3.88%</td><td>偏谨慎</td><td>观察承接 / 控仓</td></tr><tr><td class='code'>02050</td><td class='name'>三花智控</td><td class='down'>HK$24.78 -1.04%</td><td>偏谨慎</td><td>观察承接 / 控仓</td></tr></tbody></table><p class='note'>价格为真实收盘数据；美股涨跌幅按 9/21 meta 收盘相对 9/18 最后一根日K收盘计算。</p></section><section class='block'><h2>推特舆情说明</h2><p>小米公开讨论相对集中，其余名称公开检索偏少。舆情定性≠资金流向。</p></section><article class='stock' id='01788'>
+<div class='stock-head'><div class='row1'><span class='name'>国泰君安国际</span><span class='code'>01788</span><span class='px up'>HK$2.905　+0.17%</span><span class='tag'>9/22收盘 · HKD</span></div></div>
+<div class='core'><h3>核心结论</h3><p>窄幅微涨，报价接近锚定区间，公开新增公司催化有限。</p><div class='metrics'><div class='metric'><b>情绪</b><span>中性</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+0.52%</span></div><div class='metric'><b>币种</b><span>HKD</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>HK$2.905，日变动 +0.17%；近5个可得收盘变动 +0.52%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>截至本轮公开检索，未发现可可靠归因于9月21日的单一公司级新增催化；价格更多随行业与风格轮动。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性；热度：低；公开检索偏少，未发现可核验的集中 X 讨论主题；争议点：样本稀疏，不宜外推。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>港股受中美关系、南向资金与外部利率共同影响，缺口风险不可忽视。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='01810'>
+<div class='stock-head'><div class='row1'><span class='name'>小米集团-W</span><span class='code'>01810</span><span class='px down'>HK$27.20　-1.38%</span><span class='tag'>9/22收盘 · HKD</span></div></div>
+<div class='core'><h3>核心结论</h3><p>发布会当日开盘前参考昨收；新品与汽车锁单叙事仍是主线，波动可能放大。</p><div class='metrics'><div class='metric'><b>情绪</b><span>偏谨慎</span></div><div class='metric'><b>操作</b><span>观察承接 / 控仓</span></div><div class='metric'><b>5日表现</b><span class='up'>+2.64%</span></div><div class='metric'><b>币种</b><span>HKD</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>HK$27.20，日变动 -1.38%；近5个可得收盘变动 +2.64%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>短线承压，先确认止跌与板块共振。</p></div>
+<div class='sec'><h3>情报</h3><p>9/23 晚间小米 18 Pro 系列发布窗口；高盛维持买入、目标价 39 港元等公开评级被广泛引用。公开讨论集中新品、汽车锁单与毛利。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：偏多；热度：中高；话题：新品发布、汽车锁单/交付和高端化；争议点：汽车毛利、交付节奏与存储成本。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>港股受中美关系、南向资金与外部利率共同影响，缺口风险不可忽视。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='06178'>
+<div class='stock-head'><div class='row1'><span class='name'>光大证券</span><span class='code'>06178</span><span class='px up'>HK$7.160　+0.14%</span><span class='tag'>9/22收盘 · HKD</span></div></div>
+<div class='core'><h3>核心结论</h3><p>券商股小幅上涨，成交弹性一般，需市场成交额持续放大确认。</p><div class='metrics'><div class='metric'><b>情绪</b><span>中性</span></div><div class='metric'><b>操作</b><span>持有观察 / 等确认</span></div><div class='metric'><b>5日表现</b><span class='up'>+1.20%</span></div><div class='metric'><b>币种</b><span>HKD</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>HK$7.160，日变动 +0.14%；近5个可得收盘变动 +1.20%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>走势温和，需用下一交易日量价确认延续性。</p></div>
+<div class='sec'><h3>情报</h3><p>截至本轮公开检索，未发现可可靠归因于9月21日的单一公司级新增催化；价格更多随行业与风格轮动。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性；热度：低；公开检索偏少，未发现可核验的集中 X 讨论主题；争议点：样本稀疏，不宜外推。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>港股受中美关系、南向资金与外部利率共同影响，缺口风险不可忽视。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='09660'>
+<div class='stock-head'><div class='row1'><span class='name'>地平线机器人-W</span><span class='code'>09660</span><span class='px down'>HK$4.090　-3.88%</span><span class='tag'>9/22收盘 · HKD</span></div></div>
+<div class='core'><h3>核心结论</h3><p>智驾主题偏弱整理，收入增长与持续亏损估值拉扯仍在。</p><div class='metrics'><div class='metric'><b>情绪</b><span>偏谨慎</span></div><div class='metric'><b>操作</b><span>观察承接 / 控仓</span></div><div class='metric'><b>5日表现</b><span class='down'>-0.49%</span></div><div class='metric'><b>币种</b><span>HKD</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>HK$4.090，日变动 -3.88%；近5个可得收盘变动 -0.49%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>短线承压，先确认止跌与板块共振。</p></div>
+<div class='sec'><h3>情报</h3><p>截至本轮公开检索，未发现可可靠归因于9月21日的单一公司级新增催化；价格更多随行业与风格轮动。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性；热度：低；公开检索偏少，未发现可核验的集中 X 讨论主题；争议点：样本稀疏，不宜外推。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>港股受中美关系、南向资金与外部利率共同影响，缺口风险不可忽视。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><article class='stock' id='02050'>
+<div class='stock-head'><div class='row1'><span class='name'>三花智控</span><span class='code'>02050</span><span class='px down'>HK$24.78　-1.04%</span><span class='tag'>9/22收盘 · HKD</span></div></div>
+<div class='core'><h3>核心结论</h3><p>热管理/机器人链小幅回落，走势相对稳健但弹性一般。</p><div class='metrics'><div class='metric'><b>情绪</b><span>偏谨慎</span></div><div class='metric'><b>操作</b><span>观察承接 / 控仓</span></div><div class='metric'><b>5日表现</b><span class='up'>+6.26%</span></div><div class='metric'><b>币种</b><span>HKD</span></div></div></div>
+<div class='sec'><h3>数据视角</h3><p><b>收盘：</b>HK$24.78，日变动 -1.04%；近5个可得收盘变动 +6.26%。价格均来自 Yahoo Finance chart 日线/元数据。</p><p><b>趋势：</b>短线承压，先确认止跌与板块共振。</p></div>
+<div class='sec'><h3>情报</h3><p>截至本轮公开检索，未发现可可靠归因于9月21日的单一公司级新增催化；价格更多随行业与风格轮动。</p></div>
+<div class='sec twitter'><h3>推特舆情 / Twitter/X</h3><p>情绪倾向：中性；热度：低；公开检索偏少，未发现可核验的集中 X 讨论主题；争议点：样本稀疏，不宜外推。</p><p class='note'>公开网页检索与二手聚合定性；不引用虚构账号或原文。舆情定性≠资金流向。</p></div>
+<div class='sec'><h3>作战计划</h3><div class='plan'><div class='cell'><b>idealBuy</b><span>回踩前收附近、缩量企稳后再评估</span></div><div class='cell'><b>secondaryBuy</b><span>突破当日高位且放量确认，待补精确位</span></div><div class='cell'><b>stopLoss</b><span>跌破关键低点且无法收回则减仓，待补精确位</span></div><div class='cell'><b>takeProfit</b><span>急涨后放量滞涨分批，不预设虚构价位</span></div></div><ul><li>港股受中美关系、南向资金与外部利率共同影响，缺口风险不可忽视。</li><li>若使用杠杆ETF，仅适合能承受显著波动与损耗的短周期风险管理。</li></ul></div>
+<div class='mini-disc'>条件式计划仅供复盘参考，不构成投资建议。</div></article><section class='block sources'><h2>数据与来源</h2><ul><li>报价：<a href='https://query1.finance.yahoo.com/v8/finance/chart/NVDA?interval=1d&amp;range=10d'>Yahoo Finance chart API</a>，拉取文件 /workspace/*-quotes-2026-09-22.json。美股使用 meta.regularMarketPrice（9/21真收盘），涨跌幅相对9/18最后日K计算。</li><li>美国市场：<a href='https://www.seattletimes.com/business/how-major-us-stock-indexes-fared-monday-9-21-2026/'>AP / Seattle Times</a>。</li><li>A股：<a href='https://www.21jingji.com/article/20260921/herald/eff3d5909eddd5637dfc1a2e22e5f34c.html'>21经济网 / 澎湃</a>。</li><li>港股：<a href='https://news.rthk.hk/rthk/en/component/k2/1870953-20260921.htm'>RTHK / Reuters / Xinhua</a>。</li><li>个股情报与X主题：公开网页搜索归纳，稀疏处明确写“公开检索偏少”；不伪造推文、账号或精确流量。</li></ul><div class='disclaimer'>本页为信息整理、情景推演与复盘参考，使用 Asia/Shanghai 时区。舆情定性≠资金流向，所有操作计划均不构成投资建议。</div></section></div>
+<footer>Gaspar Watchlist Digest · 2026-09-22 · Asia/Shanghai · 不构成投资建议</footer></div><script>(function(){var tabs=['us-mkt','us-watch','cn-mkt','cn-watch','hk-mkt','hk-watch'];function show(id,push){if(!tabs.includes(id))id='us-mkt';document.querySelectorAll('.tab-panel').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));document.getElementById('panel-'+id).classList.add('active');document.getElementById('tab-'+id).classList.add('active');if(push)history.replaceState(null,'','#'+id);window.scrollTo({top:0,behavior:'smooth'})}document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>show(b.dataset.tab,true)));window.addEventListener('hashchange',()=>show(location.hash.slice(1),false));show(location.hash.slice(1)||'us-mkt',false);})();</script></body></html>
